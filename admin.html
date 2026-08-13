@@ -37,7 +37,7 @@ button{margin-top:22px;width:100%;padding:14px;border:0;border-radius:999px;back
 </div>
 <label for="title">通知標題</label><input id="title" required maxlength="80" placeholder="例如：CBL 官方公告">
 <label for="body">通知內容</label><textarea id="body" required maxlength="240" placeholder="輸入要推播給訂閱者的訊息"></textarea>
-<button id="send" type="submit">發送推播</button>
+<button id="send" type="button">發送推播</button>
 <div id="status" role="status"></div>
 </form>
 <a class="back" href="./index.html">← 回到 CBL 官網</a>
@@ -48,18 +48,20 @@ button{margin-top:22px;width:100%;padding:14px;border:0;border-radius:999px;back
 const SUPABASE_URL="https://iwwwpgdrasrhmrhncsim.supabase.co";
 const SUPABASE_KEY="sb_publishable_2Ko8glEiFB6NfunRyCr_4A_c1c1fvmO";
 const SEND_ENDPOINT=SUPABASE_URL+"/functions/v1/push-send";
-const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const form=document.querySelector("#push-form"),send=document.querySelector("#send"),status=document.querySelector("#status");
 function show(message,kind){status.textContent=message;status.className=kind||""}
-form.addEventListener("submit",async(event)=>{
- event.preventDefault(); send.disabled=true; show("正在發送…");
+send.addEventListener("click",async()=>{
+ send.disabled=true; show("正在發送…");
  try{
+  if(!window.supabase?.createClient) throw new Error("Supabase 載入失敗，請重新整理後再試");
+  const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
   let {data:{session}}=await client.auth.getSession();
-  if(!session){const result=await client.auth.signInAnonymously();if(result.error)throw result.error;session=result.data.session}
+  if(!session){const auth=await client.auth.signInAnonymously();if(auth.error)throw auth.error;session=auth.data.session}
   const response=await fetch(SEND_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+session.access_token,"x-admin-key":document.querySelector("#admin-key").value},body:JSON.stringify({channelId:document.querySelector("#channel").value,title:document.querySelector("#title").value.trim(),body:document.querySelector("#body").value.trim(),url:document.querySelector("#url").value.trim()})});
   const result=await response.json().catch(()=>({}));
   if(!response.ok)throw new Error(result.error||"發送失敗");
-  const detail = result.failed ? "；失敗 "+result.failed+" 則（"+Object.entries(result.failures||{}).map(([key,value])=>key+" "+value).join("、")+"）" : "";\n  show("完成：找到 "+result.matched+" 位訂閱者，成功送出 "+result.sent+" 則"+detail+"。", result.failed ? "error" : "success");
+  const detail=result.failed ? "；失敗 "+result.failed+" 則（"+Object.entries(result.failures||{}).map(([key,value])=>key+" "+value).join("、")+"）" : "";
+  show("完成：找到 "+result.matched+" 位訂閱者，成功送出 "+result.sent+" 則"+detail+"。",result.failed?"error":"success");
  }catch(error){show("發送失敗："+(error.message||"請檢查管理金鑰與 Supabase 設定"),"error")}finally{send.disabled=false}
 });
 </script>

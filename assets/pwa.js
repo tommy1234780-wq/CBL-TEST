@@ -30,7 +30,7 @@
     toggle.textContent = expanded ? "收起設定" : "設定通知";
   }
   toggle.addEventListener("click", () => setExpanded(settings.hidden));
-  if (saved.length) setExpanded(true);
+
   const authClient = window.supabase?.createClient(config.supabaseUrl, config.supabasePublishableKey);
   async function accessToken() {
     if (!authClient) throw new Error("Supabase client unavailable");

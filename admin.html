@@ -24,7 +24,7 @@ button{margin-top:22px;width:100%;padding:14px;border:0;border-radius:999px;back
 <section class="card">
 <h1>CBL 官方推播管理</h1>
 <p>選擇通知頻道、輸入訊息後即可發送給已訂閱的使用者。管理金鑰只會在本次瀏覽器請求中使用，不會寫入網頁程式碼。</p>
-<form id="push-form">
+<div id="push-form">
 <label for="admin-key">管理金鑰</label>
 <input id="admin-key" type="password" autocomplete="off" required placeholder="輸入 CBL_ADMIN_KEY">
 <div class="grid">
@@ -39,7 +39,7 @@ button{margin-top:22px;width:100%;padding:14px;border:0;border-radius:999px;back
 <label for="body">通知內容</label><textarea id="body" required maxlength="240" placeholder="輸入要推播給訂閱者的訊息"></textarea>
 <button id="send" type="button">發送推播</button>
 <div id="status" role="status"></div>
-</form>
+</div>
 <a class="back" href="./index.html">← 回到 CBL 官網</a>
 </section>
 </main>

@@ -54,3 +54,23 @@
 - VAPID 私鑰只能放在後端環境變數，不能放進網站檔案。
 - 推播權限要由使用者點擊按鈕觸發，不能頁面一載入就跳出授權視窗。
 - 發送失敗或回傳 `404/410` 的訂閱應從資料庫刪除。
+
+
+## 官方通知
+
+前端現在提供「CBL 官方通知」選項，送到後端的頻道 ID 是 OFFICIAL。球隊頻道則是 A 到 J。
+
+後端發送時，依頻道篩選訂閱資料。例如官方公告應選出包含 OFFICIAL 的訂閱，再透過 Web Push 發送：
+
+POST /api/push/send
+
+請求 JSON：
+
+{
+  "channelId": "OFFICIAL",
+  "title": "CBL 官方公告",
+  "body": "第三屆最新賽事公告已發布。",
+  "url": "https://tommy1234780-wq.github.io/CBL-TEST/"
+}
+
+這個發送 API 必須限制管理員使用，VAPID 私鑰只能放在伺服器環境變數，不能放在前端或 GitHub repository。

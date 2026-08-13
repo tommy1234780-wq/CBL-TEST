@@ -27,7 +27,7 @@
   function setExpanded(expanded) {
     settings.hidden = !expanded;
     toggle.setAttribute("aria-expanded", String(expanded));
-    toggle.textContent = expanded ? "收起設定" : "設定通知";
+    toggle.textContent = expanded ? "收起設定" : "✦ 設定通知";
   }
   toggle.addEventListener("click", () => setExpanded(settings.hidden));
 

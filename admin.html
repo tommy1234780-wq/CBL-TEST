@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#03101f">
+<title>CBL 官方推播管理</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at top right,#123e61,#03101f 55%);color:#eaf6ff}
+main{width:min(680px,calc(100% - 32px));margin:48px auto}
+.card{padding:28px;border:1px solid #2a6a91;border-radius:24px;background:rgba(3,24,49,.9);box-shadow:0 20px 60px #0006}
+h1{margin:0 0 8px;font-size:clamp(1.7rem,5vw,2.5rem)}p{color:#b7d5ed;line-height:1.6}
+label{display:block;margin:18px 0 8px;font-weight:700}input,textarea,select{width:100%;padding:13px 14px;border:1px solid #3b7193;border-radius:12px;background:#071c30;color:#fff;font:inherit}textarea{min-height:130px;resize:vertical}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.hint{font-size:.85rem;color:#8fb6ce;margin-top:6px}
+button{margin-top:22px;width:100%;padding:14px;border:0;border-radius:999px;background:#79d1ff;color:#03101f;font:inherit;font-weight:800;cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}
+#status{min-height:28px;margin:18px 0 0;font-weight:700}.success{color:#8deda8}.error{color:#ff9b9b}
+.back{display:inline-block;margin-top:20px;color:#79d1ff}
+@media(max-width:540px){.grid{grid-template-columns:1fr}.card{padding:20px}}
+</style>
+</head>
+<body>
+<main>
+<section class="card">
+<h1>CBL 官方推播管理</h1>
+<p>選擇通知頻道、輸入訊息後即可發送給已訂閱的使用者。管理金鑰只會在本次瀏覽器請求中使用，不會寫入網頁程式碼。</p>
+<form id="push-form">
+<label for="admin-key">管理金鑰</label>
+<input id="admin-key" type="password" autocomplete="off" required placeholder="輸入 CBL_ADMIN_KEY">
+<div class="grid">
+<div><label for="channel">通知頻道</label>
+<select id="channel">
+<option value="OFFICIAL">CBL 官方通知</option>
+<option value="A">戰狼棒球隊</option><option value="B">神清163棒球隊</option><option value="C">遊牧者棒球隊</option><option value="D">好Chill棒球隊</option><option value="E">台中樂天棒球隊</option><option value="F">台中NGU棒球隊</option><option value="G">T.C.W棒球隊</option><option value="H">創邑棒球隊</option><option value="I">捷創科技 JTRON</option><option value="J">安穆科技棒球隊</option>
+</select></div>
+<div><label for="url">點擊後網址（可選）</label><input id="url" type="url" value="https://tommy1234780-wq.github.io/CBL-TEST/"></div>
+</div>
+<label for="title">通知標題</label><input id="title" required maxlength="80" placeholder="例如：CBL 官方公告">
+<label for="body">通知內容</label><textarea id="body" required maxlength="240" placeholder="輸入要推播給訂閱者的訊息"></textarea>
+<button id="send" type="submit">發送推播</button>
+<div id="status" role="status"></div>
+</form>
+<a class="back" href="./index.html">← 回到 CBL 官網</a>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://iwwwpgdrasrhmrhncsim.supabase.co";
+const SUPABASE_KEY="sb_publishable_2Ko8glEiFB6NfunRyCr_4A_c1c1fvmO";
+const SEND_ENDPOINT=SUPABASE_URL+"/functions/v1/push-send";
+const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const form=document.querySelector("#push-form"),send=document.querySelector("#send"),status=document.querySelector("#status");
+function show(message,kind){status.textContent=message;status.className=kind||""}
+form.addEventListener("submit",async(event)=>{
+ event.preventDefault(); send.disabled=true; show("正在發送…");
+ try{
+  let {data:{session}}=await client.auth.getSession();
+  if(!session){const result=await client.auth.signInAnonymously();if(result.error)throw result.error;session=result.data.session}
+  const response=await fetch(SEND_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+session.access_token,"x-admin-key":document.querySelector("#admin-key").value},body:JSON.stringify({channelId:document.querySelector("#channel").value,title:document.querySelector("#title").value.trim(),body:document.querySelector("#body").value.trim(),url:document.querySelector("#url").value.trim()})});
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(result.error||"發送失敗");
+  show("完成：找到 "+result.matched+" 位訂閱者，成功送出 "+result.sent+" 則。","success");
+ }catch(error){show("發送失敗："+(error.message||"請檢查管理金鑰與 Supabase 設定"),"error")}finally{send.disabled=false}
+});
+</script>
+</body>
+</html>

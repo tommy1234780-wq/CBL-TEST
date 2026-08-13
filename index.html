@@ -85,15 +85,20 @@
         </div>
         <p>選擇支持的球隊，賽程提醒、比賽結果與最新消息會優先通知你。</p>
       </div>
-      <div class="push-panel" data-push-panel>
-        <div class="push-panel-copy">
-          <strong>只接收你在意的比賽消息</strong>
-          <span data-push-status>請選擇球隊後開啟通知。</span>
+      <div class="push-panel compact" data-push-panel>
+        <div class="push-summary">
+          <div class="push-panel-copy">
+            <strong>通知設定</strong>
+            <span data-push-status>只接收你在意的球隊消息。</span>
+          </div>
+          <button class="push-toggle" type="button" data-push-toggle aria-expanded="false" aria-controls="push-settings">設定通知</button>
         </div>
-        <div class="team-subscription-grid" data-team-options></div>
-        <div class="push-actions">
-          <button class="push-button" type="button" data-enable-push>開啟球隊推播</button>
-          <button class="push-button secondary" type="button" data-disable-push hidden>取消推播</button>
+        <div class="push-settings" id="push-settings" data-push-settings hidden>
+          <div class="team-subscription-grid" data-team-options></div>
+          <div class="push-actions">
+            <button class="push-button" type="button" data-enable-push>開啟通知</button>
+            <button class="push-button secondary" type="button" data-disable-push hidden>取消推播</button>
+          </div>
         </div>
       </div>
     </section>

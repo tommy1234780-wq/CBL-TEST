@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>球隊介紹｜CBL 第三屆官方網站</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --text-color: #333;
+            --header-bg: #ffffff;
+            --nav-bg: #ffffff;
+            --link-color: #1565c0;
+            --link-border: #1565c0;
+            --link-hover-bg: #1565c0;
+            --link-hover-text: #ffffff;
+            --border-color: #e0e0e0;
+            --title-color: #0d47a1;
+            --card-bg: #ffffff;
+            --section-title-border: #e0e0e0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --text-color: #e0e0e0;
+                --header-bg: #1e1e1e;
+                --nav-bg: #1e1e1e;
+                --link-color: #4e9af1;
+                --link-border: #4e9af1;
+                --link-hover-bg: #4e9af1;
+                --link-hover-text: #ffffff;
+                --border-color: #333333;
+                --title-color: #4e9af1;
+                --card-bg: #1e1e1e;
+                --section-title-border: #333333;
+            }
+            /* Specific for sub-nav in some pages */
+            .sub-nav a { background-color: #2c2c2c !important; color: #4e9af1 !important; border-color: #444 !important; }
+            .sub-nav a.active { background-color: #4e9af1 !important; color: #ffffff !important; border-color: #4e9af1 !important; }
+            /* Specific for table headers/rows in ranking pages */
+            th { background-color: #242526 !important; color: #e0e0e0 !important; }
+            td { border-bottom: 1px solid #333 !important; color: #e0e0e0 !important; }
+            table { background-color: #1e1e1e !important; }
+            .team-section { background-color: #1e1e1e !important; box-shadow: 0 4px 8px rgba(0,0,0,0.5) !important; }
+            .team-section p { color: #b0b0b0 !important; }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- Desktop Styles --- */
+        .header {
+            text-align: center;
+            background-color: var(--header-bg);
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .title-group {
+            display: inline-block; /* Centered by header's text-align */
+        }
+        .title-group img {
+            width: 80px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .title-group h1 {
+            color: var(--title-color);
+            margin: 0;
+            font-size: 2em;
+        }
+        .navbar {
+            background-color: var(--nav-bg);
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center; /* Reverted to center */
+            flex-wrap: wrap; /* Re-added wrap */
+        }
+        .nav-links li {
+            margin: 5px 10px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--link-color);
+            font-size: 0.9em;
+            padding: 8px 15px;
+            border: 2px solid var(--link-border);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--link-hover-bg);
+            color: var(--link-hover-text);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .menu-toggle {
+            display: none; /* Hidden on desktop */
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+            text-align: center;
+        }
+        .team-section {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+        .team-section img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .team-section h3 {
+            color: var(--title-color);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        .team-section p {
+            line-height: 1.6;
+            color: #555;
+            text-align: justify;
+            width: 100%;
+        }
+
+        /* --- Mobile Styles --- */
+        @media (max-width: 992px) {
+            body {
+                padding-top: 70px; /* Space for fixed header */
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 15px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .title-group {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+            }
+            .title-group img {
+                width: 50px; /* Smaller logo for mobile header */
+                margin-bottom: 0;
+            }
+            .title-group h1 {
+                font-size: 1.2em; /* Smaller title for mobile header */
+            }
+            .navbar {
+                padding: 0;
+                border: none;
+            }
+            .menu-toggle {
+                display: block; /* Show hamburger */
+                background-color: transparent;
+                color: var(--title-color);
+                border: 2px solid var(--title-color);
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 1.5em; /* Reverted to larger size */
+                padding: 0px 12px; /* Reverted to previous padding */
+                line-height: 1.2;
+            }
+            .menu-toggle:hover {
+                 background-color: var(--title-color);
+                 color: white;
+            }
+            .nav-links {
+                display: none; /* Hidden by default */
+                position: fixed;
+                top: 70px; /* Position below fixed header */
+                left: 0;
+                right: 0;
+                background: var(--header-bg);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                flex-direction: column;
+                padding: 0;
+                margin: 0;
+                z-index: 999; /* Ensure menu is on top of other content */
+            }
+            .nav-links.active {
+                display: flex; /* Show when toggled */
+            }
+            .nav-links li {
+                width: 100%;
+                margin: 0;
+            }
+            .nav-links a {
+                display: block;
+                padding: 15px;
+                border-radius: 0;
+                border: none;
+                border-bottom: 1px solid var(--border-color);
+                color: var(--link-color); /* Default link color in dropdown */
+                background-color: var(--header-bg); /* Default background in dropdown */
+                text-align: center; /* Center text in mobile dropdown */
+                transform: none; /* Reset desktop transform */
+                box-shadow: none; /* Reset desktop shadow */
+            }
+            .nav-links a:hover {
+                background-color: var(--bg-color); /* Light grey on hover */
+                color: var(--title-color); /* Ensure text is visible on hover */
+            }
+            .nav-links a.active {
+                background-color: var(--bg-color); /* Light blue for active item */
+                color: var(--title-color); /* Dark blue text for active item */
+                font-weight: bold; /* Make it stand out */
+            }
+            .nav-links li:last-child a {
+                border-bottom: none;
+            }
+        }
+    </style>
+    <link rel="icon" href="assets/season3-main-logo.webp">
+    <link rel="stylesheet" href="assets/season3-site.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="title-group">
+            <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO">
+            <h1>台中市CBL企業交流聯盟</h1>
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+    </header>
+
+    <nav class="navbar">
+        <ul class="nav-links" id="nav-links">
+            <li><a href="index.html">首頁</a></li>
+            <li><a href="賽程戰績表.html">賽程戰績表</a></li>
+            <li><a href="數據統計.html">選手數據查詢</a></li>
+            <li><a href="打者排行榜.html">打者排行榜</a></li>
+            <li><a href="投手排行榜.html">投手排行榜</a></li>
+            <li><a href="CBL名人堂.html">CBL名人堂</a></li>
+            <li><a href="team_introduction.html">球隊介紹</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h2>球隊介紹</h2>
+        
+        <div class="team-section">
+            <img src="assets/teams/A.webp" alt="戰狼棒球隊 LOGO" loading="lazy" decoding="async">
+            <h3>戰狼</h3>
+            <p>🐺 戰狼出擊！速度與智慧並存的最強混合型戰隊！
+<br>
+一支與眾不同的球隊正在台中集結！
+台中戰狼隊——由高中生與家長共同組成的熱血團隊，橫跨世代，卻有著同一個信念：為夢想而戰！
+<br>
+🎯 高中生的爆發力 × 家長的冷靜智慧！
+年輕球員們活力四射、進步神速，
+而家長隊友則用豐富的經驗穩定軍心，
+雙方完美配合，在球場上擦出最強火花！
+<br>
+🔥 戰狼精神：團結．堅韌．智慧！
+從日常訓練到正式比賽，戰狼隊總是全力以赴，
+每一顆球、每一次奔跑，都是對「團隊」的信仰與堅持！
+<br>
+🏆 今年，戰狼隊將以更成熟的姿態出征乙組聯盟，
+不僅要挑戰席次，更要讓全聯盟看見——
+高中生與家長攜手，也能打出最狂的球風！
+<br>
+📣「狼群集結，誰與爭鋒！」</p>
+        </div>
+
+        <div class="team-section">
+            <img src="assets/teams/B.webp" alt="神清163棒球隊 LOGO" loading="lazy" decoding="async">
+            <h3>神清163</h3>
+            <p>🔥 軍魂不滅，熱血再燃！
+<br>
+神清163棒球隊來自台中神岡的58砲兵指揮部，一群身懷軍職、心繫棒球的戰士，以「神清路163號」為名，向所有人宣告：我們來自軍隊，但也屬於球場！
+<br>
+🏃‍♂️ 重燃青春，回到熱血原點！
+<br>
+球員們多為昔日校隊成員，雖然現已身負保家衛國的使命，但心中對棒球的熱愛始終未熄。神清163是他們在操課與任務之外的另一個戰場——用汗水擊出熱情、用棒球延續榮耀！
+<br>
+⚾ 球風如軍風，紀律與激情並進！
+<br>
+我們崇尚開心打球，但不隨便打球。就像在部隊中的分秒必爭，球場上的我們同樣要求戰術紀律與團隊配合。比賽時，全隊一心、堅定執行，不只是打棒球，更像是一場榮譽出征！
+<br>
+💥 團結、榮耀、使命！
+<br>
+神清163不只是球隊，是兄弟，是部隊，是信仰！我們用一球一棒，證明軍人不只有剛硬，更能在球場上展現柔韌與熱血，這場比賽，我們打的是青春、拼的是榮耀！</p>
+        </div>
+
+        <div class="team-section">
+            <img src="assets/teams/C.webp" alt="遊牧者棒球隊 LOGO" loading="lazy" decoding="async">
+            <h3>遊牧者</h3>
+            <p>遊牧者棒球隊是一支風格自由奔放、充滿活力與動力的隊伍。
+<br>
+他們的成員來自不同產業與年齡層，因對棒球的熱愛而聚集，正如「遊牧」一詞人員來來去去但本心不變。
+<br>
+他們的比賽節奏靈活多變，戰術大膽，不服輸的精神，是聯盟中最難以預測的對手之一。
+<br>
+遊牧者重視態度與氣氛，球隊文化不拘形式，強調彼此信任與鼓勵。
+<br>
+他們在自由的節奏中找到致勝的節拍，用行動證明，總是享受比賽的他們，同樣能在球場上展現壓倒性的存在感、贏得勝利</p>
+        </div>
+
+        <div class="team-section">
+            <img src="assets/teams/D.webp" alt="好Chill棒球隊 LOGO" loading="lazy" decoding="async">
+            <h3>好Chill</h3>
+            <p>正如其名，是一支風格自由、氣氛輕鬆卻潛力驚人的隊伍。
+<br>
+他們來自各行各業，隊員們用行動證明：「認真打球，也能很Chill！」
+<br>
+儘管賽場上講求勝負，好Chill棒球隊更看重參與與快樂。
+<br>
+他們在場上總帶著笑容，卻不代表他們對比賽不投入。
+<br>
+這支隊伍打起來節奏明快，擁有強烈進攻意識與靈活守備，是聯盟中最具冠軍像的隊伍之一。
+<br>
+今年他們喊出口號「不只Chill，更要Win！」，在保持風格的同時，也能朝著佳績邁進！</p>
+        </div>
+
+        <div class="team-section">
+            <img src="assets/teams/E.webp" alt="台中樂天棒球隊 LOGO" loading="lazy" decoding="async">
+            <h3>台中樂天</h3>
+            <p>台中樂天棒球隊是一支充滿正能量的球隊。
+<br>
+他們以積極樂觀的態度迎接每場比賽，不論勝敗都能從中找到學習與成長的樂趣。
+<br>
+隊員們大多是從各行各業從辦公室延伸到球場，彼此的默契與信任成為球隊最大資產。
+<br>
+樂天隊不只是聯盟的正港元老球隊，更擁有穩定的打線與默契十足的球隊組合，是一支攻守平衡的勁旅。
+<br>
+他們相信，只要保持熱情和正向態度，任何挑戰都能迎刃而解。
+<br>
+今年，他們誓言把這份「樂天精神」發揮到極致，不僅打出精彩比賽，更要打出團隊的榮耀與驕傲！</p>
+        </div>
+
+        <div class="team-section">
+            <img src="assets/teams/F.webp" alt="台中NGU棒球隊 LOGO" loading="lazy" decoding="async">
+            <h3>台中NGU</h3>
+            <p>台中NGU是一支以休閒娛樂為主軸的棒球隊，成立的初衷很簡單：
+讓每一位喜歡棒球的朋友，都能在下班後、週末時光裡，揮棒流汗、放鬆身心。
+<br>
+球隊成員來自各行各業，年齡層多元，不論是剛入門的新手，還是熱愛球場多年的老手，我們都歡迎加入。平時大家以練習交流為主，偶爾參加友誼賽或小型聯賽，享受比賽的樂趣，同時也珍惜彼此的相處時光。
+<br>
+在這裡，我們不只打球，更在球場上累積友誼與回憶。
+<br>
+無論你是想運動、交朋友，還是單純想重新找回對棒球的熱情，台中NGU棒球隊 都歡迎你的加入</p>
+        </div>
+
+        <div class="team-section">
+            <img src="assets/teams/G.webp" alt="T.C.W棒球隊 LOGO" loading="lazy" decoding="async">
+            <h3>T.C.W</h3>
+            <p>T.C.W棒球隊，是Taichung City Wolverines (台中金鋼狼）的縮寫，是一支專業與熱血兼具的球隊，隊名也象徵團結（Teamwork）、挑戰（Challenge）與勝利（Win）的信念。
+<br>
+棒球作為台灣的國民運動，一種台灣人對於運動的共同象徵，T.C.W棒球隊的隊員們也不例外，對於棒球都有無比的執著與熱情。領隊用棒球吸引他國的朋友加入，招募英國與美國等國際球員。T.C.W棒球隊不僅融合國內、外等優質球員，球場上的氣氛也因彼此背景不同而更加有活力。每次出賽都能有種置身國外打球的氛圍，中英台三種語言夾雜的溝通環境，更是學習外文的好機會。T.C.W是一支年輕且具備競爭力的隊伍，最大的優勢是速度與拚勁，更重要的是不服輸的態度，對手只要一不注意就要付出慘痛的代價。
+<br>
+棒球不僅讓T.C.W棒球隊的各位相聚。然而，更重要的是我們因為棒球而成為緊密的朋友，不僅是周末出來打場比賽的短暫關係。
+<br>
+T.C.W隊今年瞄準聯盟前段班席次。對他們而言，每一場比賽，都是一次超越自我、實踐團隊精神的挑戰！</p>
+        </div>
+
+        <div class="team-section">
+            <img src="assets/teams/H.webp" alt="創邑棒球隊 LOGO" loading="lazy" decoding="async">
+            <h3>創邑棒球隊 ChungYi Baseball</h3>
+            <p>創邑棒球隊是一支充滿創意與活力的隊伍，秉持「創造勝利，築夢未來」的信念，用棒球揮灑青春，展現無限可能！
+<br>
+成員來自各行各業，卻因熱愛棒球而齊聚一堂，他們用汗水與團隊合作，寫下屬於自己的熱血篇章。
+<br>
+在球場上，創邑棒球隊不僅追求勝負，更重視團隊精神與每一場快樂打球的意義。他們以笑容迎戰挑戰，在每場比賽中找到成長與喜悅。
+<br>
+📣 今年口號：
+🎯 創無止境，邑戰到底！</p>
+        </div>
+
+        <div class="team-section">
+            <img src="assets/teams/I.webp" alt="捷創科技 JTRON 棒球隊 LOGO" loading="lazy" decoding="async">
+            <h3>捷創科技 JTRON 棒球隊</h3>
+            <p>他們是一支來自高科技產業的隱形戰隊，長年穿梭在半導體設備維修與精密儀器的世界裡。
+<br>
+而今，JTRON 捷創科技棒球隊，將那份嚴謹與專注投射到球場上，打造出一支兼具科技理性與戰鬥本能的球隊。
+<br>
+🔧 精密工藝｜沈穩制敵
+<br>
+在企業中，他們秉持「精準服務，超越期待」的核心精神；在球場上，這句話成了行動準則。
+<br>
+練球如同調校儀器、出賽彷彿執行任務。每一場比賽，他們都以無聲姿態佈局，再用冷靜而銳利的攻勢給予對手致命一擊。
+<br>
+「無聲佈局，一擊必殺。」是他們的信條，也是他們的風格。
+<br>
+🧠 精神連結｜團隊戰術系統
+<br>
+JTRON不僅是一支球隊，更是一個協作精密的戰術系統。
+他們重視心靈層次的溝通與戰術默契，
+如同半導體晶片間的數據傳輸，無需多言，心領神會。
+<br>
+面對強敵，他們不硬碰，而是解構對手戰術，精準迎擊。
+他們像一場無聲的革命，在對手還未察覺前就已潛伏就位。
+<br>
+⚔️ 隊伍使命｜科技戰魂的具象化
+<br>
+作為 CBL 聯盟中最難以預測的隊伍之一，
+他們的目標從不只是勝場與名次，
+而是將「科技人的戰鬥力」從實驗室帶到球場！
+<br>
+用冷靜取勝、用專業說話、用榮耀戰鬥。
+<br>
+🎯 JTRON 使命宣言：「沉默，是因為目標鎖定；出擊，必是致命一擊。」</p>
+        </div>
+
+        <div class="team-section">
+            <img src="assets/teams/J.webp" alt="安穆科技棒球隊 LOGO" loading="lazy" decoding="async">
+            <h3>安穆科技</h3>
+            <p>安穆科技棒球隊是來自高科技產業的代表性隊伍之一，隊伍中來自各行各業的球員，更是加深球隊豐富的文化。
+<br>
+冠名的安穆科技江老闆更是以身作則，每次都能帶著滿滿的熱情及專注在球場上展現團隊合作與無限熱情。
+<br>
+北中南各種職業球場都能看到他們的足跡，還特別遠赴日本東京巨蛋與日本球隊來場社會人球隊的交流。
+<br>
+球員們愛球成痴的屬性非常之高啊🤣🤣🤣
+<br>
+球隊秉持「穩中求勝、精準出擊」的精神，練球時嚴謹不馬虎，戰術布陣也帶有濃厚的智慧型打球的特色。
+<br>
+安穆科技棒球隊重視團隊溝通與策略配合，即便對手強大，也總能冷靜應對、穩住陣腳。
+<br>
+作為聯盟中老牌的隊伍之一，他們今年的目標是展現安穆人不容小覷的戰鬥力，勇敢挑戰聯盟最高席次！</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var links = document.getElementById('nav-links');
+            links.classList.toggle('active');
+        }
+    </script>
+
+    <script src="assets/season3-site.js"></script>
+</body>
+</html>

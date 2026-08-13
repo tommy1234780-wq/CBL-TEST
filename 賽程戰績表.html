@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>賽程戰績表 - 台中市CBL企業交流聯盟｜CBL 第三屆官方網站</title>
+    <style>
+        :root {
+            --bg-color: #031025;
+            --text-color: #f4e8cc;
+            --header-bg: rgba(3, 16, 37, 0.78);
+            --nav-bg: rgba(2, 11, 27, 0.86);
+            --link-color: #ffd46b;
+            --link-border: #e9ad42;
+            --link-hover-bg: #e9ad42;
+            --link-hover-text: #ffffff;
+            --border-color: rgba(255, 212, 107, 0.22);
+            --title-color: #ffffff;
+            --card-bg: rgba(2, 10, 26, 0.72);
+            --section-title-border: #e9ad42;
+            
+            --bh-color: #7b4cff;
+            --star-color: #ff8a2c;
+            --gold-color: #ffd46b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background:
+                radial-gradient(circle at 16% 12%, rgba(123, 76, 255, 0.32), transparent 28%),
+                radial-gradient(circle at 84% 16%, rgba(255, 138, 44, 0.26), transparent 30%),
+                linear-gradient(180deg, #061a4a 0%, var(--bg-color) 46%, #020814 100%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                        radial-gradient(ellipse at 50% 22%, transparent 0 25%, rgba(255, 212, 107, 0.18) 25.1%, transparent 25.5%),
+                        radial-gradient(ellipse at 50% 52%, transparent 0 41%, rgba(123, 76, 255, 0.24) 41.1%, transparent 41.45%),
+                        radial-gradient(circle at 18% 30%, rgba(123, 76, 255, 0.22) 0%, transparent 36%),
+                        radial-gradient(circle at 82% 70%, rgba(255, 138, 44, 0.2) 0%, transparent 36%);
+            overflow: hidden;
+        }
+
+        .cosmic-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle, rgba(255,255,255,.9) 0 1px, transparent 1.6px),
+                radial-gradient(circle, rgba(255,212,107,.72) 0 1px, transparent 1.6px);
+            background-size: 96px 96px, 143px 143px;
+            background-position: 19px 23px, 61px 77px;
+            opacity: .36;
+        }
+
+        .black-hole {
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 300px;
+            height: 300px;
+            background:
+                radial-gradient(circle at center, #000 0 34%, rgba(8, 5, 18, 0.96) 35% 45%, transparent 46%),
+                conic-gradient(from 215deg, transparent 0 14%, rgba(255, 212, 107, .68) 18%, rgba(123, 76, 255, .72) 32%, transparent 47%, rgba(255, 212, 107, .44) 60%, transparent 80%);
+            border-radius: 50%;
+            box-shadow: 0 0 58px 18px rgba(123, 76, 255, .55), 
+                        0 0 120px 42px rgba(123, 76, 255, 0.2);
+            animation: blackHolePulse 8s infinite ease-in-out;
+        }
+
+        .black-hole::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, transparent 58%, rgba(255, 212, 107, .34) 67%, transparent 80%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .star-element {
+            position: absolute;
+            bottom: 15%;
+            right: 10%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #fff6cf 0 10%, #ffd46b 28%, #ff8a2c 58%, transparent 76%);
+            border-radius: 50%;
+            box-shadow: 0 0 78px 26px rgba(255, 138, 44, .5), 0 0 130px 44px rgba(255, 212, 107, .14);
+            animation: starGlow 6s infinite ease-in-out;
+        }
+
+        @keyframes blackHolePulse {
+            0%, 100% { transform: scale(1); filter: saturate(1); }
+            50% { transform: scale(1.04); filter: saturate(1.18); }
+        }
+
+        @keyframes starGlow {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .baseball-laces {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            box-sizing: border-box;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .baseball-laces svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 12px rgba(255, 212, 107, .62));
+            animation: rotateLaces 40s linear infinite;
+        }
+
+        .star-element .baseball-laces svg {
+            filter: drop-shadow(0 0 12px rgba(255, 138, 44, .72));
+            animation: rotateLaces 30s linear reverse infinite;
+        }
+
+        @keyframes rotateLaces {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header {
+            text-align: center;
+            background-color: var(--header-bg);
+            backdrop-filter: blur(15px);
+            padding: 30px 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .title-group h1 {
+            color: var(--title-color);
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 0 0 15px rgba(255,255,255,0.34), 0 0 30px rgba(255, 212, 107, .28);
+            letter-spacing: 2px;
+        }
+
+        .title-group img {
+            width: 100px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 22px rgba(255, 212, 107, .32);
+            border: 2px solid rgba(255, 212, 107, .55);
+        }
+
+        .navbar {
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1em;
+            padding: 10px 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: linear-gradient(45deg, rgba(123, 76, 255, .95), rgba(233, 173, 66, .95), rgba(255, 138, 44, .95));
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(255, 212, 107, 0.28);
+            transform: translateY(-5px);
+            color: #fff;
+        }
+
+        .container {
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 22px 60px rgba(0, 0, 0, .34);
+            text-align: left;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--star-color);
+            color: var(--star-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.5em;
+            line-height: 1;
+        }
+
+        .group-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 0 0 18px;
+            justify-content: flex-start;
+        }
+        .group-tab {
+            appearance: none;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-color);
+            cursor: pointer;
+            font: inherit;
+            font-weight: 700;
+            padding: 9px 22px;
+            transition: background .2s, color .2s, transform .2s;
+        }
+        .group-tab:hover, .group-tab.active {
+            background: var(--link-hover-bg);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        
+        .sub-nav {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            border-bottom: 2px solid var(--border-color);
+            text-align: left;
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+        }
+        .sub-nav li {
+            margin: 0;
+        }
+        .sub-nav a, .sub-nav button {
+            text-decoration: none;
+            color: var(--text-color);
+            background-color: rgba(255,255,255,0.05);
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 1em;
+            display: block;
+            white-space: nowrap;
+            font: inherit;
+        }
+        .sub-nav a:hover, .sub-nav button:hover {
+            background-color: var(--link-hover-bg);
+            color: #fff;
+        }
+        .sub-nav a.active, .sub-nav button.active {
+            color: #fff;
+            background-color: var(--link-hover-bg);
+            border-color: var(--link-hover-bg);
+            font-weight: bold;
+            z-index: 1;
+            position: relative;
+            transform: translateY(1px);
+        }
+        
+        .report-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 992px) {
+            body {
+                padding-top: 0px !important;
+            }
+            .header {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                padding: 10px 15px !important;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0;
+                right: 0;
+                box-sizing: border-box !important;
+                z-index: 1001;
+                background-color: var(--header-bg);
+                backdrop-filter: blur(15px);
+            }
+            .title-group {
+                display: flex !important;
+                align-items: center !important;
+                gap: 8px !important;
+            }
+            .title-group h1 { font-size: 1.1em !important; }
+            .title-group img { width: 35px !important; margin-bottom: 0 !important; }
+            
+            .menu-toggle {
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+            }
+            
+            .navbar { 
+                position: fixed !important; 
+                top: 65px !important; /* 修正此處以對齊 header */
+                left: 0;
+                right: 0;
+                box-sizing: border-box !important;
+                z-index: 100;
+            }
+            .nav-links {
+                display: none;
+                background: rgba(10, 10, 10, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                position: absolute;
+                width: 100%;
+                top: 0;
+                left: 0;
+                padding: 0;
+                margin: 0;
+            }
+            .nav-links.active { display: flex !important; }
+            .nav-links a {
+                padding: 15px !important;
+                border-bottom: 1px solid var(--border-color);
+                text-align: center !important;
+                display: block !important;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .container { margin-top: 100px !important; }
+        }
+    </style>
+    <link rel="icon" href="assets/season3-main-logo.webp">
+    <link rel="stylesheet" href="assets/season3-site.css">
+</head>
+<body>
+
+    <div class="cosmic-bg">
+        <div class="black-hole">
+            <div class="baseball-laces">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 50 2 A 38 48 0 0 0 50 98" fill="none" stroke="#ffd46b" stroke-width="2.5" stroke-dasharray="2 3.5"/>
+                    <path d="M 50 2 A 38 48 0 0 1 50 98" fill="none" stroke="#7b4cff" stroke-width="2.5" stroke-dasharray="2 3.5"/>
+                </svg>
+            </div>
+        </div>
+        <div class="star-element">
+            <div class="baseball-laces">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 50 2 A 38 48 0 0 0 50 98" fill="none" stroke="#ffd46b" stroke-width="2.5" stroke-dasharray="2 3.5"/>
+                    <path d="M 50 2 A 38 48 0 0 1 50 98" fill="none" stroke="#ff8a2c" stroke-width="2.5" stroke-dasharray="2 3.5"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="title-group">
+            <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO">
+            <h1>賽程戰績表</h1>
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+    </header>
+
+    <nav class="navbar">
+        <ul class="nav-links" id="nav-links">
+            <li><a href="index.html">首頁</a></li>
+            <li><a href="賽程戰績表.html" class="active">賽程戰績表</a></li>
+            <li><a href="數據統計.html">選手數據查詢</a></li>
+            <li><a href="打者排行榜.html">打者排行榜</a></li>
+            <li><a href="投手排行榜.html">投手排行榜</a></li>
+            <li><a href="CBL名人堂.html">CBL名人堂</a></li>
+            <li><a href="team_introduction.html">球隊介紹</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <ul class="sub-nav">
+            <li><a class="active" data-view="schedule" href="#schedule">賽程</a></li>
+            <li><a data-view="standings" href="#standings">戰績排名</a></li>
+        </ul>
+
+        <div class="group-tabs" role="tablist" aria-label="Division selector">
+            <button class="group-tab active" type="button" data-division="black-hole">黑洞組</button>
+            <button class="group-tab" type="button" data-division="stellar">恆星組</button>
+        </div>
+
+        <img id="report-image" class="report-image" alt="Report">
+    </div>
+
+    <script>
+        const assets = {
+            'black-hole': { schedule: 'assets/reports/black-hole-schedule.webp', standings: 'assets/reports/black-hole-standings.webp' },
+            stellar: { schedule: 'assets/reports/stellar-schedule.webp', standings: 'assets/reports/stellar-standings.webp' }
+        };
+        let currentDivision = 'black-hole';
+        let currentView = 'schedule';
+
+        function renderReport() {
+            const image = document.getElementById('report-image');
+            image.src = assets[currentDivision][currentView];
+        }
+
+        document.querySelectorAll('.group-tab').forEach(button => {
+            button.addEventListener('click', () => {
+                currentDivision = button.dataset.division;
+                document.querySelectorAll('.group-tab').forEach(item => item.classList.toggle('active', item === button));
+                renderReport();
+            });
+        });
+
+        document.querySelectorAll('.sub-nav a').forEach(link => {
+            link.addEventListener('click', event => {
+                event.preventDefault();
+                currentView = link.dataset.view;
+                document.querySelectorAll('.sub-nav a').forEach(item => item.classList.toggle('active', item === link));
+                renderReport();
+            });
+        });
+        function toggleMenu() { document.getElementById('nav-links').classList.toggle('active'); }
+        renderReport();
+    </script>
+    <script src="assets/season3-site.js"></script>
+</body>
+</html>

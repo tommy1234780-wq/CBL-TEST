@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CBL 打者成績查詢｜CBL 第三屆官方網站</title>
+  <style>
+    :root {
+      --primary-color: #003566;
+      --secondary-color: #ffc300;
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --text-main: #212529;
+      --text-muted: #6c757d;
+      --border-color: #dee2e6;
+      --hover-color: #f1f3f5;
+      --sticky-bg: #fdfdfd;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #121212;
+        --card-bg: #1e1e1e;
+        --text-main: #e0e0e0;
+        --text-muted: #b0b0b0;
+        --border-color: #333333;
+        --hover-color: #2c2c2c;
+        --sticky-bg: #1e1e1e;
+      }
+      .note-readonly { background-color: #2c2600; color: #ffd43b; border-color: #5c4d00; }
+      .controls { background: #252525; }
+      input, select { background-color: #2c2c2c; color: white; border-color: #444; }
+      .highlight-ops { background-color: #3d2b1f; }
+      #loading-overlay { background: rgba(0,0,0,0.8); }
+      #loading-overlay p { color: #4e9af1; }
+      td:nth-child(1), td:nth-child(2), td:nth-child(3) { background-color: var(--sticky-bg); }
+      .player-card { background: linear-gradient(135deg, #1e1e1e 0%, #121212 100%); border: 1px solid #333; }
+      
+      /* 生涯模式深色樣式 */
+      .career-view-table td {
+        background-color: #1a2634;
+        color: #e0e0e0;
+      }
+      .career-view-table td:nth-child(1), 
+      .career-view-table td:nth-child(2), 
+      .career-view-table td:nth-child(3) {
+        background-color: #243346;
+        color: #e0e0e0;
+      }
+      .career-view-table tbody tr:hover td {
+        background-color: #2c3e50;
+        color: #ffffff;
+      }
+    }
+
+    body { 
+      font-family: 'Segoe UI', system-ui, -apple-system, "Noto Sans TC", sans-serif; 
+      margin: 0; 
+      padding: 0;
+      background-color: var(--bg-color); 
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    .container { 
+      max-width: 1400px; 
+      margin: 20px auto; 
+      padding: 24px; 
+      background-color: var(--card-bg); 
+      border-radius: 12px; 
+      box-shadow: 0 8px 30px rgba(0,0,0,0.05); 
+    }
+
+    header {
+      border-bottom: 2px solid var(--primary-color);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    h1 { 
+      margin: 0; 
+      font-size: 28px; 
+      color: var(--primary-color);
+      font-weight: 800;
+    }
+
+    .update-info {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .note-readonly {
+      background-color: #fff9db;
+      color: #856404;
+      border-left: 4px solid var(--secondary-color);
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      border-radius: 4px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 控制列優化 */
+    .controls { 
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+      background: #f1f3f5;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    input, select, button { 
+      padding: 10px 14px; 
+      font-size: 15px; 
+      border: 1px solid var(--border-color); 
+      border-radius: 6px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(0,53,102,0.1);
+    }
+
+    button { 
+      background-color: var(--primary-color); 
+      color: white;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    button:hover { 
+      background-color: #001d3d;
+      transform: translateY(-1px);
+    }
+
+    button#toggle-career-view {
+      background-color: #fff;
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+    }
+
+    button#toggle-career-view:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    /* 表格設計 */
+    .table-wrapper { 
+      overflow: auto; 
+      max-height: 70vh; 
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      position: relative;
+    }
+
+    table { 
+      width: 100%; 
+      border-collapse: separate; 
+      border-spacing: 0;
+      font-size: 14px; 
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    th { 
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      padding: 14px 12px;
+      text-align: center; 
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+
+    th:hover {
+      background-color: #002855;
+    }
+
+    td { 
+      padding: 12px; 
+      border-bottom: 1px solid var(--border-color); 
+      text-align: center; 
+      white-space: nowrap; 
+    }
+
+    tbody tr:hover {
+      background-color: var(--hover-color);
+    }
+
+    /* 固定欄位樣式 */
+    th:nth-child(1), td:nth-child(1),
+    th:nth-child(2), td:nth-child(2),
+    th:nth-child(3), td:nth-child(3) {
+      position: sticky;
+      z-index: 5;
+    }
+
+    td:nth-child(1), td:nth-child(2), td:nth-child(3) {
+      background-color: var(--sticky-bg);
+      font-weight: 600;
+      border-right: 1px solid var(--border-color);
+    }
+
+    thead th:nth-child(1), thead th:nth-child(2), thead th:nth-child(3) {
+      z-index: 11;
+      background-color: var(--primary-color);
+    }
+
+    /* 關鍵數據突顯 */
+    .highlight-avg { color: #d9480f; font-weight: bold; }
+    .highlight-ops { background-color: #fff4e6; font-weight: bold; }
+
+    /* 球員卡片樣式 */
+    #player-cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .player-card {
+      background: linear-gradient(135deg, #003566 0%, #001d3d 100%);
+      color: white;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+      animation: slideIn 0.4s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .player-card::after {
+      content: "";
+      position: absolute;
+      top: -50%; right: -20%;
+      width: 200px; height: 200px;
+      background: rgba(255, 195, 0, 0.1);
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .player-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid var(--secondary-color);
+      object-fit: cover;
+      background-color: #eee;
+      z-index: 2;
+    }
+
+    .player-info {
+      flex-grow: 1;
+      z-index: 2;
+    }
+
+    .player-info h2 {
+      margin: 0;
+      font-size: 24px;
+      color: var(--secondary-color);
+    }
+
+    .player-info .team-tag {
+      font-size: 14px;
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-top: 4px;
+      display: inline-block;
+    }
+
+    .player-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+      z-index: 2;
+    }
+
+    .stat-item {
+      text-align: left;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #adb5bd;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .stat-value.highlight {
+      color: var(--secondary-color);
+    }
+
+    /* 生涯模式樣式 */
+    .career-view-table td {
+      background-color: #f0f7ff;
+      color: #000000;
+    }
+    .career-view-table td:nth-child(1), 
+    .career-view-table td:nth-child(2), 
+    .career-view-table td:nth-child(3) {
+      background-color: #e7f3ff;
+      color: #000000;
+    }
+    .career-view-table tbody tr:hover td {
+      background-color: #d0e7ff;
+      color: #000000;
+    }
+
+    /* 排序指示器 */
+    .sort-icon {
+      font-size: 10px;
+      margin-left: 4px;
+      opacity: 0.5;
+    }
+    th.sorted-desc .sort-icon::after { content: " ▼"; opacity: 1; }
+    th.sorted-asc .sort-icon::after { content: " ▲"; opacity: 1; }
+
+    /* 載入中動畫 */
+    #loading-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255,255,255,0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 4px solid var(--border-color);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    @media (max-width: 768px) {
+      .container { margin: 0; border-radius: 0; padding: 16px; }
+      header { flex-direction: column; align-items: flex-start; }
+      .controls { grid-template-columns: 1fr; }
+      h1 { font-size: 20px; }
+    }
+  </style>
+    <link rel="icon" href="assets/season3-main-logo.webp">
+    <link rel="stylesheet" href="assets/season3-site.css">
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <p style="margin-top: 12px; font-weight: 600; color: var(--primary-color);">資料讀取中...</p>
+</div>
+
+<div class="container">
+  <header>
+    <div>
+      <h1>CBL 企業交流聯盟 打者成績</h1>
+      <div class="update-info">數據更新時間：<span id="last-updated">讀取中...</span></div>
+    </div>
+    <button id="toggle-career-view">
+      <span>📊</span> 查看生涯成績
+    </button>
+  </header>
+
+  <div class="note-readonly">
+    <span>ℹ️</span> 提示：此頁面僅供查詢打者成績，使用者無法修改資料。
+  </div>
+
+  <div class="controls">
+    <div class="control-group">
+      <label>搜尋球員</label>
+      <input id="search" type="text" placeholder="輸入姓名..." />
+    </div>
+    <div class="control-group">
+      <label>球隊篩選</label>
+      <select id="team"><option value="">全部球隊</option></select>
+    </div>
+    <div class="control-group">
+      <label>屆數/賽季</label>
+      <select id="season"><option value="">全部屆數</option></select>
+    </div>
+    <div class="control-group" style="justify-content: flex-end;">
+      <button id="clear-filters" style="background-color: var(--text-muted);">
+        清除篩選
+      </button>
+    </div>
+  </div>
+
+  <div id="player-cards-container"></div>
+
+  <div class="table-wrapper">
+    <table id="table">
+      <thead><tr id="header-row"></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_X5jYPR24dk5oqUSr1py8glTu-jHZJwuzhyJN7RrjMkgkXjwv0hVgmn7KlieQy_-CZEn6UQofqTbz/pub?gid=546432089&single=true&output=csv";
+
+  const searchInput = document.getElementById('search');
+  const teamSelect = document.getElementById('team');
+  const seasonSelect = document.getElementById('season');
+  const clearBtn = document.getElementById('clear-filters');
+  const headerRow = document.getElementById('header-row');
+  const tbody = document.getElementById('tbody');
+  const careerViewBtn = document.getElementById('toggle-career-view');
+  const loadingOverlay = document.getElementById('loading-overlay');
+  const playerCardsContainer = document.getElementById('player-cards-container');
+  
+  let originalRows = [], careerStats = [], headers = [];
+  let isCareerView = false;
+  let sortKey = '', sortOrder = 'none';
+
+  async function main() {
+    try {
+      const text = await fetchCSV(CSV_URL);
+      parseCSV(text);
+      extractAndUpdateTime();
+      calculateCareerStats();
+      buildFilters();
+      setupEventListeners();
+      render();
+      loadingOverlay.style.display = 'none';
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="10" style="color:red; padding:20px;">讀取錯誤：${err.message}</td></tr>`;
+      loadingOverlay.style.display = 'none';
+    }
+  }
+
+  async function fetchCSV(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.text();
+  }
+
+  function parseCSV(text) {
+    const lines = text.replace(/\r/g,'').split('\n').filter(l => l.trim() !== '');
+    headers = splitCSVLine(lines[0]).map(h => h.trim());
+    originalRows = lines.slice(1).map(line => {
+      const cells = splitCSVLine(line);
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = (cells[i] || '').trim());
+      return obj;
+    });
+  }
+  
+  function calculateCareerStats() {
+    const nameKey = headers.find(h => h.includes('姓名')) || "背號/姓名";
+    const teamKey = headers.find(h => h.includes('隊')) || "隊伍";
+    const seasonKey = headers.find(h => h.includes('屆數') || h.includes('屆別') || h.includes('賽季')) || "屆數";
+    const nonStatKeys = [nameKey, teamKey, seasonKey];
+
+    const playerStats = new Map();
+
+    for (const row of originalRows) {
+      const playerName = row[nameKey]?.trim();
+      if (!playerName) continue;
+
+      if (!playerStats.has(playerName)) {
+        const newStats = {
+          [nameKey]: playerName,
+          [teamKey]: row[teamKey], 
+          [seasonKey]: '生涯累計',
+          lastSeason: row[seasonKey],
+        };
+        headers.forEach(h => {
+          if (!nonStatKeys.includes(h)) newStats[h] = Number(row[h]) || 0;
+        });
+        playerStats.set(playerName, newStats);
+      } else {
+        const stats = playerStats.get(playerName);
+        if (row[seasonKey] > stats.lastSeason) {
+          stats.lastSeason = row[seasonKey];
+          stats[teamKey] = row[teamKey];
+        }
+        headers.forEach(h => {
+          if (!nonStatKeys.includes(h)) stats[h] += Number(row[h]) || 0;
+        });
+      }
+    }
+
+    // 動態鍵名匹配
+    const ABKey = headers.find(h => h === 'AB' || h === '打數') || 'AB';
+    const HKey = headers.find(h => h === 'H' || h === '安打總數' || h === '安打') || 'H';
+    const BBKey = headers.find(h => h.toUpperCase() === 'BB' || h === '四壞') || 'BB';
+    const HBPKey = headers.find(h => h.toUpperCase() === 'HBP' || h === '觸身') || 'HBP';
+    const SFKey = headers.find(h => h.toUpperCase() === 'SF' || h === '高犧') || 'SF';
+    const PAKey = headers.find(h => h.toUpperCase() === 'PA' || h === '打席') || 'PA';
+    const TBKey = headers.find(h => h === 'TB' || h === '壘打數') || 'TB';
+    const SOKey = headers.find(h => h.toUpperCase() === 'SO' || h === '三振') || 'SO';
+    
+    const avgKey = headers.find(h => h.includes('AVG') || h.includes('打擊率')) || 'AVG';
+    const obpKey = headers.find(h => h.includes('OBP') || h.includes('上壘率')) || 'OBP';
+    const slgKey = headers.find(h => h.includes('SLG') || h.includes('長打率')) || 'SLG';
+    const opsKey = headers.find(h => h.includes('OPS')) || 'OPS';
+
+    careerStats = Array.from(playerStats.values()).map(stats => {
+      const AB = stats[ABKey], H = stats[HKey], BB = stats[BBKey], HBP = stats[HBPKey], SF = stats[SFKey], TB = stats[TBKey], PA = stats[PAKey], SO = stats[SOKey];
+      
+      stats[avgKey] = AB > 0 ? (H / AB).toFixed(3) : '.000';
+      stats[obpKey] = (AB + BB + HBP + SF) > 0 ? ((H + BB + HBP) / (AB + BB + HBP + SF)).toFixed(3) : '.000';
+      stats[slgKey] = AB > 0 ? (TB / AB).toFixed(3) : '.000';
+      stats[opsKey] = (parseFloat(stats[obpKey]) + parseFloat(stats[slgKey])).toFixed(3);
+      
+      const kRateKey = headers.find(h => h.toUpperCase() === 'K%' || h === '三振率' || h === '被三振率');
+      if (kRateKey) stats[kRateKey] = PA > 0 ? ((SO / PA) * 100).toFixed(1) + '%' : '0.0%';
+
+      return stats;
+    });
+  }
+
+  function render() {
+    const dataToRender = isCareerView ? careerStats : originalRows;
+    const nameKey = searchInput.dataset.nameKey;
+    const teamKey = teamSelect.dataset.teamKey;
+    const seasonKey = seasonSelect.dataset.seasonKey;
+    
+    const kw = searchInput.value.trim().toLowerCase();
+    const team = teamSelect.value;
+    const season = seasonSelect.value;
+    
+    const filtered = dataToRender.filter(r => {
+      const passName = kw ? String(r[nameKey] || '').toLowerCase().includes(kw) : true;
+      const passTeam = team ? r[teamKey] === team : true;
+      const passSeason = isCareerView ? true : (season ? r[seasonKey] === season : true);
+      return passName && passTeam && passSeason;
+    });
+
+    if (sortKey && sortOrder !== 'none') {
+      filtered.sort((a, b) => {
+        let valA = a[sortKey], valB = b[sortKey];
+        const isNum = !isNaN(parseFloat(valA)) && isFinite(valA);
+        if (isNum) {
+          valA = parseFloat(valA); valB = parseFloat(valB);
+        } else {
+          valA = String(valA); valB = String(valB);
+        }
+        if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+        if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    renderHeaders();
+    renderBody(filtered);
+    
+    // 處理球員卡片顯示
+    if (kw && filtered.length > 0 && filtered.length <= 3) {
+      renderPlayerCards(filtered);
+    } else {
+      playerCardsContainer.innerHTML = '';
+    }
+
+    updateStickyColumns();
+  }
+
+  function renderPlayerCards(data) {
+    const nameKey = searchInput.dataset.nameKey;
+    const teamKey = teamSelect.dataset.teamKey;
+    
+    const avgKey = headers.find(h => h.includes('AVG') || h.includes('打擊率'));
+    const hrKey = headers.find(h => h === 'HR' || h === '全壘打');
+    const rbiKey = headers.find(h => h === 'RBI' || h === '打點');
+    const opsKey = headers.find(h => h.includes('OPS'));
+
+    playerCardsContainer.innerHTML = data.map(r => {
+      const playerName = r[nameKey];
+      const photoPath = `images/${playerName}.jpg`;
+      
+      return `
+        <div class="player-card">
+          <img src="${photoPath}" class="player-photo" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(playerName)}&background=random&size=128'" alt="${playerName}">
+          <div class="player-info">
+            <h2>${playerName}</h2>
+            <div class="team-tag">${r[teamKey]}</div>
+            <div class="player-stats-grid">
+              <div class="stat-item">
+                <span class="stat-label">AVG</span>
+                <span class="stat-value highlight">${r[avgKey] || '.000'}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">OPS</span>
+                <span class="stat-value highlight">${r[opsKey] || '.000'}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">HR</span>
+                <span class="stat-value">${r[hrKey] || '0'}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">RBI</span>
+                <span class="stat-value">${r[rbiKey] || '0'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  function renderHeaders() {
+    const AC1_INDEX = 28;
+    const seasonKey = headers.find(h => h.includes('屆別') || h.includes('賽季'));
+    
+    window.displayHeaders = headers.filter((h, i) => i !== AC1_INDEX && !(isCareerView && h === seasonKey));
+
+    headerRow.innerHTML = window.displayHeaders.map(h => {
+      let cls = '';
+      if (sortKey === h) cls = sortOrder === 'asc' ? 'sorted-asc' : 'sorted-desc';
+      return `<th class="${cls}" data-key="${h}">${h}<span class="sort-icon"></span></th>`;
+    }).join('');
+  }
+
+  function renderBody(data) {
+    const avgKey = headers.find(h => h.includes('AVG') || h.includes('打擊率'));
+    const opsKey = headers.find(h => h.includes('OPS'));
+
+    tbody.innerHTML = data.map(r => {
+      return `<tr>` + window.displayHeaders.map(h => {
+        let cls = '';
+        if (h === avgKey) cls = 'highlight-avg';
+        if (h === opsKey) cls = 'highlight-ops';
+        return `<td class="${cls}">${r[h] ?? ''}</td>`;
+      }).join('') + `</tr>`;
+    }).join('') || `<tr><td colspan="${window.displayHeaders.length}">查無資料</td></tr>`;
+  }
+
+  function setupEventListeners() {
+    searchInput.addEventListener('input', render);
+    [teamSelect, seasonSelect].forEach(el => el.addEventListener('change', render));
+    
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      teamSelect.value = '';
+      seasonSelect.value = seasonSelect.options[1]?.value || ''; // 預設回第一項
+      render();
+    });
+
+    careerViewBtn.addEventListener('click', () => {
+      isCareerView = !isCareerView;
+      careerViewBtn.innerHTML = isCareerView ? '<span>📅</span> 返回賽季成績' : '<span>📊</span> 查看生涯成績';
+      seasonSelect.disabled = isCareerView;
+      document.getElementById('table').classList.toggle('career-view-table', isCareerView);
+      sortKey = ''; sortOrder = 'none';
+      render();
+    });
+
+    headerRow.addEventListener('click', e => {
+      const th = e.target.closest('th');
+      if (!th) return;
+      const key = th.dataset.key;
+      if (sortKey === key) {
+        sortOrder = sortOrder === 'desc' ? 'asc' : (sortOrder === 'asc' ? 'none' : 'desc');
+      } else {
+        sortKey = key; sortOrder = 'desc';
+      }
+      render();
+    });
+
+    window.addEventListener('resize', updateStickyColumns);
+  }
+
+  function buildFilters() {
+    const teamKey = headers.find(h => h.includes('隊')) || "隊伍";
+    const seasonKey = headers.find(h => h.includes('屆數') || h.includes('屆別') || h.includes('賽季')) || "屆數";
+    const nameKey = headers.find(h => h.includes('姓名')) || "背號/姓名";
+
+    const teams = [...new Set(originalRows.map(r => r[teamKey]).filter(Boolean))].sort();
+    const seasons = [...new Set(originalRows.map(r => r[seasonKey]).filter(Boolean))].sort().reverse();
+    
+    teamSelect.innerHTML = '<option value="">全部球隊</option>' + teams.map(t => `<option>${t}</option>`).join('');
+    seasonSelect.innerHTML = '<option value="">全部屆數</option>' + seasons.map(s => `<option>${s}</option>`).join('');
+    
+    seasonSelect.value = seasons[0] || ''; 
+    searchInput.dataset.nameKey = nameKey;
+    teamSelect.dataset.teamKey = teamKey;
+    seasonSelect.dataset.seasonKey = seasonKey;
+  }
+
+  function extractAndUpdateTime() {
+    const AC1_INDEX = 28;
+    const el = document.getElementById('last-updated');
+    if (headers[AC1_INDEX]) el.textContent = headers[AC1_INDEX];
+  }
+
+  function updateStickyColumns() {
+    const ths = document.querySelectorAll('#table th');
+    if (ths.length < 3) return;
+    
+    const w1 = ths[0].offsetWidth, w2 = ths[1].offsetWidth;
+    
+    document.querySelectorAll('#table th:nth-child(1), #table td:nth-child(1)').forEach(e => e.style.left = '0px');
+    document.querySelectorAll('#table th:nth-child(2), #table td:nth-child(2)').forEach(e => e.style.left = w1 + 'px');
+    document.querySelectorAll('#table th:nth-child(3), #table td:nth-child(3)').forEach(e => e.style.left = (w1 + w2) + 'px');
+  }
+
+  function splitCSVLine(line) {
+    const out = []; let cur = '', inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i], n = line[i+1];
+      if (c === '"' && inQuotes && n === '"') { cur += '"'; i++; }
+      else if (c === '"') inQuotes = !inQuotes;
+      else if (c === ',' && !inQuotes) { out.push(cur); cur = ''; }
+      else cur += c;
+    }
+    out.push(cur);
+    return out;
+  }
+
+  main();
+</script>
+
+    <script src="assets/season3-site.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "CBL 第三屆官方網站",
+  "short_name": "CBL 棒球聯盟",
+  "description": "台中市 CBL 企業交流棒球聯盟第三屆官方網站",
+  "lang": "zh-TW",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#03101f",
+  "theme_color": "#03101f",
+  "icons": [
+    { "src": "assets/season3-main-logo.webp", "sizes": "900x900", "type": "image/webp", "purpose": "any maskable" }
+  ]
+}

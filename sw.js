@@ -1,4 +1,4 @@
-const CACHE_NAME = "cbl-season-3-v1";
+const CACHE_NAME = "cbl-season-3-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -25,6 +25,7 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+  if (new URL(event.request.url).pathname.endsWith("/admin.html")) return;
   event.respondWith(
     caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
       const copy = response.clone();

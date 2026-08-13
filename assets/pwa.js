@@ -20,7 +20,17 @@
   const status = panel.querySelector("[data-push-status]");
   const enable = panel.querySelector("[data-enable-push]");
   const disable = panel.querySelector("[data-disable-push]");
+  const toggle = panel.querySelector("[data-push-toggle]");
+  const settings = panel.querySelector("[data-push-settings]");
   const saved = JSON.parse(localStorage.getItem("cbl-followed-teams") || "[]");
+
+  function setExpanded(expanded) {
+    settings.hidden = !expanded;
+    toggle.setAttribute("aria-expanded", String(expanded));
+    toggle.textContent = expanded ? "收起設定" : "設定通知";
+  }
+  toggle.addEventListener("click", () => setExpanded(settings.hidden));
+  if (saved.length) setExpanded(true);
   const authClient = window.supabase?.createClient(config.supabaseUrl, config.supabasePublishableKey);
   async function accessToken() {
     if (!authClient) throw new Error("Supabase client unavailable");

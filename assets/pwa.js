@@ -12,7 +12,7 @@
     supabasePublishableKey: "sb_publishable_2Ko8glEiFB6NfunRyCr_4A_c1c1fvmO",
     subscribeEndpoint: "https://iwwwpgdrasrhmrhncsim.supabase.co/functions/v1/push-subscribe",
     unsubscribeEndpoint: "https://iwwwpgdrasrhmrhncsim.supabase.co/functions/v1/push-unsubscribe",
-    vapidPublicKey: "BEOqP4jgcghd7uHvYO1LZ81A4s-jSyWvtXNtK781EbpRcgduRusVlMI8XTrxPy3-Oe1XQcn5jazo0EcsP5P-V1E"
+    vapidPublicKey: "BA461i_ApeYPTt5PLjpC9JWvlXCRBlBn8i6RvJhasK0doPIpJM3YS01qQsCYq4DtvRug-j3VnCsHRtfmzfUqFxE"
   };
   const panel = document.querySelector("[data-push-panel]");
   if (!panel) return;

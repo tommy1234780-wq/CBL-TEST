@@ -1,16 +1,17 @@
 .notification-section { position: relative; }
-.push-panel { border: 1px solid rgba(92, 173, 255, .22); border-radius: 14px; background: rgba(3, 24, 49, .68); }
+.push-panel { position: relative; overflow: hidden; border: 1px solid rgba(92, 173, 255, .26); border-radius: 14px; background: linear-gradient(135deg, rgba(4, 20, 41, .88), rgba(9, 31, 58, .72)); }
+.push-panel::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 8% 0%, rgba(110, 200, 255, .14), transparent 32%), radial-gradient(circle at 94% 100%, rgba(115, 89, 217, .12), transparent 34%); }
 .push-panel.compact { padding: 14px 16px; }
-.push-summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.push-summary, .push-settings { position: relative; z-index: 1; }\n.push-summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .push-panel-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .push-panel-copy strong { color: #eaf6ff; font-size: .98rem; }
 .push-panel-copy span { color: #9fc4d9; font-size: .84rem; }
 .push-toggle { flex: 0 0 auto; border: 1px solid rgba(121,209,255,.42); border-radius: 999px; padding: 8px 13px; color: #ccecff; background: rgba(121,209,255,.08); font: inherit; font-size: .88rem; cursor: pointer; }
 .push-toggle:hover { background: rgba(121,209,255,.16); }
-.push-settings { padding-top: 14px; margin-top: 14px; border-top: 1px solid rgba(183, 213, 237, .14); }
+.push-settings { padding-top: 14px; margin-top: 14px; border-top: 1px solid rgba(155, 203, 235, .16); }
 .team-subscription-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 8px; }
-.team-option { display: flex; align-items: center; gap: 7px; padding: 9px 10px; border: 1px solid rgba(183, 213, 237, .2); border-radius: 10px; color: #dcefff; cursor: pointer; background: rgba(255,255,255,.035); font-size: .88rem; transition: .2s ease; }
-.team-option:has(input:checked) { border-color: #63c4ff; background: rgba(41, 146, 215, .22); }
+.team-option { display: flex; align-items: center; gap: 7px; padding: 9px 10px; border: 1px solid rgba(150, 202, 238, .24); border-radius: 10px; color: #dcefff; cursor: pointer; background: linear-gradient(135deg, rgba(21, 54, 84, .64), rgba(8, 23, 45, .62)); box-shadow: inset 0 1px 0 rgba(255,255,255,.035); font-size: .88rem; transition: border-color .2s ease, background .2s ease, box-shadow .2s ease, transform .2s ease; }\n.team-option:hover { transform: translateY(-1px); border-color: rgba(122, 211, 255, .65); background: linear-gradient(135deg, rgba(31, 80, 120, .68), rgba(14, 36, 65, .74)); }
+.team-option:has(input:checked) { border-color: #75d6ff; background: linear-gradient(135deg, rgba(30, 126, 184, .56), rgba(68, 73, 166, .48)); box-shadow: 0 0 0 1px rgba(117, 214, 255, .18), 0 8px 20px rgba(30, 123, 202, .18), inset 0 1px 0 rgba(255,255,255,.12); }
 .team-option input { accent-color: #63c4ff; }
 .push-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .push-button { border: 0; border-radius: 999px; padding: 9px 15px; color: #03101f; background: #79d1ff; font: inherit; font-size: .9rem; font-weight: 700; cursor: pointer; }

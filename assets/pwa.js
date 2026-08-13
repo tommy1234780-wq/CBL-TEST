@@ -28,7 +28,7 @@
     const teamIds = selectedTeams();
     if (!teamIds.length) return setStatus("請至少選擇一支球隊。");
     localStorage.setItem("cbl-followed-teams", JSON.stringify(teamIds));
-    if (!config.vapidPublicKey) return setStatus("球隊已保存。完成網站 HTTPS 與推播伺服器設定後即可收到通知。");
+    if (!config.vapidPublicKey) return setStatus("通知頻道已保存。完成推播伺服器設定後即可收到通知。");
     try {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") return setStatus("你尚未允許通知，可稍後再試。");
@@ -36,7 +36,7 @@
       const subscription = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(config.vapidPublicKey) });
       const response = await fetch(config.subscribeEndpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ subscription, teamIds }) });
       if (!response.ok) throw new Error("subscribe failed");
-      enable.hidden = true; disable.hidden = false; setStatus("已開啟推播：" + teamIds.length + " 支球隊。");
+      enable.hidden = true; disable.hidden = false; setStatus("已開啟推播：" + teamIds.length + " 個通知頻道。");
     } catch (_) { setStatus("推播設定失敗，請確認網站使用 HTTPS 並稍後再試。"); }
   });
 

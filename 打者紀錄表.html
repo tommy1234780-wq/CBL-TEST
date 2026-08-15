@@ -6,27 +6,21 @@
   <title>CBL 打者成績查詢｜CBL 第三屆官方網站</title>
   <style>
     :root {
-      --primary-color:#003566; --primary-dark:#001d3d; --secondary-color:#ffc300;
-      --bg-color:#f8f9fa; --card-bg:#fff; --text-main:#212529; --text-muted:#6c757d;
-      --border-color:#dee2e6; --hover-color:#f1f3f5; --sticky-bg:#fdfdfd;
-      --soft-blue:#edf5ff; --hot-bg:#fff4e6;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-color:#121212; --card-bg:#1e1e1e; --text-main:#e0e0e0; --text-muted:#b0b0b0;
-        --border-color:#333; --hover-color:#2c2c2c; --sticky-bg:#1e1e1e;
-        --soft-blue:#1d2b39; --hot-bg:#3d2b1f;
-      }
-      .note-readonly{background:#2c2600;color:#ffd43b;border-color:#5c4d00}
-      .controls,.view-toolbar{background:#252525}
-      input,select{background:#2c2c2c;color:#fff;border-color:#444}
-      #loading-overlay{background:rgba(0,0,0,.8)}
-      #loading-overlay p{color:#4e9af1}
-      .career-view-table td{background:#1a2634;color:#e0e0e0}
-      .career-view-table td:nth-child(1),.career-view-table td:nth-child(2),.career-view-table td:nth-child(3){background:#243346;color:#e0e0e0}
-      .career-view-table tbody tr:hover td{background:#2c3e50;color:#fff}
-      .mobile-player-card,.detail-stat{background:#1e1e1e}
-      .mobile-summary-stat{background:#292d31}
+      --primary-color:#0d2e50;
+      --primary-dark:#06172a;
+      --secondary-color:#d8b45a;
+      --bg-color:#061321;
+      --card-bg:#081a2d;
+      --panel-bg:#0b2038;
+      --panel-soft:#102942;
+      --text-main:#f3f5f7;
+      --text-muted:#a9bdd1;
+      --border-color:rgba(216,180,90,.34);
+      --hover-color:#12314f;
+      --sticky-bg:#0a1d32;
+      --soft-blue:#0d2741;
+      --hot-bg:#182d42;
+      --orange:#f05a19;
     }
     *{box-sizing:border-box}
     body{
@@ -35,100 +29,129 @@
     }
     .container{
       max-width:1400px;margin:20px auto;padding:24px;background:var(--card-bg);
-      border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.05)
+      border:1px solid var(--border-color);border-radius:14px;
+      box-shadow:0 10px 34px rgba(0,0,0,.24)
     }
     header{
-      border-bottom:2px solid var(--primary-color);margin-bottom:24px;padding-bottom:16px;
+      border-bottom:2px solid rgba(216,180,90,.45);margin-bottom:24px;padding-bottom:16px;
       display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px
     }
-    h1{margin:0;font-size:28px;color:var(--primary-color);font-weight:800}
+    h1{margin:0;font-size:28px;color:#f4d27a;font-weight:800}
     .update-info{font-size:14px;color:var(--text-muted)}
     .note-readonly{
-      background:#fff9db;color:#856404;border-left:4px solid var(--secondary-color);
-      padding:12px 16px;margin-bottom:18px;border-radius:4px;font-size:14px;
+      background:#11273c;color:#d8e3ee;border-left:4px solid var(--secondary-color);
+      padding:12px 16px;margin-bottom:18px;border-radius:7px;font-size:14px;
       display:flex;align-items:center;gap:8px
     }
     .controls{
       display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;
-      margin-bottom:14px;background:#f1f3f5;padding:16px;border-radius:10px
+      margin-bottom:14px;background:var(--panel-bg);padding:16px;border-radius:11px;
+      border:1px solid var(--border-color)
     }
     .control-group{display:flex;flex-direction:column;gap:6px}
     .control-group label,.view-label{font-size:13px;font-weight:700;color:var(--text-muted)}
     input,select,button{
       padding:10px 14px;font-size:15px;border:1px solid var(--border-color);
-      border-radius:7px;outline:none;transition:all .2s
+      border-radius:8px;outline:none;transition:all .2s
     }
-    input:focus,select:focus{border-color:var(--primary-color);box-shadow:0 0 0 3px rgba(0,53,102,.1)}
+    input,select{background:#0c2239;color:var(--text-main)}
+    input::placeholder{color:#7890a7}
+    input:focus,select:focus{border-color:var(--secondary-color);box-shadow:0 0 0 3px rgba(216,180,90,.12)}
     button{
-      background:var(--primary-color);color:#fff;font-weight:700;border:none;cursor:pointer;
-      display:flex;align-items:center;justify-content:center;gap:6px
+      background:var(--primary-color);color:#fff;font-weight:700;border:1px solid rgba(216,180,90,.35);
+      cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px
     }
-    button:hover{background:var(--primary-dark);transform:translateY(-1px)}
-    button#toggle-career-view{background:#fff;color:var(--primary-color);border:2px solid var(--primary-color)}
-    button#toggle-career-view:hover{background:var(--primary-color);color:#fff}
+    button:hover{background:#123b61;transform:translateY(-1px)}
+    button#toggle-career-view{
+      background:#0d2238;color:#f3d27d;border:1px solid rgba(216,180,90,.55)
+    }
+    button#toggle-career-view:hover{background:#173858;color:#fff3c9}
 
     .view-toolbar{
       display:flex;align-items:center;justify-content:space-between;gap:12px;
-      background:#f1f3f5;padding:12px 14px;border-radius:10px;margin-bottom:14px;flex-wrap:wrap
+      background:var(--panel-bg);padding:12px 14px;border-radius:11px;margin-bottom:14px;
+      flex-wrap:wrap;border:1px solid var(--border-color)
     }
     .view-switch{display:flex;gap:8px}
     .view-btn{
-      border:1px solid var(--border-color);background:var(--card-bg);color:var(--primary-color);
+      border:1px solid rgba(216,180,90,.42);background:#0c2239;color:#c6d6e5;
       padding:8px 13px;border-radius:8px;font-weight:800;cursor:pointer
     }
-    .view-btn.active{background:var(--primary-color);color:#fff;border-color:var(--primary-color)}
+    .view-btn:hover{background:#143756;color:#fff}
+    .view-btn.active{
+      background:#f3bf3f;color:#071522;border-color:#f3bf3f;
+      box-shadow:0 4px 12px rgba(243,191,63,.15)
+    }
     .view-hint{font-size:12px;color:var(--text-muted)}
 
-    .table-wrapper{overflow:auto;max-height:70vh;border:1px solid var(--border-color);border-radius:9px;position:relative}
-    table{width:100%;border-collapse:separate;border-spacing:0;font-size:14px}
+    .table-wrapper{
+      overflow:auto;max-height:70vh;border:1px solid var(--border-color);
+      border-radius:10px;position:relative;background:#07192b
+    }
+    table{width:100%;border-collapse:separate;border-spacing:0;font-size:14px;background:#07192b}
     thead{position:sticky;top:0;z-index:10}
     th{
-      background:var(--primary-color);color:#fff;font-weight:700;padding:12px 10px;text-align:center;
-      white-space:nowrap;cursor:pointer;user-select:none;border-right:1px solid rgba(255,255,255,.1)
+      background:#0b2a49;color:#f4d27a;font-weight:700;padding:12px 10px;text-align:center;
+      white-space:nowrap;cursor:pointer;user-select:none;border-right:1px solid rgba(216,180,90,.18)
     }
-    th:hover{background:#002855}
-    td{padding:11px 10px;border-bottom:1px solid var(--border-color);text-align:center;white-space:nowrap}
-    tbody tr:nth-child(even) td{background:#fafbfc}
+    th:hover{background:#113858}
+    td{
+      padding:11px 10px;border-bottom:1px solid rgba(216,180,90,.16);
+      text-align:center;white-space:nowrap;color:#e7eef5;background:#081b2f
+    }
+    tbody tr:nth-child(even) td{background:#0a2036}
     tbody tr:hover td{background:var(--hover-color)}
     th:nth-child(1),td:nth-child(1),th:nth-child(2),td:nth-child(2),th:nth-child(3),td:nth-child(3){position:sticky;z-index:5}
     td:nth-child(1),td:nth-child(2),td:nth-child(3){background:var(--sticky-bg);font-weight:600;border-right:1px solid var(--border-color)}
-    thead th:nth-child(1),thead th:nth-child(2),thead th:nth-child(3){z-index:11;background:var(--primary-color)}
-    .highlight-avg{color:#d9480f;font-weight:900}
-    .highlight-ops{background:var(--hot-bg)!important;font-weight:900}
-    .group-start{border-left:3px solid rgba(255,195,0,.55)!important}
-    td.group-start{border-left:3px solid rgba(0,53,102,.18)!important}
-    .sort-icon{font-size:10px;margin-left:4px;opacity:.5}
+    tbody tr:nth-child(even) td:nth-child(1),tbody tr:nth-child(even) td:nth-child(2),tbody tr:nth-child(even) td:nth-child(3){background:#0b2239}
+    thead th:nth-child(1),thead th:nth-child(2),thead th:nth-child(3){z-index:11;background:#0b2a49}
+    .highlight-avg{color:var(--orange);font-weight:900}
+    .highlight-ops{background:#132c43!important;color:#f3d27a;font-weight:900}
+    .group-start{border-left:3px solid rgba(216,180,90,.58)!important}
+    td.group-start{border-left:3px solid rgba(216,180,90,.28)!important}
+    .sort-icon{font-size:10px;margin-left:4px;opacity:.55}
     th.sorted-desc .sort-icon::after{content:" ▼";opacity:1}
     th.sorted-asc .sort-icon::after{content:" ▲";opacity:1}
 
-    .career-view-table td{background:#f0f7ff;color:#000}
-    .career-view-table td:nth-child(1),.career-view-table td:nth-child(2),.career-view-table td:nth-child(3){background:#e7f3ff;color:#000}
-    .career-view-table tbody tr:hover td{background:#d0e7ff;color:#000}
+    .career-view-table td{background:#0d263e;color:#e8f0f7}
+    .career-view-table td:nth-child(1),.career-view-table td:nth-child(2),.career-view-table td:nth-child(3){background:#102d49;color:#fff}
+    .career-view-table tbody tr:hover td{background:#173b5d;color:#fff}
 
     .mobile-list{display:none}
     .mobile-player-card{
-      border:1px solid var(--border-color);border-radius:13px;background:var(--card-bg);
-      overflow:hidden;margin-bottom:10px
+      border:1px solid rgba(216,180,90,.4);border-radius:14px;background:#071b2f;
+      overflow:hidden;margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,.12)
     }
-    .mobile-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px}
-    .mobile-player-meta strong{display:block;font-size:16px}
+    .mobile-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 14px 10px}
+    .mobile-player-meta strong{display:block;font-size:17px;color:#f7f4ea}
     .mobile-player-meta small{display:block;color:var(--text-muted);margin-top:1px}
     .mobile-avg{text-align:right}
-    .mobile-avg small{display:block;color:var(--text-muted);font-size:10px;font-weight:800}
-    .mobile-avg strong{font-size:20px;color:#d9480f}
-    .mobile-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:0 12px 12px}
-    .mobile-summary-stat{background:#f5f7f9;border-radius:8px;padding:7px 4px;text-align:center}
-    .mobile-summary-stat span,.detail-stat span{display:block;font-size:10px;color:var(--text-muted);font-weight:800}
-    .mobile-summary-stat b{font-size:15px}
-    .mobile-toggle{
-      width:100%;background:transparent;color:var(--primary-color);border-radius:0;
-      border-top:1px solid var(--border-color);padding:9px;font-size:13px
+    .mobile-avg small{display:block;color:#aebfd0;font-size:10px;font-weight:800}
+    .mobile-avg strong{font-size:21px;color:var(--orange)}
+    .mobile-summary{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:2px 13px 13px
     }
-    .mobile-toggle:hover{background:var(--hover-color);transform:none}
-    .mobile-details{display:none;background:var(--soft-blue);padding:11px}
+    .mobile-summary-stat{
+      background:var(--panel-soft);border:1px solid rgba(216,180,90,.2);
+      border-radius:9px;padding:8px 4px;text-align:center
+    }
+    .mobile-summary-stat span,.detail-stat span{display:block;font-size:10px;color:#a9bdd1;font-weight:800}
+    .mobile-summary-stat b{font-size:16px;color:#f4ead0}
+    .mobile-toggle{
+      width:100%;background:#071a2d;color:#b9c9d9;border-radius:0;border:0;
+      border-top:1px solid rgba(216,180,90,.28);padding:10px;font-size:13px
+    }
+    .mobile-toggle:hover{background:#0d2944;color:#f4d27a;transform:none}
+    .mobile-details{
+      display:none;background:#0a2239;padding:11px;border-top:1px solid rgba(216,180,90,.16)
+    }
     .mobile-player-card.expanded .mobile-details{display:block}
-    .mobile-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-    .detail-stat{background:var(--card-bg);border-radius:8px;text-align:center;padding:7px 4px}
+    .mobile-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .detail-stat{
+      background:#102b46;border:1px solid rgba(216,180,90,.18);
+      border-radius:8px;text-align:center;padding:8px 4px
+    }
+    .detail-stat b{color:#edf3f8}
     .mobile-player-card.expanded .mobile-toggle .open-label{display:none}
     .mobile-toggle .close-label{display:none}
     .mobile-player-card.expanded .mobile-toggle .close-label{display:inline}
@@ -137,22 +160,24 @@
     .view-full-mobile .mobile-player-card .mobile-toggle .close-label{display:inline}
 
     #loading-overlay{
-      position:fixed;inset:0;background:rgba(255,255,255,.8);display:flex;flex-direction:column;
+      position:fixed;inset:0;background:rgba(4,14,24,.88);display:flex;flex-direction:column;
       justify-content:center;align-items:center;z-index:1000
     }
+    #loading-overlay p{color:#f4d27a!important}
     .spinner{
-      width:40px;height:40px;border:4px solid var(--border-color);border-top:4px solid var(--primary-color);
+      width:40px;height:40px;border:4px solid rgba(216,180,90,.2);border-top:4px solid var(--secondary-color);
       border-radius:50%;animation:spin 1s linear infinite
     }
     @keyframes spin{to{transform:rotate(360deg)}}
 
     @media (max-width:768px){
-      .container{margin:0;border-radius:0;padding:14px;box-shadow:none}
+      body{background:#061321}
+      .container{margin:0;border-radius:0;padding:14px;background:#06182a;box-shadow:none;border-left:0;border-right:0}
       header{flex-direction:column;align-items:flex-start;margin-bottom:16px}
       .controls{grid-template-columns:1fr 1fr;padding:12px}
       .controls .control-group:first-child{grid-column:1/-1}
       h1{font-size:20px}
-      .view-toolbar{padding:10px}
+      .view-toolbar{padding:11px}
       .view-switch{width:100%}
       .view-btn{flex:1}
       .view-hint{display:none}
@@ -171,7 +196,7 @@
 <body>
 <div id="loading-overlay">
   <div class="spinner"></div>
-  <p style="margin-top:12px;font-weight:600;color:var(--primary-color)">資料讀取中...</p>
+  <p style="margin-top:12px;font-weight:600">資料讀取中...</p>
 </div>
 
 <div class="container">
@@ -200,7 +225,7 @@
     </div>
     <div class="control-group" style="justify-content:flex-end">
       <label>&nbsp;</label>
-      <button id="clear-filters" style="background-color:var(--text-muted)">清除篩選</button>
+      <button id="clear-filters" style="background-color:#314b61">清除篩選</button>
     </div>
   </div>
 
@@ -255,8 +280,8 @@
       render();
       loadingOverlay.style.display = 'none';
     } catch (err) {
-      tbody.innerHTML = `<tr><td style="color:red;padding:20px">讀取錯誤：${escapeHtml(err.message)}</td></tr>`;
-      mobileList.innerHTML = `<div style="color:red;padding:20px">讀取錯誤：${escapeHtml(err.message)}</div>`;
+      tbody.innerHTML = `<tr><td style="color:#ff8f66;padding:20px">讀取錯誤：${escapeHtml(err.message)}</td></tr>`;
+      mobileList.innerHTML = `<div style="color:#ff8f66;padding:20px">讀取錯誤：${escapeHtml(err.message)}</div>`;
       loadingOverlay.style.display = 'none';
     }
   }
@@ -305,7 +330,7 @@
 
     const ABKey = findKey(['AB',/打數/],'AB');
     const HKey = findKey(['H',/安打總數/,/^安打$/],'H');
-    const BBKey = findKey(['BB',/四壞/],'BB');
+    const BBKey = findKey(['BB',/四壞/,/保送/],'BB');
     const HBPKey = findKey(['HBP',/觸身/],'HBP');
     const SFKey = findKey(['SF',/高犧/],'SF');
     const PAKey = findKey(['PA',/打席/],'PA');
@@ -382,10 +407,11 @@
       h => /^(H|安打|安打總數)$/i.test(h),
       h => /^(HR|全壘打)$/i.test(h),
       h => /^(RBI|打點)$/i.test(h),
+      h => /^(BB|四壞|保送)$/i.test(h),
+      h => /^(SB|盜壘)$/i.test(h),
       h => /AVG|打擊率/i.test(h),
       h => /OBP|上壘率/i.test(h),
-      h => /OPS/i.test(h),
-      h => /^(SB|盜壘)$/i.test(h)
+      h => /OPS/i.test(h)
     ];
     const picked = [];
     preferredMatchers.forEach(match => {
@@ -399,7 +425,7 @@
   function classifyHeader(h) {
     if (/AVG|打擊率|OBP|上壘率|SLG|長打率|OPS/i.test(h)) return 'rate';
     if (/^(2B|3B|HR|全壘打|二壘打|三壘打)$/i.test(h)) return 'power';
-    if (/^(BB|SO|K%|四壞|三振|三振率|被三振率)$/i.test(h)) return 'discipline';
+    if (/^(BB|SO|K%|四壞|保送|三振|三振率|被三振率)$/i.test(h)) return 'discipline';
     if (/^(SB|CS|盜壘|盜壘刺)$/i.test(h)) return 'running';
     return 'basic';
   }
@@ -441,8 +467,10 @@
     const hKey = findKey(['H',/^安打$/, /安打總數/]);
     const hrKey = findKey(['HR',/^全壘打$/]);
     const rbiKey = findKey(['RBI',/^打點$/]);
+    const bbKey = findKey(['BB',/^四壞$/, /^保送$/]);
+    const sbKey = findKey(['SB',/^盜壘$/]);
     const opsKey = headers.find(h => h.includes('OPS'));
-    const summaryKeys = [hKey,hrKey,rbiKey,opsKey].filter(Boolean);
+    const summaryKeys = [hKey,hrKey,rbiKey,bbKey,sbKey,opsKey].filter(Boolean);
     const detailHeaders = getFullDetailHeaders(nameKey,teamKey,summaryKeys,avgKey);
 
     mobileList.classList.toggle('view-full-mobile',isFullView);

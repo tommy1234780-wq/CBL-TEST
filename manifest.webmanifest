@@ -9,6 +9,6 @@
   "background_color": "#03101f",
   "theme_color": "#03101f",
   "icons": [
-    { "src": "assets/season3-main-logo.webp", "sizes": "900x900", "type": "image/webp", "purpose": "any maskable" }
+    { "src": "assets/cbl-pwa-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }

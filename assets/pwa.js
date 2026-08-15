@@ -1,6 +1,32 @@
 (function () {
   "use strict";
 
+  // PWA 更新檢查獨立於推播面板，讓所有載入本檔的頁面都能自動更新。
+  if ("serviceWorker" in navigator) {
+    let reloading = false;
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (reloading) return;
+      reloading = true;
+      window.location.reload();
+    });
+
+    navigator.serviceWorker
+      .register("./sw.js", { updateViaCache: "none" })
+      .then((registration) => {
+        // 每次開啟網站 / PWA 都主動向伺服器確認 sw.js 是否有新版。
+        registration.update().catch(() => {});
+
+        // PWA 從背景回到前景時再檢查一次，避免長時間不關閉而錯過更新。
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") {
+            registration.update().catch(() => {});
+          }
+        });
+      })
+      .catch(() => {});
+  }
+
   const teams = [
     ["OFFICIAL", "CBL 官方通知"],
     ["A", "戰狼棒球隊"], ["B", "神清163棒球隊"], ["C", "遊牧者棒球隊"], ["D", "好Chill棒球隊"],
@@ -47,7 +73,6 @@
   const selectedTeams = () => [...options.querySelectorAll("input:checked")].map((input) => input.value);
   const setStatus = (message) => { status.textContent = message; };
 
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
   if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
     enable.disabled = true; setStatus("此瀏覽器不支援網站推播，仍可保存你的球隊選擇。");
   }

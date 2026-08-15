@@ -1,4 +1,4 @@
-const CACHE_NAME = "cbl-season-3-v2";
+const CACHE_NAME = "cbl-season-3-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -25,7 +25,8 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
-  if (new URL(event.request.url).pathname.endsWith("/admin.html")) return;
+  const path = decodeURIComponent(new URL(event.request.url).pathname);
+  if (path.endsWith("/admin.html") || path.endsWith("/content-admin.html") || path.endsWith("/賽程戰績表.html")) return;
   event.respondWith(
     caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
       const copy = response.clone();

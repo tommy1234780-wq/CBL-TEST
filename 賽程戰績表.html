@@ -377,7 +377,7 @@
             .container { margin-top: 100px !important; }
         }
     </style>
-    <link rel="icon" href="assets/cbl-pwa-icon.png">
+    <link rel="icon" href="assets/season3-main-logo.webp">
     <link rel="stylesheet" href="assets/season3-site.css">
 </head>
 <body>
@@ -466,6 +466,18 @@
         });
         function toggleMenu() { document.getElementById('nav-links').classList.toggle('active'); }
         renderReport();
+        fetch('https://iwwwpgdrasrhmrhncsim.supabase.co/functions/v1/content-manager', { headers: { apikey: 'sb_publishable_2Ko8glEiFB6NfunRyCr_4A_c1c1fvmO' } })
+          .then(response => response.ok ? response.json() : null)
+          .then(data => {
+            if (!data) return;
+            const managed = Object.fromEntries((data.assets || []).map(asset => [asset.asset_key, asset.url]));
+            if (managed.black_hole_schedule) assets['black-hole'].schedule = managed.black_hole_schedule;
+            if (managed.black_hole_standings) assets['black-hole'].standings = managed.black_hole_standings;
+            if (managed.stellar_schedule) assets.stellar.schedule = managed.stellar_schedule;
+            if (managed.stellar_standings) assets.stellar.standings = managed.stellar_standings;
+            renderReport();
+          })
+          .catch(() => {});
     </script>
     <script src="assets/season3-site.js"></script>
 </body>

@@ -1,468 +1,201 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CBL名人堂 - 台中市CBL企業交流聯盟｜CBL 第三屆官方網站</title>
-    <style>
-        :root {
-            --bg-color: #f0f2f5;
-            --text-color: #333;
-            --header-bg: #ffffff;
-            --nav-bg: #ffffff;
-            --link-color: #1565c0;
-            --link-border: #1565c0;
-            --link-hover-bg: #1565c0;
-            --link-hover-text: #ffffff;
-            --border-color: #e0e0e0;
-            --title-color: #0d47a1;
-            --card-bg: #ffffff;
-            --section-title-border: #e0e0e0;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #121212;
-                --text-color: #e0e0e0;
-                --header-bg: #1e1e1e;
-                --nav-bg: #1e1e1e;
-                --link-color: #4e9af1;
-                --link-border: #4e9af1;
-                --link-hover-bg: #4e9af1;
-                --link-hover-text: #ffffff;
-                --border-color: #333333;
-                --title-color: #4e9af1;
-                --card-bg: #1e1e1e;
-                --section-title-border: #333333;
-            }
-            /* Specific for sub-nav in some pages */
-            .sub-nav a { background-color: #2c2c2c !important; color: #4e9af1 !important; border-color: #444 !important; }
-            .sub-nav a.active { background-color: #4e9af1 !important; color: #ffffff !important; border-color: #4e9af1 !important; }
-            /* Specific for table headers/rows in ranking pages */
-            th { background-color: #242526 !important; color: #e0e0e0 !important; }
-            td { border-bottom: 1px solid #333 !important; color: #e0e0e0 !important; }
-            table { background-color: #1e1e1e !important; }
-            .award-card { background-color: #1e1e1e !important; box-shadow: 0 4px 8px rgba(0,0,0,0.5) !important; }
-            .award-card .player-name { color: #e0e0e0 !important; }
-            .season-selector { background-color: #1e1e1e !important; color: #e0e0e0 !important; }
-            .season-selector label { color: #e0e0e0 !important; }
-            .season-selector select { background-color: #2c2c2c !important; color: white !important; border-color: #444 !important; }
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-        }
-
-        /* --- Desktop Styles --- */
-        .header {
-            text-align: center;
-            background-color: var(--header-bg);
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .title-group {
-            display: inline-block; /* Centered by header's text-align */
-        }
-        .title-group img {
-            width: 80px;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-        .title-group h1 {
-            color: var(--title-color);
-            margin: 0;
-            font-size: 2em;
-        }
-        .navbar {
-            background-color: var(--nav-bg);
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-            text-align: center;
-        }
-        .nav-links {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center; /* Reverted to center */
-            flex-wrap: wrap; /* Re-added wrap */
-        }
-        .nav-links li {
-            margin: 5px 10px;
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--link-color);
-            font-size: 0.9em;
-            padding: 8px 15px;
-            border: 2px solid var(--link-border);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-        .nav-links a:hover, .nav-links a.active {
-            background-color: var(--link-hover-bg);
-            color: var(--link-hover-text);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .menu-toggle {
-            display: none; /* Hidden on desktop */
-        }
-
-        .container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .awards-section {
-            margin-bottom: 40px;
-        }
-
-        .awards-section h2 {
-            text-align: center;
-            color: var(--title-color);
-            margin-bottom: 30px;
-            font-size: 2em;
-        }
-
-        .awards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .award-card {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .award-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-        }
-
-        .player-photo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 15px;
-            background-color: var(--border-color);
-        }
-
-        .award-card h3 {
-            color: var(--link-color);
-            margin-top: 0;
-            font-size: 1.5em;
-            margin-bottom: 5px;
-        }
-        
-        .award-card .player-name {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--text-color);
-            margin: 5px 0;
-        }
-
-        .award-card .player-stat {
-            font-size: 1.2em;
-            color: #e65100;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        .season-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        #hall-of-fame-title {
-            color: var(--title-color);
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-
-        .season-selector {
-            display: inline-block;
-            padding: 10px;
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .season-selector label {
-            margin-right: 10px;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-
-        .season-selector select {
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            font-size: 1em;
-        }
-
-        /* --- Mobile Styles --- */
-        @media (max-width: 992px) {
-            body {
-                padding-top: 70px; /* Space for fixed header */
-            }
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 10px 15px;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 1000;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            }
-            .title-group {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-            }
-            .title-group img {
-                width: 50px; /* Smaller logo for mobile header */
-                margin-bottom: 0;
-            }
-            .title-group h1 {
-                font-size: 1.2em; /* Smaller title for mobile header */
-            }
-            .navbar {
-                padding: 0;
-                border: none;
-            }
-            .menu-toggle {
-                display: block; /* Show hamburger */
-                background-color: transparent;
-                color: var(--title-color);
-                border: 2px solid var(--title-color);
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 1.5em; /* Reverted to larger size */
-                padding: 0px 12px; /* Reverted to previous padding */
-                line-height: 1.2;
-            }
-            .menu-toggle:hover {
-                 background-color: var(--title-color);
-                 color: white;
-            }
-            .nav-links {
-                display: none; /* Hidden by default */
-                position: fixed;
-                top: 70px; /* Position below fixed header */
-                left: 0;
-                right: 0;
-                background: var(--header-bg);
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                flex-direction: column;
-                padding: 0;
-                margin: 0;
-                z-index: 999; /* Ensure menu is on top of other content */
-            }
-            .nav-links.active {
-                display: flex; /* Show when toggled */
-            }
-            .nav-links li {
-                width: 100%;
-                margin: 0;
-            }
-            .nav-links a {
-                display: block;
-                padding: 15px;
-                border-radius: 0;
-                border: none;
-                border-bottom: 1px solid var(--border-color);
-                color: var(--link-color); /* Default link color in dropdown */
-                background-color: var(--header-bg); /* Default background in dropdown */
-                text-align: center; /* Center text in mobile dropdown */
-                transform: none; /* Reset desktop transform */
-                box-shadow: none; /* Reset desktop shadow */
-            }
-            .nav-links a:hover {
-                background-color: var(--bg-color); /* Light grey on hover */
-                color: var(--title-color); /* Ensure text is visible on hover */
-            }
-            .nav-links a.active {
-                background-color: var(--bg-color); /* Light blue for active item */
-                color: var(--title-color); /* Dark blue text for active item */
-                font-weight: bold; /* Make it stand out */
-            }
-            .nav-links li:last-child a {
-                border-bottom: none;
-            }
-        }
-    </style>
-    <link rel="icon" href="assets/season3-main-logo.webp">
-    <link rel="stylesheet" href="assets/season3-site.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#020b17">
+  <title>CBL 名人堂｜CBL 第三屆官方網站</title>
+  <link rel="icon" href="assets/season3-main-logo.webp">
+  <link rel="stylesheet" href="assets/season3-site.css">
+  <link rel="stylesheet" href="assets/hall-of-fame.css">
 </head>
-<body>
-
-    <header class="header">
-        <div class="title-group">
-            <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO">
-            <h1>台中市CBL企業交流聯盟</h1>
-        </div>
-        <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
-    </header>
-
-    <nav class="navbar">
-        <ul class="nav-links" id="nav-links">
-            <li><a href="index.html">首頁</a></li>
-            <li><a href="賽程戰績表.html">賽程戰績表</a></li>
-            <li><a href="數據統計.html">選手數據查詢</a></li>
-            <li><a href="打者排行榜.html">打者排行榜</a></li>
-            <li><a href="投手排行榜.html">投手排行榜</a></li>
-            <li><a href="CBL名人堂.html">CBL名人堂</a></li>
-            <li><a href="team_introduction.html">球隊介紹</a></li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        <div class="season-header">
-            <h2 id="hall-of-fame-title">第一屆 CBL名人堂</h2>
-            <div class="season-selector">
-                <label for="season-select">選擇屆數:</label>
-                <select id="season-select">
-                    <option value="1">第一屆</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="awards-section">
-            <h3>年度MVP</h3>
-            <div class="awards-grid" id="mvp-awards">
-                <div class="award-card">
-                    <img src="images/賴韋廷.jpg" alt="賴韋廷" class="player-photo">
-                    <h3>年度MVP</h3>
-                    <p class="player-name">賴韋廷</p>
-                    <p class="player-stat">MVP</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="awards-section">
-            <h3>打者獎項</h3>
-            <div class="awards-grid" id="hitter-awards">
-                <div class="award-card">
-                    <img src="images/王瑋鋐.jpg" alt="王瑋鋐" class="player-photo">
-                    <h3>打擊王</h3>
-                    <p class="player-name">王瑋鋐</p>
-                    <p class="player-stat">0.533</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/詹承憲.jpg" alt="詹承憲" class="player-photo">
-                    <h3>安打王</h3>
-                    <p class="player-name">詹承憲</p>
-                    <p class="player-stat">15</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/賴韋廷.jpg" alt="賴韋廷" class="player-photo">
-                    <h3>安打王</h3>
-                    <p class="player-name">賴韋廷</p>
-                    <p class="player-stat">15</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/施昱綸.jpg" alt="施昱綸" class="player-photo">
-                    <h3>安打王</h3>
-                    <p class="player-name">施昱綸</p>
-                    <p class="player-stat">15</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/李統裕.jpg" alt="李統裕" class="player-photo">
-                    <h3>安打王</h3>
-                    <p class="player-name">李統裕</p>
-                    <p class="player-stat">15</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/賴韋廷.jpg" alt="賴韋廷" class="player-photo">
-                    <h3>全壘打王</h3>
-                    <p class="player-name">賴韋廷</p>
-                    <p class="player-stat">6</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/賴韋廷.jpg" alt="賴韋廷" class="player-photo">
-                    <h3>打點王</h3>
-                    <p class="player-name">賴韋廷</p>
-                    <p class="player-stat">20</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/賴承郁.jpg" alt="賴丞郁" class="player-photo">
-                    <h3>盜壘王</h3>
-                    <p class="player-name">賴丞郁</p>
-                    <p class="player-stat">17</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="awards-section">
-            <h3>投手獎項</h3>
-            <div class="awards-grid" id="pitcher-awards">
-                <div class="award-card">
-                    <img src="images/林銘孝.jpg" alt="林銘孝" class="player-photo">
-                    <h3>防禦率王</h3>
-                    <p class="player-name">林銘孝</p>
-                    <p class="player-stat">2.97</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/羅迪.jpg" alt="羅迪" class="player-photo">
-                    <h3>勝投王</h3>
-                    <p class="player-name">羅迪</p>
-                    <p class="player-stat">3</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/王瑋鋐.jpg" alt="王瑋鋐" class="player-photo">
-                    <h3>三振王</h3>
-                    <p class="player-name">王瑋鋐</p>
-                    <p class="player-stat">22</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/林晏辰.jpg" alt="Player Photo" class="player-photo">
-                    <h3>中繼王</h3>
-                    <p class="player-name">林晏辰</p>
-                    <p class="player-stat">6</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/李統裕.jpg" alt="李統裕" class="player-photo">
-                    <h3>救援王</h3>
-                    <p class="player-name">李統裕</p>
-                    <p class="player-stat">3</p>
-                </div>
-                <div class="award-card">
-                    <img src="images/陳麒文.jpg" alt="陳麒文" class="player-photo">
-                    <h3>救援王</h3>
-                    <p class="player-name">陳麒文</p>
-                    <p class="player-stat">3</p>
-                </div>
-            </div>
-        </div>
+<body class="hall-of-fame-page">
+  <header class="header">
+    <div class="title-group">
+      <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO">
+      <h1>CBL 名人堂</h1>
     </div>
+    <button class="menu-toggle" type="button" onclick="toggleMenu()">&#9776;</button>
+  </header>
+  <nav class="navbar" aria-label="主要導覽">
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="賽程戰績表.html">賽程戰績表</a></li>
+      <li><a href="數據統計.html">選手數據查詢</a></li>
+      <li><a href="打者排行榜.html">打者排行榜</a></li>
+      <li><a href="投手排行榜.html">投手排行榜</a></li>
+      <li><a href="CBL名人堂.html">CBL名人堂</a></li>
+      <li><a href="team_introduction.html">球隊介紹</a></li>
+    </ul>
+  </nav>
 
-    <script>
-        function toggleMenu() {
-            var links = document.getElementById('nav-links');
-            links.classList.toggle('active');
-        }
-    </script>
+  <main class="hall-main" id="hall-top">
+    <section class="hall-hero">
+      <div class="hall-hero-copy">
+        <span class="hall-eyebrow">CBL HALL OF FAME · OFFICIAL RECORD</span>
+        <h2>聯盟榮耀殿堂</h2>
+        <p>讓每一項成就被正式記錄，讓球員與球隊共享屬於 CBL 的榮耀。</p>
+        <div class="hall-summary">
+          <span><strong>11</strong>項獎項</span>
+          <span><strong>10</strong>位得獎球員</span>
+          <span><strong>1</strong>屆正式紀錄</span>
+        </div>
+      </div>
+      <div class="hall-seal" aria-label="CBL 榮耀徽章">
+        <span>HALL OF FAME</span>
+        <img src="assets/season3-main-logo.webp" alt="CBL LOGO">
+        <strong>榮耀被流傳</strong>
+      </div>
+    </section>
 
-    <script src="assets/season3-site.js"></script>
+    <section class="hall-controls" aria-label="名人堂篩選">
+      <div class="season-tabs" role="tablist" aria-label="屆別">
+        <span>選擇屆別</span>
+        <button class="active" type="button" aria-selected="true">第一屆</button>
+        <button type="button" disabled title="第二屆資料尚未建立">第二屆</button>
+        <button type="button" disabled title="第三屆資料尚未建立">第三屆</button>
+      </div>
+      <div class="hall-category-tabs" role="tablist" aria-label="獎項類別">
+        <button class="active" type="button" data-category="all" aria-selected="true">全部榮耀</button>
+        <button type="button" data-category="mvp" aria-selected="false">年度 MVP</button>
+        <button type="button" data-category="hitter" aria-selected="false">打者獎項</button>
+        <button type="button" data-category="pitcher" aria-selected="false">投手獎項</button>
+      </div>
+    </section>
+
+    <section class="induction-plaque" data-award-category="mvp">
+      <div class="plaque-serial"><span>HOF MVP</span><strong>001</strong><small>OFFICIAL RECORD</small></div>
+      <div class="induction-photo">
+        <img src="images/賴韋廷.jpg" alt="第一屆年度 MVP 賴韋廷">
+        <span>第一屆</span>
+      </div>
+      <div class="induction-copy">
+        <span class="induction-kicker">MOST VALUABLE PLAYER · INDUCTEE</span>
+        <p>第一屆 CBL 年度最高個人榮耀</p>
+        <h2>賴韋廷</h2>
+        <div class="player-meta"><span>安穆科技棒球隊</span><span>第一屆正式紀錄</span></div>
+        <blockquote>以整季穩定輸出與關鍵長打承擔勝負，也讓球隊的每一場努力，被聯盟正式記錄。</blockquote>
+        <div class="induction-stats">
+          <span><small>AVG</small><strong>.517</strong></span>
+          <span><small>HR</small><strong>6</strong></span>
+          <span><small>RBI</small><strong>20</strong></span>
+        </div>
+      </div>
+      <div class="induction-team-seal">
+        <img src="assets/teams/J.webp" alt="安穆科技棒球隊 LOGO">
+        <span>TEAM HONOR</span>
+        <strong>安穆科技</strong>
+      </div>
+      <div class="official-nameplate">
+        <span>INDUCTED INTO THE CBL HALL OF FAME</span>
+        <strong>年度 MVP · 賴韋廷</strong>
+        <small>CBL TAICHUNG OFFICIAL RECORD</small>
+      </div>
+    </section>
+
+    <section class="award-section" data-award-category="hitter">
+      <div class="section-heading">
+        <div><span class="eyebrow">HITTING HONORS</span><h2>打者榮耀</h2></div>
+        <p>每一次擊球與推進，都累積成被記住的成績。</p>
+      </div>
+      <div class="award-grid">
+        <article class="hof-award-card">
+          <span class="award-index">01</span>
+          <img class="award-photo" src="images/王瑋鋐.jpg" alt="打擊王王瑋鋐">
+          <span class="award-logo"><img src="assets/teams/D.webp" alt="好Chill LOGO"></span>
+          <div class="award-copy"><small>打擊王</small><h3>王瑋鋐</h3><p>好Chill 棒球隊</p><strong>.533 AVG</strong></div>
+        </article>
+        <article class="hof-award-card shared-card">
+          <span class="award-index">02</span>
+          <div class="shared-photos">
+            <img src="images/詹承憲.jpg" alt="詹承憲">
+            <img src="images/賴韋廷.jpg" alt="賴韋廷">
+            <img src="images/施昱綸.jpg" alt="施昱綸">
+            <img src="images/李統裕.jpg" alt="李統裕">
+          </div>
+          <div class="award-copy">
+            <small>安打王 · 共同得主</small>
+            <h3>四位球員共享榮耀</h3>
+            <p>詹承憲 · 賴韋廷 · 施昱綸 · 李統裕</p>
+            <div class="shared-team-logos"><img src="assets/teams/C.webp" alt="遊牧者"><img src="assets/teams/J.webp" alt="安穆科技"><img src="assets/teams/D.webp" alt="好Chill"></div>
+            <strong>15 H</strong>
+          </div>
+        </article>
+        <article class="hof-award-card">
+          <span class="award-index">03</span>
+          <img class="award-photo" src="images/賴韋廷.jpg" alt="全壘打王賴韋廷">
+          <span class="award-logo"><img src="assets/teams/J.webp" alt="安穆科技 LOGO"></span>
+          <div class="award-copy"><small>全壘打王</small><h3>賴韋廷</h3><p>安穆科技棒球隊</p><strong>6 HR</strong></div>
+        </article>
+        <article class="hof-award-card">
+          <span class="award-index">04</span>
+          <img class="award-photo" src="images/賴韋廷.jpg" alt="打點王賴韋廷">
+          <span class="award-logo"><img src="assets/teams/J.webp" alt="安穆科技 LOGO"></span>
+          <div class="award-copy"><small>打點王</small><h3>賴韋廷</h3><p>安穆科技棒球隊</p><strong>20 RBI</strong></div>
+        </article>
+        <article class="hof-award-card">
+          <span class="award-index">05</span>
+          <img class="award-photo" src="images/賴承郁.jpg" alt="盜壘王賴丞郁">
+          <span class="award-logo"><img src="assets/teams/C.webp" alt="遊牧者 LOGO"></span>
+          <div class="award-copy"><small>盜壘王</small><h3>賴丞郁</h3><p>遊牧者棒球隊</p><strong>17 SB</strong></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="award-section" data-award-category="pitcher">
+      <div class="section-heading">
+        <div><span class="eyebrow">PITCHING HONORS</span><h2>投手榮耀</h2></div>
+        <p>每一局壓制與守成，成為球隊走向勝利的軌跡。</p>
+      </div>
+      <div class="award-grid">
+        <article class="hof-award-card">
+          <span class="award-index">01</span>
+          <img class="award-photo" src="images/林銘孝.jpg" alt="防禦率王林銘孝">
+          <span class="award-logo"><img src="assets/teams/J.webp" alt="安穆科技 LOGO"></span>
+          <div class="award-copy"><small>防禦率王</small><h3>林銘孝</h3><p>安穆科技棒球隊</p><strong>2.97 ERA</strong></div>
+        </article>
+        <article class="hof-award-card">
+          <span class="award-index">02</span>
+          <img class="award-photo" src="images/羅迪.jpg" alt="勝投王羅迪">
+          <span class="award-logo"><img src="assets/teams/J.webp" alt="安穆科技 LOGO"></span>
+          <div class="award-copy"><small>勝投王</small><h3>羅迪</h3><p>安穆科技棒球隊</p><strong>3 W</strong></div>
+        </article>
+        <article class="hof-award-card">
+          <span class="award-index">03</span>
+          <img class="award-photo" src="images/王瑋鋐.jpg" alt="三振王王瑋鋐">
+          <span class="award-logo"><img src="assets/teams/D.webp" alt="好Chill LOGO"></span>
+          <div class="award-copy"><small>三振王</small><h3>王瑋鋐</h3><p>好Chill 棒球隊</p><strong>22 K</strong></div>
+        </article>
+        <article class="hof-award-card">
+          <span class="award-index">04</span>
+          <img class="award-photo" src="images/林晏辰.jpg" alt="中繼王林晏辰">
+          <span class="award-logo"><img src="assets/teams/G.webp" alt="T.C.W LOGO"></span>
+          <div class="award-copy"><small>中繼王</small><h3>林晏辰</h3><p>T.C.W 棒球隊</p><strong>6 HLD</strong></div>
+        </article>
+        <article class="hof-award-card shared-card saves">
+          <span class="award-index">05</span>
+          <div class="shared-photos two">
+            <img src="images/李統裕.jpg" alt="李統裕">
+            <img src="images/陳麒文.jpg" alt="陳麒文">
+          </div>
+          <div class="award-copy">
+            <small>救援王 · 共同得主</small>
+            <h3>李統裕 · 陳麒文</h3>
+            <p>遊牧者棒球隊 · 安穆科技棒球隊</p>
+            <div class="shared-team-logos"><img src="assets/teams/C.webp" alt="遊牧者"><img src="assets/teams/J.webp" alt="安穆科技"></div>
+            <strong>3 SV</strong>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("nav-links").classList.toggle("active");
+    }
+  </script>
+  <script src="assets/season3-site.js"></script>
+  <script src="assets/hall-of-fame.js"></script>
 </body>
 </html>

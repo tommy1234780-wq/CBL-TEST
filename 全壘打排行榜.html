@@ -1,263 +1,69 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全壘打排行榜｜CBL 第三屆官方網站</title>
-    <style>
-        :root {
-            --bg-color: #f0f2f5;
-            --text-color: #333;
-            --header-bg: #ffffff;
-            --nav-bg: #ffffff;
-            --link-color: #1565c0;
-            --link-border: #1565c0;
-            --link-hover-bg: #1565c0;
-            --link-hover-text: #ffffff;
-            --border-color: #e0e0e0;
-            --title-color: #0d47a1;
-            --card-bg: #ffffff;
-            --section-title-border: #e0e0e0;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #121212;
-                --text-color: #e0e0e0;
-                --header-bg: #1e1e1e;
-                --nav-bg: #1e1e1e;
-                --link-color: #4e9af1;
-                --link-border: #4e9af1;
-                --link-hover-bg: #4e9af1;
-                --link-hover-text: #ffffff;
-                --border-color: #333333;
-                --title-color: #4e9af1;
-                --card-bg: #1e1e1e;
-                --section-title-border: #333333;
-            }
-            th { background-color: #242526 !important; color: #e0e0e0 !important; }
-            td { border-bottom: 1px solid #333 !important; color: #e0e0e0 !important; }
-            .group-tabs {
-            display: flex;
-            gap: 10px;
-            margin: 0 0 18px;
-        }
-        .group-tab {
-            appearance: none;
-            border: 1px solid #d8a83d;
-            border-radius: 999px;
-            background: var(--card-bg);
-            color: var(--title-color);
-            cursor: pointer;
-            font: inherit;
-            font-weight: 700;
-            padding: 9px 22px;
-            transition: background .2s, color .2s, transform .2s;
-        }
-        .group-tab:hover, .group-tab.active {
-            background: #c7972d;
-            color: #fff;
-            transform: translateY(-1px);
-        }
-        table { background-color: #1e1e1e !important; }
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
-        h1 {
-            color: var(--title-color);
-        }
-        .group-tabs {
-            display: flex;
-            gap: 10px;
-            margin: 0 0 18px;
-        }
-        .group-tab {
-            appearance: none;
-            border: 1px solid #d8a83d;
-            border-radius: 999px;
-            background: var(--card-bg);
-            color: var(--title-color);
-            cursor: pointer;
-            font: inherit;
-            font-weight: 700;
-            padding: 9px 22px;
-            transition: background .2s, color .2s, transform .2s;
-        }
-        .group-tab:hover, .group-tab.active {
-            background: #c7972d;
-            color: #fff;
-            transform: translateY(-1px);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: var(--card-bg);
-        }
-        th, td {
-            border: 1px solid var(--border-color);
-            text-align: left;
-            padding: 8px;
-            color: var(--text-color);
-        }
-        th {
-            background-color: var(--header-bg);
-        }
-
-        @media screen and (max-width: 600px) {
-            .table-container {
-                overflow-x: auto;
-            }
-            body {
-                font-size: 0.9em;
-            }
-            th, td {
-                padding: 6px;
-            }
-        }
-    </style>
-    <link rel="icon" href="assets/season3-main-logo.webp">
-    <link rel="stylesheet" href="assets/season3-site.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#03101f">
+  <title>全壘打排行榜｜CBL 第三屆官方網站</title>
+  <link rel="icon" href="assets/season3-main-logo.webp">
+  <link rel="stylesheet" href="assets/leaderboard.css">
 </head>
-<body>
-
-    <h1>全壘打排行榜</h1>
-
-    <div class="group-tabs" role="tablist" aria-label="Division selector">
-        <button id="tab-A" class="group-tab active" type="button" onclick="switchGroup('A\u7d44')">黑洞組</button>
-        <button id="tab-B" class="group-tab" type="button" onclick="switchGroup('B\u7d44')">恆星組</button>
+<body class="leaderboard-detail"
+  data-csv="https://docs.google.com/spreadsheets/d/e/2PACX-1vT_X5jYPR24dk5oqUSr1py8glTu-jHZJwuzhyJN7RrjMkgkXjwv0hVgmn7KlieQy_-CZEn6UQofqTbz/pub?gid=546432089&single=true&output=csv"
+  data-metric="HR"
+  data-metric-label="全壘打"
+  data-metric-aliases="HR|全壘打"
+  data-secondary-label="打席"
+  data-secondary-aliases="打席"
+  data-sort="desc"
+  data-decimals="0"
+  data-minimum="0"
+  data-minimum-aliases=""
+  data-rule="依全壘打數排序，同分時依打席數排列"
+  data-division="black-hole">
+  <header class="ranking-detail-header">
+    <div>
+      <span class="eyebrow">OFFICIAL HITTING RANKING</span>
+      <h1>全壘打排行榜</h1>
+      <p>記錄最具破壞力的長打表現，讓每一次越牆都被聯盟留下。</p>
     </div>
-    <div class="table-container">
-        <table>
-        <thead>
-            <tr>
-                <th>排名</th>
-                <th>球員</th>
-                <th>隊伍</th>
-                <th>全壘打</th>
-            </tr>
-        </thead>
-        <tbody id="leaderboard-tbody">
-            <!-- Data will be loaded dynamically -->
-        </tbody>
+    <span class="ranking-live-mark">官方即時資料</span>
+  </header>
+
+  <div class="ranking-controls">
+    <div class="division-tabs" role="tablist" aria-label="組別切換">
+      <button class="division-tab active" type="button" data-group="A組" aria-selected="true">
+        <img src="assets/black-hole-division-logo.webp" alt="">黑洞組
+      </button>
+      <button class="division-tab" type="button" data-group="B組" aria-selected="false">
+        <img src="assets/stellar-division-logo.webp" alt="">恆星組
+      </button>
+    </div>
+    <p class="ranking-rule" id="ranking-rule"></p>
+  </div>
+
+  <div class="ranking-section-heading">
+    <span>TOP 3</span>
+    <strong id="division-heading"></strong>
+    <small>第三屆例行賽</small>
+  </div>
+  <section class="ranking-podium" id="ranking-podium" aria-label="全壘打排行榜前三名"></section>
+
+  <div class="ranking-table-heading">
+    <div><span>COMPLETE RANKING</span><strong>完整排名</strong></div>
+    <small id="ranking-updated">官方資料載入中</small>
+  </div>
+  <div class="ranking-table-wrap">
+    <table class="ranking-table">
+      <thead>
+        <tr><th>排名</th><th>球員</th><th>隊伍</th><th id="secondary-heading"></th><th id="metric-heading"></th></tr>
+      </thead>
+      <tbody id="ranking-table-body">
+        <tr><td colspan="5"><div class="ranking-empty-state"><div><strong>官方資料載入中</strong><span>正在同步第三屆排行榜。</span></div></div></td></tr>
+      </tbody>
     </table>
-    </div>
-
-    <script>
-        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_X5jYPR24dk5oqUSr1py8glTu-jHZJwuzhyJN7RrjMkgkXjwv0hVgmn7KlieQy_-CZEn6UQofqTbz/pub?gid=546432089&single=true&output=csv";
-        const tbody = document.getElementById('leaderboard-tbody');
-
-        const SEASON = '\u7b2c\u4e09\u5c46';
-        let currentGroup = 'A\u7d44';
-
-        function normalizeGroup(value) {
-            const group = String(value || '').replace(/\s/g, '').toUpperCase();
-            if (group === 'A' || group === 'A\u7d44') return 'A\u7d44';
-            if (group === 'B' || group === 'B\u7d44') return 'B\u7d44';
-            return '';
-        }
-
-        function switchGroup(group) {
-            currentGroup = group;
-            document.querySelectorAll('.group-tab').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(group === 'A\u7d44' ? 'tab-A' : 'tab-B').classList.add('active');
-            fetchAndRenderLeaderboard();
-        }
-
-        async function fetchAndRenderLeaderboard() {
-            try {
-                const res = await fetch(CSV_URL);
-                if (!res.ok) throw new Error('Failed to fetch CSV: HTTP ' + res.status);
-                const text = await res.text();
-                
-                const lines = text.trim().split(/\n/);
-                const headers = lines[0].split(',').map(h => h.trim());
-                let data = lines.slice(1).map(line => {
-                    const values = [];
-                    let current_value = "";
-                    let in_quotes = false;
-                    for (let i = 0; i < line.length; i++) {
-                        const char = line[i];
-                        const next_char = line[i+1];
-                        if (char === '"' && in_quotes && next_char === '"' ) {
-                            current_value += '"' ;
-                            i++;
-                        } else if (char === '"' ) {
-                            in_quotes = !in_quotes;
-                        } else if (char === ',' && !in_quotes) {
-                            values.push(current_value.trim());
-                            current_value = "";
-                        } else {
-                            current_value += char;
-                        }
-                    }
-                    values.push(current_value.trim());
-
-                    const row_data = {};
-                    headers.forEach((h, i) => row_data[h] = values[i] || "");
-                    return row_data;
-                });
-
-                const seasonKey = headers.find(h => h.includes('屆數') || h.includes('屆別') || h.includes('賽季')) || "屆數";
-                const groupKey = headers.find(h => h.includes('\u7d44\u5225') || h.includes('\u5206\u7d44'));
-                if (!groupKey) throw new Error('The CSV needs a group column.');
-                data = data.filter(row => String(row[seasonKey] || '').trim() === SEASON);
-                data = data.filter(row => normalizeGroup(row[groupKey]) === currentGroup);
-                const player_key = headers.find(h => h.includes('姓名')) || '背號/姓名';
-                const team_key = headers.find(h => h.includes('隊伍')) || '隊伍';
-                const hr_key = headers.find(h => h.includes('HR')) || 'HR'; // Key for Home Runs
-
-                data.forEach(entry => {
-                    entry[hr_key] = parseInt(entry[hr_key], 10) || 0;
-                });
-
-                const sorted_data = data
-                    .filter(entry => entry[hr_key] > 0)
-                    .sort((a, b) => b[hr_key] - a[hr_key]);
-
-                let html_rows = "";
-                let rank = 0;
-                let last_score = -1;
-                sorted_data.slice(0, 10).forEach((player, index) => {
-                    if (player[hr_key] !== last_score) {
-                        rank = index + 1;
-                    }
-                    let rank_display = rank;
-                    if (rank === 1) {
-                        rank_display = '🏆';
-                    }
-
-                    const is_first = rank === 1;
-                    const style = is_first ? ' style="color: red;"' : '';
-
-                    html_rows += `
-                        <tr>
-                            <td>${rank_display}</td>
-                            <td><span${style}>${player[player_key]}</span></td>
-                            <td><span${style}>${player[team_key]}</span></td>
-                            <td><span${style}>${player[hr_key]}</span></td>
-                        </tr>
-                    `;
-                    last_score = player[hr_key];
-                });
-                tbody.innerHTML = html_rows;
-
-            } catch (error) {
-                console.error("Error fetching or parsing CSV:", error);
-                tbody.innerHTML = `<tr><td colspan="4">載入資料失敗: ${error.message}</td></tr>`;
-            }
-        }
-
-        fetchAndRenderLeaderboard();
-        setInterval(fetchAndRenderLeaderboard, 300000); // Refresh every 5 minutes
-    </script>
-
-    <script src="assets/season3-site.js"></script>
+  </div>
+  <p class="ranking-status">同分依官方排行榜規則排列；最終名次與資格認定以 CBL 聯盟公告為準。</p>
+  <script src="assets/leaderboard.js"></script>
 </body>
 </html>

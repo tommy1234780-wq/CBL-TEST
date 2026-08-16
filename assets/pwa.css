@@ -19,3 +19,23 @@
 .push-button.secondary { color: #dcefff; background: rgba(255,255,255,.13); }
 .push-button:disabled { cursor: not-allowed; opacity: .55; }
 @media (max-width: 520px) { .push-panel.compact { padding: 13px; } .push-summary { align-items: flex-start; } .team-subscription-grid { grid-template-columns: 1fr 1fr; } }
+
+/* Mobile-safe team carousel: keep touch devices moving and promote transform animation to GPU. */
+.team-track {
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .team-track:hover {
+    animation-play-state: running;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .team-track:hover {
+    animation-play-state: paused;
+  }
+}

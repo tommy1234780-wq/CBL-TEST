@@ -1,0 +1,905 @@
+:root {
+  --hof-gold: #f2b840;
+  --hof-gold-pale: #ffe1a0;
+  --hof-silver: #cbd5df;
+  --hof-bronze: #d68f5d;
+  --hof-text: #f7f3e8;
+  --hof-muted: #a7b8c9;
+  --hof-line: rgba(242, 184, 64, 0.2);
+  --hof-soft: rgba(255, 255, 255, 0.1);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.hall-of-fame-page {
+  overflow-x: hidden;
+}
+
+.hall-main {
+  width: min(100% - 40px, 1450px);
+  margin: 28px auto 58px;
+}
+
+.hall-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  min-height: 310px;
+  padding: 46px 52px;
+  gap: 34px;
+  align-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 82% 40%, rgba(242, 184, 64, 0.13), transparent 17rem),
+    linear-gradient(110deg, rgba(139, 99, 255, 0.1), rgba(5, 21, 41, 0.97) 42%, rgba(255, 138, 42, 0.07));
+  border: 1px solid rgba(242, 184, 64, 0.28);
+  border-radius: 8px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
+}
+
+.hall-eyebrow,
+.section-heading .eyebrow,
+.induction-kicker {
+  display: block;
+  color: var(--hof-gold);
+  font-family: Arial, sans-serif;
+  font-size: 0.67rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+}
+
+.hall-hero h2 {
+  margin: 8px 0 10px;
+  color: #fff;
+  font-size: clamp(2.2rem, 4vw, 3.7rem);
+  letter-spacing: 0;
+}
+
+.hall-hero-copy > p {
+  max-width: 720px;
+  margin: 0;
+  color: #bcc9d6;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.hall-summary {
+  display: flex;
+  margin-top: 29px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hall-summary span {
+  min-width: 126px;
+  padding: 11px 14px;
+  color: #aebdca;
+  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(242, 184, 64, 0.43);
+}
+
+.hall-summary strong {
+  margin-right: 4px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 1.25rem;
+}
+
+.hall-seal {
+  position: relative;
+  display: grid;
+  width: 208px;
+  height: 208px;
+  place-items: center;
+  align-content: center;
+  justify-self: center;
+  text-align: center;
+  border: 2px solid rgba(242, 184, 64, 0.65);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 184, 64, 0.15), rgba(4, 18, 36, 0.94) 68%);
+  box-shadow: 0 0 52px rgba(242, 184, 64, 0.16), inset 0 0 35px rgba(242, 184, 64, 0.08);
+}
+
+.hall-seal::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(242, 184, 64, 0.24);
+  border-radius: 50%;
+}
+
+.hall-seal img {
+  position: relative;
+  width: 88px;
+  height: 94px;
+  object-fit: contain;
+}
+
+.hall-seal span,
+.hall-seal strong {
+  position: relative;
+  display: block;
+}
+
+.hall-seal span {
+  color: #91a4b6;
+  font-family: Arial, sans-serif;
+  font-size: 0.5rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.hall-seal strong {
+  margin-top: 5px;
+  color: var(--hof-gold-pale);
+  font-size: 0.78rem;
+}
+
+.hall-controls {
+  display: flex;
+  margin: 12px 0 28px;
+  padding: 7px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(4, 16, 31, 0.84);
+  border: 1px solid rgba(242, 184, 64, 0.16);
+  border-radius: 6px;
+}
+
+.season-tabs,
+.hall-category-tabs {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.season-tabs > span {
+  margin: 0 7px;
+  color: #7f93a6;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.hall-controls button {
+  min-height: 38px;
+  padding: 0 13px;
+  color: #cbd7e2;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.hall-controls button:hover,
+.hall-controls button.active {
+  color: #07101d;
+  background: var(--hof-gold);
+  border-color: var(--hof-gold);
+}
+
+.hall-controls button:disabled {
+  color: #64778a;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.induction-plaque {
+  position: relative;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) 190px;
+  min-height: 420px;
+  padding: 34px 36px 0;
+  gap: 34px;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(242, 184, 64, 0.58);
+  border-radius: 8px;
+  background: linear-gradient(105deg, rgba(242, 184, 64, 0.12), rgba(5, 21, 41, 0.98) 34%, rgba(3, 14, 29, 0.99));
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34), inset 0 0 0 6px rgba(242, 184, 64, 0.025);
+}
+
+.induction-plaque::before {
+  content: "";
+  position: absolute;
+  inset: 9px 9px 74px;
+  border: 1px solid rgba(242, 184, 64, 0.18);
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+.induction-plaque::after {
+  content: "HALL OF FAME";
+  position: absolute;
+  right: 180px;
+  bottom: 46px;
+  color: rgba(242, 184, 64, 0.035);
+  font-family: Arial, sans-serif;
+  font-size: 5.8rem;
+  font-weight: 900;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.plaque-serial {
+  position: absolute;
+  right: 25px;
+  top: 20px;
+  z-index: 3;
+  display: grid;
+  min-width: 132px;
+  padding: 10px 12px;
+  gap: 1px;
+  text-align: right;
+  background: rgba(0, 0, 0, 0.2);
+  border-right: 3px solid var(--hof-gold);
+}
+
+.plaque-serial span,
+.plaque-serial small {
+  color: #90a3b6;
+  font-family: Arial, sans-serif;
+  font-size: 0.55rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.plaque-serial strong {
+  color: var(--hof-gold);
+  font-family: Arial, sans-serif;
+  font-size: 1.45rem;
+}
+
+.induction-photo {
+  position: relative;
+  z-index: 1;
+  height: 305px;
+  overflow: hidden;
+  background: #071525;
+  border: 1px solid rgba(242, 184, 64, 0.55);
+  border-radius: 5px;
+  box-shadow: 14px 18px 38px rgba(0, 0, 0, 0.32);
+}
+
+.induction-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 -70px 70px rgba(2, 10, 20, 0.34);
+}
+
+.induction-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.induction-photo > span {
+  position: absolute;
+  left: 11px;
+  bottom: 10px;
+  z-index: 2;
+  padding: 5px 8px;
+  color: #07111f;
+  font-size: 0.64rem;
+  font-weight: 900;
+  background: var(--hof-gold);
+  border-radius: 3px;
+}
+
+.induction-copy,
+.induction-team-seal {
+  position: relative;
+  z-index: 1;
+}
+
+.induction-copy > p {
+  margin: 13px 0 4px;
+  color: var(--hof-gold-pale);
+  font-size: 0.76rem;
+}
+
+.induction-copy h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 3rem;
+  letter-spacing: 0;
+}
+
+.player-meta {
+  display: flex;
+  margin-top: 8px;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.player-meta span {
+  padding: 5px 8px;
+  color: #b7c5d1;
+  font-size: 0.65rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 3px;
+}
+
+.induction-copy blockquote {
+  max-width: 620px;
+  margin: 22px 0 18px;
+  padding: 10px 0 10px 16px;
+  color: #c6d2dc;
+  font-size: 0.82rem;
+  line-height: 1.75;
+  border-left: 3px solid var(--hof-gold);
+}
+
+.induction-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 110px));
+  gap: 6px;
+}
+
+.induction-stats span {
+  display: grid;
+  padding: 10px 12px;
+  gap: 3px;
+  background: rgba(0, 0, 0, 0.19);
+  border-top: 1px solid rgba(242, 184, 64, 0.44);
+}
+
+.induction-stats small {
+  color: #879caf;
+  font-family: Arial, sans-serif;
+  font-size: 0.57rem;
+  font-weight: 900;
+}
+
+.induction-stats strong {
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 1.2rem;
+}
+
+.induction-team-seal {
+  display: grid;
+  width: 168px;
+  height: 168px;
+  padding: 0;
+  place-items: center;
+  align-content: center;
+  justify-self: center;
+  text-align: center;
+  overflow: hidden;
+  background: radial-gradient(circle, rgba(203, 213, 223, 0.18), rgba(4, 18, 36, 0.97) 68%);
+  border: 2px solid rgba(203, 213, 223, 0.67);
+  border-radius: 50%;
+  box-shadow: 0 0 38px rgba(203, 213, 223, 0.13), inset 0 0 28px rgba(203, 213, 223, 0.1);
+}
+
+.induction-team-seal img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  transform: scale(1.52);
+}
+
+.induction-team-seal span {
+  display: none;
+}
+
+.induction-team-seal strong {
+  display: none;
+}
+
+.official-nameplate {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: 1fr auto 1fr;
+  min-height: 68px;
+  margin: 0 -36px;
+  padding: 12px 36px;
+  gap: 20px;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(90deg, rgba(52, 40, 15, 0.95), rgba(121, 89, 23, 0.96) 48%, rgba(52, 40, 15, 0.95));
+  border-top: 1px solid rgba(242, 184, 64, 0.52);
+}
+
+.official-nameplate span,
+.official-nameplate small {
+  color: #e7cf94;
+  font-family: Arial, sans-serif;
+  font-size: 0.55rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.official-nameplate strong {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.official-nameplate small {
+  text-align: right;
+}
+
+.award-section {
+  margin-top: 42px;
+}
+
+.section-heading {
+  display: flex;
+  margin-bottom: 16px;
+  gap: 24px;
+  align-items: end;
+  justify-content: space-between;
+}
+
+.section-heading h2 {
+  margin: 5px 0 0;
+  color: #fff;
+  font-size: 1.35rem;
+}
+
+.section-heading p {
+  margin: 0;
+  color: var(--hof-muted);
+  font-size: 0.76rem;
+}
+
+.award-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.hof-award-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  min-height: 166px;
+  padding: 14px;
+  gap: 15px;
+  align-items: center;
+  overflow: hidden;
+  background: rgba(5, 20, 39, 0.91);
+  border: 1px solid var(--hof-soft);
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.015);
+}
+
+.hof-award-card:hover {
+  border-color: rgba(242, 184, 64, 0.4);
+  background: linear-gradient(120deg, rgba(242, 184, 64, 0.07), rgba(5, 20, 39, 0.94));
+}
+
+.award-index {
+  position: absolute;
+  right: 10px;
+  bottom: -12px;
+  color: rgba(242, 184, 64, 0.08);
+  font-family: Arial, sans-serif;
+  font-size: 4.5rem;
+  font-weight: 900;
+}
+
+.award-photo {
+  position: relative;
+  z-index: 1;
+  width: 100px;
+  height: 132px;
+  object-fit: cover;
+  object-position: center top;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+}
+
+.award-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.award-copy small {
+  color: var(--hof-gold);
+  font-size: 0.69rem;
+  font-weight: 900;
+}
+
+.award-copy h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.13rem;
+}
+
+.award-copy p {
+  margin: 0;
+  color: var(--hof-muted);
+  font-size: 0.68rem;
+  line-height: 1.55;
+}
+
+.award-copy strong {
+  margin-top: 5px;
+  color: var(--hof-gold-pale);
+  font-family: Arial, sans-serif;
+  font-size: 1.22rem;
+}
+
+.award-logo {
+  position: absolute;
+  right: -15px;
+  top: -17px;
+  z-index: 2;
+  display: grid;
+  width: 66px;
+  height: 66px;
+  place-items: center;
+  overflow: hidden;
+  background: rgba(5, 20, 39, 0.96);
+  border: 2px solid var(--hof-gold);
+  border-radius: 50%;
+  box-shadow: 0 0 22px rgba(242, 184, 64, 0.14);
+}
+
+.award-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  transform: scale(1.08);
+}
+
+.shared-card {
+  grid-column: span 2;
+  grid-template-columns: 220px minmax(0, 1fr);
+}
+
+.shared-photos {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: 132px;
+  gap: 4px;
+}
+
+.shared-photos.two {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.shared-photos img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 4px;
+}
+
+.shared-team-logos {
+  display: flex;
+  margin-top: 5px;
+  gap: 5px;
+}
+
+.shared-team-logos img {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(242, 184, 64, 0.24);
+  border-radius: 50%;
+}
+
+@media (max-width: 1100px) {
+  .induction-plaque {
+    grid-template-columns: 230px minmax(0, 1fr) 155px;
+    padding-left: 26px;
+    padding-right: 26px;
+    gap: 24px;
+  }
+
+  .official-nameplate {
+    margin-left: -26px;
+    margin-right: -26px;
+    padding-left: 26px;
+    padding-right: 26px;
+  }
+
+  .induction-team-seal {
+    width: 145px;
+    height: 145px;
+  }
+
+  .award-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .hall-main {
+    width: calc(100% - 16px);
+    margin: 10px auto 38px;
+  }
+
+  .hall-hero {
+    grid-template-columns: minmax(0, 1fr) 94px;
+    min-height: 206px;
+    padding: 22px 16px;
+    gap: 10px;
+  }
+
+  .hall-hero h2 {
+    font-size: 1.8rem;
+  }
+
+  .hall-hero-copy > p {
+    font-size: 0.76rem;
+  }
+
+  .hall-summary {
+    margin-top: 16px;
+    gap: 4px;
+  }
+
+  .hall-summary span {
+    min-width: 0;
+    padding: 8px 7px;
+    font-size: 0.58rem;
+  }
+
+  .hall-summary strong {
+    display: block;
+    font-size: 1rem;
+  }
+
+  .hall-seal {
+    width: 88px;
+    height: 88px;
+  }
+
+  .hall-seal::before {
+    inset: 5px;
+  }
+
+  .hall-seal img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .hall-seal span {
+    display: none;
+  }
+
+  .hall-seal strong {
+    font-size: 0.5rem;
+  }
+
+  .hall-controls {
+    display: block;
+    margin: 9px 0 20px;
+    padding: 5px;
+  }
+
+  .season-tabs,
+  .hall-category-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .season-tabs {
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--hof-soft);
+  }
+
+  .hall-category-tabs {
+    padding-top: 5px;
+  }
+
+  .hall-controls button {
+    min-height: 34px;
+    padding: 0 10px;
+    flex: 0 0 auto;
+    font-size: 0.68rem;
+  }
+
+  .induction-plaque {
+    grid-template-columns: 118px minmax(0, 1fr);
+    min-height: 0;
+    padding: 44px 14px 0;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .induction-plaque::before {
+    inset: 7px 7px 62px;
+  }
+
+  .induction-plaque::after {
+    right: -20px;
+    bottom: 48px;
+    font-size: 3.2rem;
+  }
+
+  .plaque-serial {
+    right: 12px;
+    top: 10px;
+    min-width: 105px;
+    padding: 6px 8px;
+  }
+
+  .plaque-serial strong {
+    font-size: 1.05rem;
+  }
+
+  .plaque-serial small {
+    display: none;
+  }
+
+  .induction-photo {
+    height: 180px;
+  }
+
+  .induction-kicker {
+    font-size: 0.48rem;
+    letter-spacing: 0.1em;
+  }
+
+  .induction-copy > p {
+    margin-top: 8px;
+    font-size: 0.59rem;
+  }
+
+  .induction-copy h2 {
+    font-size: 1.65rem;
+  }
+
+  .player-meta {
+    margin-top: 5px;
+    gap: 4px;
+  }
+
+  .player-meta span {
+    padding: 3px 5px;
+    font-size: 0.55rem;
+  }
+
+  .induction-copy blockquote {
+    margin: 12px 0 8px;
+    padding: 8px 0 8px 10px;
+    font-size: 0.66rem;
+    line-height: 1.6;
+  }
+
+  .induction-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .induction-stats span {
+    padding: 7px 8px;
+  }
+
+  .induction-stats strong {
+    font-size: 0.95rem;
+  }
+
+  .induction-team-seal {
+    grid-column: 1 / -1;
+    display: block;
+    width: 86px;
+    height: 86px;
+    min-height: 86px;
+    padding: 0;
+    justify-self: center;
+    border-radius: 50%;
+  }
+
+  .induction-team-seal img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .official-nameplate {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
+    min-height: 58px;
+    margin: 0 -14px;
+    padding: 9px 14px;
+    gap: 2px;
+  }
+
+  .official-nameplate span,
+  .official-nameplate small {
+    font-size: 0.45rem;
+  }
+
+  .official-nameplate small {
+    text-align: center;
+  }
+
+  .official-nameplate strong {
+    font-size: 0.82rem;
+  }
+
+  .section-heading {
+    display: block;
+    margin-bottom: 11px;
+  }
+
+  .section-heading h2 {
+    font-size: 1.12rem;
+  }
+
+  .section-heading p {
+    margin-top: 5px;
+    font-size: 0.68rem;
+  }
+
+  .award-section {
+    margin-top: 30px;
+  }
+
+  .award-grid {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .hof-award-card {
+    grid-template-columns: 86px minmax(0, 1fr);
+    min-height: 134px;
+    padding: 10px;
+    gap: 12px;
+  }
+
+  .award-photo {
+    width: 82px;
+    height: 110px;
+  }
+
+  .award-copy h3 {
+    font-size: 1.02rem;
+  }
+
+  .award-copy strong {
+    font-size: 1.08rem;
+  }
+
+  .award-logo {
+    width: 58px;
+    height: 58px;
+  }
+
+  .shared-card {
+    grid-column: auto;
+    grid-template-columns: 132px minmax(0, 1fr);
+  }
+
+  .shared-photos {
+    height: 108px;
+    gap: 2px;
+  }
+
+  .shared-card.saves {
+    grid-template-columns: 104px minmax(0, 1fr);
+  }
+
+  .shared-card .award-copy h3 {
+    font-size: 0.9rem;
+  }
+
+  .shared-team-logos img {
+    width: 24px;
+    height: 24px;
+  }
+}

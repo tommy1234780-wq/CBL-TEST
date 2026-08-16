@@ -29,8 +29,13 @@
 }
 
 @media (hover: none), (pointer: coarse) {
-  .team-track:hover {
-    animation-play-state: running;
+  .team-track,
+  .team-track:hover,
+  .team-track:active {
+    -webkit-animation: teamOrbitIOS 42s linear infinite !important;
+    animation: teamOrbitIOS 42s linear infinite !important;
+    -webkit-animation-play-state: running !important;
+    animation-play-state: running !important;
   }
 }
 
@@ -38,4 +43,14 @@
   .team-track:hover {
     animation-play-state: paused;
   }
+}
+
+@-webkit-keyframes teamOrbitIOS {
+  from { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+  to { -webkit-transform: translate3d(-50%, 0, 0); transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes teamOrbitIOS {
+  from { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+  to { -webkit-transform: translate3d(-50%, 0, 0); transform: translate3d(-50%, 0, 0); }
 }

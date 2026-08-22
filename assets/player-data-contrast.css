@@ -44,17 +44,18 @@
   color: #b7c6d5;
 }
 
-.mobile-summary-stat strong {
+.mobile-summary-stat strong,
+.mobile-summary-stat b {
   color: #f7f4ec;
 }
 
-.mobile-card-toggle {
+.mobile-toggle {
   margin-top: 2px;
   border-top-color: rgba(255, 255, 255, 0.10);
 }
 
 /* 展開後的生涯與完整數據也使用較明顯的卡片層級 */
-.mobile-player-details,
+.mobile-details,
 .mobile-profile-inline,
 .player-profile-inline {
   background: rgba(8, 24, 41, 0.96);
@@ -99,7 +100,7 @@
   color: #ff8a5b;
 }
 
-/* 完整單季數據表格外框 */
+/* 歷屆紀錄 */
 .profile-history-wrap {
   margin-top: 8px;
   padding: 8px;
@@ -108,7 +109,6 @@
   border-radius: 10px;
 }
 
-/* 完整單季數據表格 */
 .profile-history {
   width: 100%;
   min-width: 610px;
@@ -143,11 +143,45 @@
   background: #21486d !important;
 }
 
-.mobile-player-details .mobile-summary-stat,
-.mobile-player-details .profile-stat {
-  background: #173652;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+/* 精準對應「完整單季數據」區塊：JS 實際產生的是 .mobile-detail-grid > .detail-stat */
+.mobile-details > .profile-section:last-child {
+  padding-top: 16px;
+  padding-bottom: 6px;
+}
+
+.mobile-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mobile-detail-grid .detail-stat {
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 5px;
+  text-align: center;
+  background: #1e405e !important;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid rgba(242, 184, 64, 0.26);
+  border-radius: 7px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.mobile-detail-grid .detail-stat span {
+  display: block;
+  color: #b7c6d5 !important;
+  font-weight: 800;
+}
+
+.mobile-detail-grid .detail-stat b {
+  display: block;
+  margin-top: 5px;
+  color: #f7f4ec !important;
+  font-size: 0.88rem;
+  font-weight: 800;
 }
 
 /* 桌機表格同步增加列與背景對比，不改動原本排序與固定欄位功能 */

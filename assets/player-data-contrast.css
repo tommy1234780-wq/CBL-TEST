@@ -1,0 +1,95 @@
+:root {
+  --data-card-surface: #0b213a;
+  --data-card-surface-2: #102a46;
+  --data-stat-surface: #173652;
+  --data-stat-border: rgba(255, 255, 255, 0.14);
+  --data-card-border: rgba(159, 178, 197, 0.22);
+}
+
+/* 打者 / 投手共用：讓數據卡與頁面背景拉開層次 */
+.mobile-player-card {
+  margin: 0 0 12px;
+  padding: 0 14px 12px;
+  background: linear-gradient(145deg, var(--data-card-surface-2) 0%, var(--data-card-surface) 100%);
+  border: 1px solid var(--data-card-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.mobile-card-head {
+  padding: 16px 0 12px;
+}
+
+.mobile-summary {
+  gap: 8px;
+  padding: 2px 0 14px;
+}
+
+.mobile-summary-stat {
+  min-height: 68px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 5px;
+  background: rgba(30, 64, 94, 0.9);
+  border: 1px solid var(--data-stat-border);
+  border-top-color: rgba(242, 184, 64, 0.24);
+  border-radius: 7px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.mobile-summary-stat span,
+.mobile-summary-stat small {
+  color: #b7c6d5;
+}
+
+.mobile-summary-stat strong {
+  color: #f7f4ec;
+}
+
+.mobile-card-toggle {
+  margin-top: 2px;
+  border-top-color: rgba(255, 255, 255, 0.10);
+}
+
+/* 展開後的生涯與完整數據也使用較明顯的卡片層級 */
+.mobile-player-details,
+.mobile-profile-inline,
+.player-profile-inline {
+  background: rgba(7, 24, 42, 0.92);
+}
+
+.profile-stat {
+  background: rgba(27, 61, 91, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-left: 2px solid rgba(242, 184, 64, 0.42);
+  border-radius: 6px;
+}
+
+/* 桌機表格同步增加列與背景對比，不改動原本排序與固定欄位功能 */
+#integrated-player-table td {
+  background: #0b2741;
+}
+
+#integrated-player-table tbody .player-data-row:nth-of-type(even) td {
+  background: #10304e;
+}
+
+#integrated-player-table .player-data-row:hover td {
+  background: #173c5f;
+}
+
+#integrated-player-table .player-data-row td.sticky-column {
+  background: #0c2944 !important;
+}
+
+@media (max-width: 760px) {
+  .integrated-mobile-list {
+    padding-top: 4px;
+  }
+
+  .mobile-player-card {
+    overflow: hidden;
+  }
+}

@@ -1425,3 +1425,27 @@
     font-size: 0.86rem;
   }
 }
+
+/* Mobile hero: keep division links immediately below the intro card. */
+@media (max-width: 760px) {
+  .home-page .season-hero {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    padding-bottom: 0;
+  }
+  .home-page .hero-grid {
+    flex: 0 0 auto;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    padding-bottom: 16px;
+  }
+  .home-page .hero-divisions {
+    position: static;
+    flex: 0 0 auto;
+    margin: 0 auto 16px;
+    transform: none;
+  }
+}

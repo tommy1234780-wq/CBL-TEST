@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#03101f">
+  <title>阻殺王排行榜｜CBL 第三屆官方網站</title>
+  <link rel="icon" href="assets/season3-main-logo.webp">
+  <link rel="stylesheet" href="assets/leaderboard.css">
+</head>
+<body class="leaderboard-detail"
+  data-source="assets/data/player-stats.json"
+  data-player-type="hitter"
+  data-metric="阻殺"
+  data-metric-label="阻殺數"
+  data-metric-aliases="捕手阻殺|阻殺"
+  data-secondary-label="被盜壘"
+  data-secondary-aliases="被盜壘"
+  data-secondary-tiebreak="false"
+  data-sort="desc"
+  data-decimals="0"
+  data-minimum="0"
+  data-minimum-aliases=""
+  data-rule="獲獎資格：各組捕手阻殺數最多；同數並列，最終認定以聯盟公告為準"
+  data-division="black-hole">
+  <header class="ranking-detail-header">
+    <div>
+      <span class="eyebrow">OFFICIAL FIELDING RANKING</span>
+      <h1>阻殺王排行榜</h1>
+      <p>鎮守本壘後方，記錄捕手阻斷跑壘威脅的每一次關鍵出手。</p>
+    </div>
+    <span class="ranking-live-mark">官方即時資料</span>
+  </header>
+
+  <div class="ranking-controls">
+    <div class="division-tabs" role="tablist" aria-label="組別切換">
+      <button class="division-tab active" type="button" data-group="A組" aria-selected="true">
+        <img src="assets/black-hole-division-logo.webp" alt="">黑洞組
+      </button>
+      <button class="division-tab" type="button" data-group="B組" aria-selected="false">
+        <img src="assets/stellar-division-logo.webp" alt="">恆星組
+      </button>
+    </div>
+    <p class="ranking-rule" id="ranking-rule"></p>
+  </div>
+
+  <div class="ranking-section-heading">
+    <span>TOP 3</span>
+    <strong id="division-heading"></strong>
+    <small>第三屆例行賽</small>
+  </div>
+  <section class="ranking-podium" id="ranking-podium" aria-label="阻殺王排行榜前三名"></section>
+
+  <div class="ranking-table-heading">
+    <div><span>COMPLETE RANKING</span><strong>完整排名</strong></div>
+    <small id="ranking-updated">官方資料載入中</small>
+  </div>
+  <div class="ranking-table-wrap">
+    <table class="ranking-table">
+      <thead>
+        <tr><th>排名</th><th>球員</th><th>隊伍</th><th id="secondary-heading"></th><th id="metric-heading"></th></tr>
+      </thead>
+      <tbody id="ranking-table-body">
+        <tr><td colspan="5"><div class="ranking-empty-state"><div><strong>官方資料載入中</strong><span>正在同步第三屆排行榜。</span></div></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="ranking-status">各組分開計算；最終名次與獲獎資格認定以 CBL 聯盟公告為準。</p>
+<script src="assets/season3-data.js?v=20261014-main1"></script><script src="assets/leaderboard.js?v=20261015-awards1"></script>
+</body>
+</html>

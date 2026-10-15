@@ -24,7 +24,7 @@
     "endpoint": "瀏覽器提供的 endpoint",
     "keys": { "p256dh": "...", "auth": "..." }
   },
-  "teamIds": ["A", "E"]
+  "teamIds": ["G", "E"]
 }
 ```
 
@@ -58,7 +58,7 @@
 
 ## 官方通知
 
-前端現在提供「CBL 官方通知」選項，送到後端的頻道 ID 是 OFFICIAL。球隊頻道則是 A 到 J。
+前端提供「CBL 官方通知」選項，送到後端的頻道 ID 是 `OFFICIAL`。第三屆正式球隊沿用既有頻道 `C` 到 `J`，新增球隊使用 `K` 到 `N`；退場的舊頻道 `A`、`B` 不再顯示，也不重新指派給其他球隊，避免既有訂閱者收到錯誤隊伍通知。
 
 後端發送時，依頻道篩選訂閱資料。例如官方公告應選出包含 OFFICIAL 的訂閱，再透過 Web Push 發送：
 
@@ -70,7 +70,7 @@ POST /api/push/send
   "channelId": "OFFICIAL",
   "title": "CBL 官方公告",
   "body": "第三屆最新賽事公告已發布。",
-  "url": "https://tommy1234780-wq.github.io/CBL-TEST/"
+  "url": "https://cblcbl.netlify.app/"
 }
 
 這個發送 API 必須限制管理員使用，VAPID 私鑰只能放在伺服器環境變數，不能放在前端或 GitHub repository。

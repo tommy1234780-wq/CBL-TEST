@@ -1,484 +1,179 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>賽程戰績表 - 台中市CBL企業交流聯盟｜CBL 第三屆官方網站</title>
-    <style>
-        :root {
-            --bg-color: #031025;
-            --text-color: #f4e8cc;
-            --header-bg: rgba(3, 16, 37, 0.78);
-            --nav-bg: rgba(2, 11, 27, 0.86);
-            --link-color: #ffd46b;
-            --link-border: #e9ad42;
-            --link-hover-bg: #e9ad42;
-            --link-hover-text: #ffffff;
-            --border-color: rgba(255, 212, 107, 0.22);
-            --title-color: #ffffff;
-            --card-bg: rgba(2, 10, 26, 0.72);
-            --section-title-border: #e9ad42;
-            
-            --bh-color: #7b4cff;
-            --star-color: #ff8a2c;
-            --gold-color: #ffd46b;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background:
-                radial-gradient(circle at 16% 12%, rgba(123, 76, 255, 0.32), transparent 28%),
-                radial-gradient(circle at 84% 16%, rgba(255, 138, 44, 0.26), transparent 30%),
-                linear-gradient(180deg, #061a4a 0%, var(--bg-color) 46%, #020814 100%);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        .cosmic-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background:
-                        radial-gradient(ellipse at 50% 22%, transparent 0 25%, rgba(255, 212, 107, 0.18) 25.1%, transparent 25.5%),
-                        radial-gradient(ellipse at 50% 52%, transparent 0 41%, rgba(123, 76, 255, 0.24) 41.1%, transparent 41.45%),
-                        radial-gradient(circle at 18% 30%, rgba(123, 76, 255, 0.22) 0%, transparent 36%),
-                        radial-gradient(circle at 82% 70%, rgba(255, 138, 44, 0.2) 0%, transparent 36%);
-            overflow: hidden;
-        }
-
-        .cosmic-bg::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(circle, rgba(255,255,255,.9) 0 1px, transparent 1.6px),
-                radial-gradient(circle, rgba(255,212,107,.72) 0 1px, transparent 1.6px);
-            background-size: 96px 96px, 143px 143px;
-            background-position: 19px 23px, 61px 77px;
-            opacity: .36;
-        }
-
-        .black-hole {
-            position: absolute;
-            top: 20%;
-            left: 10%;
-            width: 300px;
-            height: 300px;
-            background:
-                radial-gradient(circle at center, #000 0 34%, rgba(8, 5, 18, 0.96) 35% 45%, transparent 46%),
-                conic-gradient(from 215deg, transparent 0 14%, rgba(255, 212, 107, .68) 18%, rgba(123, 76, 255, .72) 32%, transparent 47%, rgba(255, 212, 107, .44) 60%, transparent 80%);
-            border-radius: 50%;
-            box-shadow: 0 0 58px 18px rgba(123, 76, 255, .55), 
-                        0 0 120px 42px rgba(123, 76, 255, 0.2);
-            animation: blackHolePulse 8s infinite ease-in-out;
-        }
-
-        .black-hole::after {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            border-radius: 50%;
-            background: radial-gradient(circle, transparent 58%, rgba(255, 212, 107, .34) 67%, transparent 80%);
-            animation: rotate 20s linear infinite;
-        }
-
-        .star-element {
-            position: absolute;
-            bottom: 15%;
-            right: 10%;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, #fff6cf 0 10%, #ffd46b 28%, #ff8a2c 58%, transparent 76%);
-            border-radius: 50%;
-            box-shadow: 0 0 78px 26px rgba(255, 138, 44, .5), 0 0 130px 44px rgba(255, 212, 107, .14);
-            animation: starGlow 6s infinite ease-in-out;
-        }
-
-        @keyframes blackHolePulse {
-            0%, 100% { transform: scale(1); filter: saturate(1); }
-            50% { transform: scale(1.04); filter: saturate(1.18); }
-        }
-
-        @keyframes starGlow {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .baseball-laces {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            box-sizing: border-box;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            z-index: 2;
-        }
-
-        .baseball-laces svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 0 12px rgba(255, 212, 107, .62));
-            animation: rotateLaces 40s linear infinite;
-        }
-
-        .star-element .baseball-laces svg {
-            filter: drop-shadow(0 0 12px rgba(255, 138, 44, .72));
-            animation: rotateLaces 30s linear reverse infinite;
-        }
-
-        @keyframes rotateLaces {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .header {
-            text-align: center;
-            background-color: var(--header-bg);
-            backdrop-filter: blur(15px);
-            padding: 30px 20px;
-            border-bottom: 1px solid var(--border-color);
-            position: relative;
-        }
-
-        .title-group h1 {
-            color: var(--title-color);
-            margin: 0;
-            font-size: 2.5em;
-            text-shadow: 0 0 15px rgba(255,255,255,0.34), 0 0 30px rgba(255, 212, 107, .28);
-            letter-spacing: 2px;
-        }
-
-        .title-group img {
-            width: 100px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-shadow: 0 0 22px rgba(255, 212, 107, .32);
-            border: 2px solid rgba(255, 212, 107, .55);
-        }
-
-        .navbar {
-            background-color: var(--nav-bg);
-            backdrop-filter: blur(10px);
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-links {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #fff;
-            font-size: 1em;
-            padding: 10px 20px;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 30px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: rgba(255,255,255,0.05);
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            background: linear-gradient(45deg, rgba(123, 76, 255, .95), rgba(233, 173, 66, .95), rgba(255, 138, 44, .95));
-            border-color: transparent;
-            box-shadow: 0 0 20px rgba(255, 212, 107, 0.28);
-            transform: translateY(-5px);
-            color: #fff;
-        }
-
-        .container {
-            padding: 40px 20px;
-            max-width: 1000px;
-            margin: 40px auto;
-            background: var(--card-bg);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 22px 60px rgba(0, 0, 0, .34);
-            text-align: left;
-        }
-        
-        .menu-toggle {
-            display: none;
-            background: transparent;
-            border: 1px solid var(--star-color);
-            color: var(--star-color);
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.5em;
-            line-height: 1;
-        }
-
-        .group-tabs {
-            display: flex;
-            gap: 10px;
-            margin: 0 0 18px;
-            justify-content: flex-start;
-        }
-        .group-tab {
-            appearance: none;
-            border: 1px solid var(--border-color);
-            border-radius: 999px;
-            background: rgba(255,255,255,0.05);
-            color: var(--text-color);
-            cursor: pointer;
-            font: inherit;
-            font-weight: 700;
-            padding: 9px 22px;
-            transition: background .2s, color .2s, transform .2s;
-        }
-        .group-tab:hover, .group-tab.active {
-            background: var(--link-hover-bg);
-            color: #fff;
-            transform: translateY(-1px);
-        }
-        
-        .sub-nav {
-            list-style-type: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-            border-bottom: 2px solid var(--border-color);
-            text-align: left;
-            display: flex;
-            justify-content: flex-start;
-            flex-wrap: nowrap;
-        }
-        .sub-nav li {
-            margin: 0;
-        }
-        .sub-nav a, .sub-nav button {
-            text-decoration: none;
-            color: var(--text-color);
-            background-color: rgba(255,255,255,0.05);
-            padding: 10px 15px;
-            border: 1px solid var(--border-color);
-            border-bottom: none;
-            border-radius: 5px 5px 0 0;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            font-size: 1em;
-            display: block;
-            white-space: nowrap;
-            font: inherit;
-        }
-        .sub-nav a:hover, .sub-nav button:hover {
-            background-color: var(--link-hover-bg);
-            color: #fff;
-        }
-        .sub-nav a.active, .sub-nav button.active {
-            color: #fff;
-            background-color: var(--link-hover-bg);
-            border-color: var(--link-hover-bg);
-            font-weight: bold;
-            z-index: 1;
-            position: relative;
-            transform: translateY(1px);
-        }
-        
-        .report-image {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 12px;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 992px) {
-            body {
-                padding-top: 0px !important;
-            }
-            .header {
-                display: flex !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                padding: 10px 15px !important;
-                position: fixed !important;
-                top: 0 !important;
-                left: 0;
-                right: 0;
-                box-sizing: border-box !important;
-                z-index: 1001;
-                background-color: var(--header-bg);
-                backdrop-filter: blur(15px);
-            }
-            .title-group {
-                display: flex !important;
-                align-items: center !important;
-                gap: 8px !important;
-            }
-            .title-group h1 { font-size: 1.1em !important; }
-            .title-group img { width: 35px !important; margin-bottom: 0 !important; }
-            
-            .menu-toggle {
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-            }
-            
-            .navbar { 
-                position: fixed !important; 
-                top: 65px !important; /* 修正此處以對齊 header */
-                left: 0;
-                right: 0;
-                box-sizing: border-box !important;
-                z-index: 100;
-            }
-            .nav-links {
-                display: none;
-                background: rgba(10, 10, 10, 0.95);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                position: absolute;
-                width: 100%;
-                top: 0;
-                left: 0;
-                padding: 0;
-                margin: 0;
-            }
-            .nav-links.active { display: flex !important; }
-            .nav-links a {
-                padding: 15px !important;
-                border-bottom: 1px solid var(--border-color);
-                text-align: center !important;
-                display: block !important;
-                width: 100%;
-                box-sizing: border-box;
-            }
-            .container { margin-top: 100px !important; }
-        }
-    </style>
-    <link rel="icon" href="assets/season3-main-logo.webp">
-    <link rel="stylesheet" href="assets/season3-site.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CBL 第三屆上半季正式賽程，提供黑洞組、恆星組、跨組交流與球隊賽程篩選。">
+  <meta name="theme-color" content="#03101f">
+  <meta property="og:title" content="CBL 第三屆賽程戰績">
+  <meta property="og:description" content="查看黑洞組、恆星組與跨組交流的第三屆上半季正式賽程及分組戰績。">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="CBL 台中市企業交流棒球聯盟">
+  <meta property="og:url" content="https://cblcbl.netlify.app/%E8%B3%BD%E7%A8%8B%E6%88%B0%E7%B8%BE%E8%A1%A8.html">
+  <meta property="og:image" content="https://cblcbl.netlify.app/assets/cbl-season3-social-share.jpg">
+  <meta property="og:image:secure_url" content="https://cblcbl.netlify.app/assets/cbl-season3-social-share.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CBL 台中市企業交流棒球聯盟第三屆官方主視覺">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CBL 第三屆賽程戰績">
+  <meta name="twitter:description" content="查看黑洞組、恆星組與跨組交流的第三屆上半季正式賽程及分組戰績。">
+  <meta name="twitter:image" content="https://cblcbl.netlify.app/assets/cbl-season3-social-share.jpg">
+  <title>第三屆上半季賽程｜CBL 官方網站</title>
+  <link rel="canonical" href="https://cblcbl.netlify.app/%E8%B3%BD%E7%A8%8B%E6%88%B0%E7%B8%BE%E8%A1%A8.html">
+  <link rel="icon" href="assets/cbl-pwa-icon.png">
+  <link rel="stylesheet" href="assets/season3-site.css">
+  <link rel="stylesheet" href="assets/season3-schedule.css?v=20261014-sync1">
 </head>
-<body>
+<body class="schedule-page">
+  <header class="header">
+    <a class="title-group" href="index.html" aria-label="回到 CBL 第三屆首頁">
+      <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO">
+      <span class="season-badge">CBL SEASON 3 · OFFICIAL WEBSITE</span>
+      <h1>台中市 CBL 企業交流聯盟</h1>
+    </a>
+    <button class="menu-toggle" type="button" onclick="toggleMenu()" aria-controls="nav-links" aria-label="開啟主選單">&#9776;</button>
+  </header>
 
-    <div class="cosmic-bg">
-        <div class="black-hole">
-            <div class="baseball-laces">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 50 2 A 38 48 0 0 0 50 98" fill="none" stroke="#ffd46b" stroke-width="2.5" stroke-dasharray="2 3.5"/>
-                    <path d="M 50 2 A 38 48 0 0 1 50 98" fill="none" stroke="#7b4cff" stroke-width="2.5" stroke-dasharray="2 3.5"/>
-                </svg>
+  <nav class="navbar" aria-label="主要導覽">
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="賽程戰績表.html" class="active" aria-current="page">賽程戰績表</a></li>
+      <li><a href="數據統計.html">選手數據查詢</a></li>
+      <li><a href="打者排行榜.html">打者排行榜</a></li>
+      <li><a href="投手排行榜.html">投手排行榜</a></li>
+      <li><a href="CBL名人堂.html">CBL 名人堂</a></li>
+      <li><a href="team_introduction.html">球隊介紹</a></li>
+    </ul>
+  </nav>
+
+  <main class="schedule-main">
+    <section class="schedule-hero" aria-labelledby="schedule-title">
+      <div>
+        <span class="schedule-eyebrow">CBL TAICHUNG · SEASON 3 · FIRST HALF</span>
+        <h1 id="schedule-title">第三屆上半季賽程</h1>
+        <p>黑洞組與恆星組各自展開循環賽，最終依分組排名進入跨組交流。選擇組別或球隊，即可快速找到想看的場次。</p>
+        <div class="season-facts" aria-label="上半季賽程摘要">
+          <span>36 場正式賽程</span>
+          <span>12 個比賽日</span>
+          <span>大肚溪 A 球場</span>
+        </div>
+      </div>
+      <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO">
+    </section>
+
+    <section class="schedule-workspace" aria-label="第三屆賽程與戰績">
+      <div class="schedule-view-tabs" role="tablist" aria-label="查看賽程或戰績">
+        <button type="button" role="tab" data-schedule-view="schedule" aria-selected="true" aria-controls="schedule-panel">詳細賽程</button>
+        <button type="button" role="tab" data-schedule-view="overview" aria-selected="false" aria-controls="overview-panel">賽季總覽</button>
+        <button type="button" role="tab" data-schedule-view="standings" aria-selected="false" aria-controls="standings-panel">戰績排名</button>
+      </div>
+
+      <section class="schedule-panel" id="schedule-panel" data-view-panel="schedule" role="tabpanel">
+        <div class="schedule-filter-shell">
+          <div class="schedule-filter-row">
+            <div class="schedule-filter-group">
+              <label>依賽事類型查看</label>
+              <div class="schedule-filter-buttons" aria-label="賽事類型篩選">
+                <button type="button" data-schedule-division="all" aria-pressed="true">全部 36 場</button>
+                <button type="button" data-schedule-division="black-hole" aria-pressed="false">黑洞組 15 場</button>
+                <button type="button" data-schedule-division="stellar" aria-pressed="false">恆星組 15 場</button>
+                <button type="button" data-schedule-division="crossover" aria-pressed="false">跨組交流 6 場</button>
+              </div>
             </div>
-        </div>
-        <div class="star-element">
-            <div class="baseball-laces">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 50 2 A 38 48 0 0 0 50 98" fill="none" stroke="#ffd46b" stroke-width="2.5" stroke-dasharray="2 3.5"/>
-                    <path d="M 50 2 A 38 48 0 0 1 50 98" fill="none" stroke="#ff8a2c" stroke-width="2.5" stroke-dasharray="2 3.5"/>
-                </svg>
+            <div class="team-filter-field">
+              <label for="schedule-team">直接查詢球隊</label>
+              <select id="schedule-team" data-schedule-team aria-label="選擇球隊查看上半季賽程"></select>
             </div>
+          </div>
+          <p class="schedule-filter-status" data-schedule-status aria-live="polite"></p>
+          <div class="schedule-version-note" aria-label="賽程版本資訊">
+            <span data-schedule-updated>賽程最後更新</span>
+            <span data-schedule-notice>如有賽程異動，以聯盟最新公告為準。</span>
+          </div>
         </div>
+
+        <div class="schedule-list" data-schedule-list></div>
+        <noscript><div class="schedule-empty">請啟用 JavaScript 以瀏覽第三屆上半季賽程。</div></noscript>
+      </section>
+
+      <section class="schedule-panel" id="overview-panel" data-view-panel="overview" role="tabpanel" hidden>
+        <div class="overview-shell">
+          <div class="overview-heading">
+            <div>
+              <span class="schedule-section-kicker">FIRST HALF OVERVIEW</span>
+              <h2>上半季總賽程</h2>
+            </div>
+            <p>按月與比賽日整理全部 36 場賽事，方便球隊、球員與觀眾提前安排行程。</p>
+          </div>
+          <div class="overview-controls">
+            <div class="team-filter-field">
+              <label for="overview-team">查看指定球隊</label>
+              <select id="overview-team" data-overview-team aria-label="選擇球隊查看賽季總覽"></select>
+            </div>
+            <nav class="overview-month-nav" data-overview-months aria-label="賽程月份篩選"></nav>
+          </div>
+          <p class="schedule-filter-status" data-overview-status aria-live="polite"></p>
+          <div class="schedule-version-note" aria-label="賽季總覽版本資訊">
+            <span data-overview-updated>賽程最後更新</span>
+            <span>本總覽與詳細賽程使用同一份官方資料。</span>
+          </div>
+        </div>
+        <div class="overview-list" data-overview-list></div>
+        <noscript><div class="schedule-empty">請啟用 JavaScript 以瀏覽上半季總賽程。</div></noscript>
+      </section>
+
+      <section class="schedule-panel" id="standings-panel" data-view-panel="standings" role="tabpanel" hidden>
+        <div class="standings-shell">
+          <div class="standings-heading">
+            <div>
+              <span class="schedule-section-kicker">SEASON 3 STANDINGS</span>
+              <h2>第三屆分組戰績</h2>
+            </div>
+            <p>戰績與排名依聯盟正式紀錄更新。分組循環賽完成後，排名將作為跨組交流對戰依據。</p>
+          </div>
+          <div class="standings-filter" aria-label="戰績組別篩選">
+            <button type="button" data-standings-division="black-hole" aria-pressed="true">黑洞組</button>
+            <button type="button" data-standings-division="stellar" aria-pressed="false">恆星組</button>
+          </div>
+          <div class="standings-status-bar" aria-label="戰績資料狀態">
+            <div><span>目前狀態</span><strong data-standings-status>尚未開賽</strong></div>
+            <div><span>本組已完成</span><strong data-standings-games>0 場</strong></div>
+            <div><span>資料更新</span><strong data-standings-updated>賽季開始後更新</strong></div>
+          </div>
+          <div class="standings-board" data-standings-board aria-live="polite"></div>
+          <div class="standings-rule-note">
+            <strong>排名規則</strong>
+            <span>勝 2 分、和 1 分、敗 0 分；跨組交流賽計入各隊所屬組別戰績。同分時依聯盟規章比較。</span>
+          </div>
+          <noscript><div class="schedule-empty">請啟用 JavaScript 以瀏覽第三屆分組戰績。</div></noscript>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <strong>CBL TAICHUNG · SEASON 3 OFFICIAL WEBSITE</strong>
+    <p>台中市 CBL 企業交流棒球聯盟｜黑洞組 × 恆星組</p>
+    <div class="footer-links" aria-label="CBL 官方聯絡管道">
+      <a class="line" href="https://line.me/R/ti/p/@cbl7286826" target="_blank"><b>LINE</b><span>@cbl7286826</span></a>
+      <a class="facebook" href="https://www.facebook.com/profile.php?id=61577963293322&amp;sk=about" target="_blank"><b>FB</b><span>官方 Facebook</span></a>
+      <a href="https://www.instagram.com/cbl7192868286" target="_blank"><b>IG</b><span>官方 Instagram</span></a>
+      <a href="https://www.youtube.com/@CBL7868" target="_blank"><b>YT</b><span>官方 YouTube</span></a>
     </div>
+  </footer>
 
-    <header class="header">
-        <div class="title-group">
-            <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO">
-            <h1>賽程戰績表</h1>
-        </div>
-        <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
-    </header>
-
-    <nav class="navbar">
-        <ul class="nav-links" id="nav-links">
-            <li><a href="index.html">首頁</a></li>
-            <li><a href="賽程戰績表.html" class="active">賽程戰績表</a></li>
-            <li><a href="數據統計.html">選手數據查詢</a></li>
-            <li><a href="打者排行榜.html">打者排行榜</a></li>
-            <li><a href="投手排行榜.html">投手排行榜</a></li>
-            <li><a href="CBL名人堂.html">CBL名人堂</a></li>
-            <li><a href="team_introduction.html">球隊介紹</a></li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        <ul class="sub-nav">
-            <li><a class="active" data-view="schedule" href="#schedule">賽程</a></li>
-            <li><a data-view="standings" href="#standings">戰績排名</a></li>
-        </ul>
-
-        <div class="group-tabs" role="tablist" aria-label="Division selector">
-            <button class="group-tab active" type="button" data-division="black-hole">黑洞組</button>
-            <button class="group-tab" type="button" data-division="stellar">恆星組</button>
-        </div>
-
-        <img id="report-image" class="report-image" alt="Report">
-    </div>
-
-    <script>
-        const assets = {
-            'black-hole': { schedule: 'assets/reports/black-hole-schedule.webp', standings: 'assets/reports/black-hole-standings.webp' },
-            stellar: { schedule: 'assets/reports/stellar-schedule.webp', standings: 'assets/reports/stellar-standings.webp' }
-        };
-        let currentDivision = 'black-hole';
-        let currentView = 'schedule';
-
-        function renderReport() {
-            const image = document.getElementById('report-image');
-            image.src = assets[currentDivision][currentView];
-        }
-
-        document.querySelectorAll('.group-tab').forEach(button => {
-            button.addEventListener('click', () => {
-                currentDivision = button.dataset.division;
-                document.querySelectorAll('.group-tab').forEach(item => item.classList.toggle('active', item === button));
-                renderReport();
-            });
-        });
-
-        document.querySelectorAll('.sub-nav a').forEach(link => {
-            link.addEventListener('click', event => {
-                event.preventDefault();
-                currentView = link.dataset.view;
-                document.querySelectorAll('.sub-nav a').forEach(item => item.classList.toggle('active', item === link));
-                renderReport();
-            });
-        });
-        function toggleMenu() { document.getElementById('nav-links').classList.toggle('active'); }
-        renderReport();
-        fetch('https://iwwwpgdrasrhmrhncsim.supabase.co/functions/v1/content-manager', { headers: { apikey: 'sb_publishable_2Ko8glEiFB6NfunRyCr_4A_c1c1fvmO' } })
-          .then(response => response.ok ? response.json() : null)
-          .then(data => {
-            if (!data) return;
-            const managed = Object.fromEntries((data.assets || []).map(asset => [asset.asset_key, asset.url]));
-            if (managed.black_hole_schedule) assets['black-hole'].schedule = managed.black_hole_schedule;
-            if (managed.black_hole_standings) assets['black-hole'].standings = managed.black_hole_standings;
-            if (managed.stellar_schedule) assets.stellar.schedule = managed.stellar_schedule;
-            if (managed.stellar_standings) assets.stellar.standings = managed.stellar_standings;
-            renderReport();
-          })
-          .catch(() => {});
-    </script>
-    <script src="assets/season3-site.js"></script>
+  <script>
+    function toggleMenu() {
+      document.getElementById("nav-links").classList.toggle("active");
+    }
+  </script>
+  <script src="assets/season3-data.js?v=20261014-main1"></script>
+  <script src="assets/season3-schedule-data.js?v=20261014-sync1"></script>
+  <script src="assets/season3-results-data.js?v=20261014-results1"></script>
+  <script src="assets/season3-schedule.js?v=20261014-sync1"></script>
+  <script src="assets/season3-site.js"></script>
 </body>
 </html>

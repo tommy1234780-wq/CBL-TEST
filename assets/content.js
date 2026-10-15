@@ -1,53 +1,43 @@
 (() => {
-  const URL = "https://iwwwpgdrasrhmrhncsim.supabase.co/functions/v1/content-manager";
+  const ENDPOINT = "/.netlify/functions/content-manager";
   const KEY = "sb_publishable_2Ko8glEiFB6NfunRyCr_4A_c1c1fvmO";
-  const youtubeEmbed = (value) => {
-    try {
-      const url = new URL(value);
-      if (url.hostname.includes("youtu.be")) return "https://www.youtube.com/embed/" + url.pathname.slice(1);
-      if (url.hostname.includes("youtube.com")) {
-        const id = url.searchParams.get("v") || url.pathname.split("/").filter(Boolean).pop();
-        if (id) return "https://www.youtube.com/embed/" + id;
-      }
-    } catch {}
-    return value;
+  const weeklyImage = document.getElementById("weekly-report-image");
+  const weeklyStage = document.getElementById("weekly-report");
+
+  const setWeeklyState = (state) => {
+    if (weeklyStage) weeklyStage.dataset.state = state;
   };
-  const videoCard = (item) => {
-    const article = document.createElement("article");
-    article.className = "video-card";
-    const wrap = document.createElement("div");
-    wrap.className = "video-wrapper";
-    const frame = document.createElement("iframe");
-    frame.src = youtubeEmbed(item.url);
-    frame.title = item.title;
-    frame.loading = "lazy";
-    frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-    frame.allowFullscreen = true;
-    wrap.append(frame);
-    const meta = document.createElement("div");
-    meta.className = "video-meta";
-    const strong = document.createElement("strong");
-    strong.textContent = item.title;
-    meta.append(strong);
-    article.append(wrap, meta);
-    return article;
-  };
+
+  if (weeklyImage) {
+    weeklyImage.addEventListener("load", () => setWeeklyState("ready"));
+    weeklyImage.addEventListener("error", () => setWeeklyState("empty"));
+    if (weeklyImage.complete) setWeeklyState(weeklyImage.naturalWidth ? "ready" : "empty");
+  }
+
   async function loadContent() {
     try {
-      const response = await fetch(URL, { headers: { apikey: KEY } });
+      const response = await fetch(ENDPOINT, { headers: { apikey: KEY } });
       if (!response.ok) return;
       const data = await response.json();
       const assets = Object.fromEntries((data.assets || []).map((asset) => [asset.asset_key, asset]));
-      const weekly = document.getElementById("weekly-report-image");
-      if (weekly && assets.weekly_report) {
-        weekly.src = assets.weekly_report.url;
-        weekly.alt = assets.weekly_report.alt_text || "CBL 第三屆每週戰況";
+      if (weeklyImage && assets.weekly_report) {
+        setWeeklyState("loading");
+        weeklyImage.src = assets.weekly_report.url;
+        weeklyImage.alt = assets.weekly_report.alt_text || "CBL 第三屆每週戰況";
       }
-      [["black-hole", "black-hole-videos"], ["stellar", "stellar-videos"]].forEach(([division, id]) => {
-        const holder = document.getElementById(id);
-        const videos = (data.items || []).filter((item) => item.kind === "video" && item.division === division).slice(0, 3);
-        if (holder && videos.length) holder.replaceChildren(...videos.map(videoCard));
-      });
+      const holder = document.querySelector("[data-season3-videos]");
+      const videos = (data.items || [])
+        .filter((item) => item.kind === "video")
+        .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0))
+        .slice(0, 3);
+      if (holder && videos.length && window.CBL_HOME_VIDEO) {
+        window.CBL_HOME_VIDEO.mountVideos(holder, videos.map((item, index) => ({
+          url: item.url,
+          title: item.title,
+          label: "CBL 聯盟賽事",
+          game: `GAME ${String(index + 1).padStart(2, "0")}`
+        })));
+      }
     } catch (error) {
       console.warn("CBL content load failed", error);
     }

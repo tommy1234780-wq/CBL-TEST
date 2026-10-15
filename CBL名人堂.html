@@ -7,7 +7,7 @@
   <title>CBL 名人堂｜CBL 第三屆官方網站</title>
   <link rel="icon" href="assets/season3-main-logo.webp">
   <link rel="stylesheet" href="assets/season3-site.css">
-  <link rel="stylesheet" href="assets/hall-of-fame.css">
+  <link rel="stylesheet" href="assets/hall-of-fame.css?v=20261014-s2hof1">
 </head>
 <body class="hall-of-fame-page">
   <header class="header">
@@ -15,7 +15,7 @@
       <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO">
       <h1>CBL 名人堂</h1>
     </div>
-    <button class="menu-toggle" type="button" onclick="toggleMenu()">&#9776;</button>
+    <button class="menu-toggle" type="button" onclick="toggleMenu()" aria-label="開啟導覽選單">&#9776;</button>
   </header>
   <nav class="navbar" aria-label="主要導覽">
     <ul class="nav-links" id="nav-links">
@@ -24,21 +24,21 @@
       <li><a href="數據統計.html">選手數據查詢</a></li>
       <li><a href="打者排行榜.html">打者排行榜</a></li>
       <li><a href="投手排行榜.html">投手排行榜</a></li>
-      <li><a href="CBL名人堂.html">CBL名人堂</a></li>
+      <li><a href="CBL名人堂.html" aria-current="page">CBL名人堂</a></li>
       <li><a href="team_introduction.html">球隊介紹</a></li>
     </ul>
   </nav>
 
   <main class="hall-main" id="hall-top">
-    <section class="hall-hero">
+    <section class="hall-hero" aria-labelledby="hall-title">
       <div class="hall-hero-copy">
         <span class="hall-eyebrow">CBL HALL OF FAME · OFFICIAL RECORD</span>
-        <h2>聯盟榮耀殿堂</h2>
-        <p>讓每一項成就被正式記錄，讓球員與球隊共享屬於 CBL 的榮耀。</p>
-        <div class="hall-summary">
-          <span><strong>11</strong>項獎項</span>
-          <span><strong>10</strong>位得獎球員</span>
-          <span><strong>1</strong>屆正式紀錄</span>
+        <h2 id="hall-title">聯盟榮耀殿堂</h2>
+        <p data-hall-description>讓每一項成就被正式記錄，讓球員與球隊共享屬於 CBL 的榮耀。</p>
+        <div class="hall-summary" aria-label="名人堂紀錄摘要">
+          <span><strong data-hall-award-count>12</strong>項獎項</span>
+          <span><strong data-hall-player-count>11</strong>位得獎球員</span>
+          <span><strong data-hall-season-label>第二屆</strong>正式紀錄</span>
         </div>
       </div>
       <div class="hall-seal" aria-label="CBL 榮耀徽章">
@@ -49,145 +49,47 @@
     </section>
 
     <section class="hall-controls" aria-label="名人堂篩選">
-      <div class="season-tabs" role="tablist" aria-label="屆別">
+      <div class="season-tabs" role="tablist" aria-label="選擇屆別">
         <span>選擇屆別</span>
-        <button class="active" type="button" aria-selected="true">第一屆</button>
-        <button type="button" disabled title="第二屆資料尚未建立">第二屆</button>
-        <button type="button" disabled title="第三屆資料尚未建立">第三屆</button>
+        <button type="button" data-season="1" role="tab" aria-selected="false">第一屆</button>
+        <button class="active" type="button" data-season="2" role="tab" aria-selected="true">第二屆</button>
+        <button type="button" disabled title="第三屆賽季進行中">第三屆 · 進行中</button>
       </div>
       <div class="hall-category-tabs" role="tablist" aria-label="獎項類別">
-        <button class="active" type="button" data-category="all" aria-selected="true">全部榮耀</button>
-        <button type="button" data-category="mvp" aria-selected="false">年度 MVP</button>
-        <button type="button" data-category="hitter" aria-selected="false">打者獎項</button>
-        <button type="button" data-category="pitcher" aria-selected="false">投手獎項</button>
+        <button class="active" type="button" data-category="all" role="tab" aria-selected="true">全部榮耀</button>
+        <button type="button" data-category="mvp" role="tab" aria-selected="false">年度榮耀</button>
+        <button type="button" data-category="hitter" role="tab" aria-selected="false">打者獎項</button>
+        <button type="button" data-category="pitcher" role="tab" aria-selected="false">投手獎項</button>
       </div>
     </section>
 
-    <section class="induction-plaque" data-award-category="mvp">
-      <div class="plaque-serial"><span>HOF MVP</span><strong>001</strong><small>OFFICIAL RECORD</small></div>
-      <div class="induction-photo">
-        <img src="images/賴韋廷.jpg" alt="第一屆年度 MVP 賴韋廷">
-        <span>第一屆</span>
+    <p class="hall-status" data-hall-status aria-live="polite"></p>
+
+    <section class="honor-showcase" data-award-category="mvp" aria-labelledby="annual-honors-title">
+      <div class="section-heading honor-heading">
+        <div><span class="eyebrow">ANNUAL HONORS</span><h2 id="annual-honors-title">年度榮耀</h2></div>
+        <p>代表一個賽季的最高肯定，正式列入 CBL 聯盟紀錄。</p>
       </div>
-      <div class="induction-copy">
-        <span class="induction-kicker">MOST VALUABLE PLAYER · INDUCTEE</span>
-        <p>第一屆 CBL 年度最高個人榮耀</p>
-        <h2>賴韋廷</h2>
-        <div class="player-meta"><span>安穆科技棒球隊</span><span>第一屆正式紀錄</span></div>
-        <blockquote>以整季穩定輸出與關鍵長打承擔勝負，也讓球隊的每一場努力，被聯盟正式記錄。</blockquote>
-        <div class="induction-stats">
-          <span><small>AVG</small><strong>.517</strong></span>
-          <span><small>HR</small><strong>6</strong></span>
-          <span><small>RBI</small><strong>20</strong></span>
-        </div>
-      </div>
-      <div class="induction-team-seal">
-        <img src="assets/teams/J.webp" alt="安穆科技棒球隊 LOGO">
-        <span>TEAM HONOR</span>
-        <strong>安穆科技</strong>
-      </div>
-      <div class="official-nameplate">
-        <span>INDUCTED INTO THE CBL HALL OF FAME</span>
-        <strong>年度 MVP · 賴韋廷</strong>
-        <small>CBL TAICHUNG OFFICIAL RECORD</small>
-      </div>
+      <div class="honor-showcase-grid" data-hall-highlights></div>
     </section>
 
-    <section class="award-section" data-award-category="hitter">
+    <section class="award-section" data-award-category="hitter" aria-labelledby="hitting-honors-title">
       <div class="section-heading">
-        <div><span class="eyebrow">HITTING HONORS</span><h2>打者榮耀</h2></div>
+        <div><span class="eyebrow">HITTING HONORS</span><h2 id="hitting-honors-title">打者榮耀</h2></div>
         <p>每一次擊球與推進，都累積成被記住的成績。</p>
       </div>
-      <div class="award-grid">
-        <article class="hof-award-card">
-          <span class="award-index">01</span>
-          <img class="award-photo" src="images/王瑋鋐.jpg" alt="打擊王王瑋鋐">
-          <span class="award-logo"><img src="assets/teams/D.webp" alt="好Chill LOGO"></span>
-          <div class="award-copy"><small>打擊王</small><h3>王瑋鋐</h3><p>好Chill 棒球隊</p><strong>.533 AVG</strong></div>
-        </article>
-        <article class="hof-award-card shared-card">
-          <span class="award-index">02</span>
-          <div class="shared-photos">
-            <img src="images/詹承憲.jpg" alt="詹承憲">
-            <img src="images/賴韋廷.jpg" alt="賴韋廷">
-            <img src="images/施昱綸.jpg" alt="施昱綸">
-            <img src="images/李統裕.jpg" alt="李統裕">
-          </div>
-          <div class="award-copy">
-            <small>安打王 · 共同得主</small>
-            <h3>四位球員共享榮耀</h3>
-            <p>詹承憲 · 賴韋廷 · 施昱綸 · 李統裕</p>
-            <div class="shared-team-logos"><img src="assets/teams/C.webp" alt="遊牧者"><img src="assets/teams/J.webp" alt="安穆科技"><img src="assets/teams/D.webp" alt="好Chill"></div>
-            <strong>15 H</strong>
-          </div>
-        </article>
-        <article class="hof-award-card">
-          <span class="award-index">03</span>
-          <img class="award-photo" src="images/賴韋廷.jpg" alt="全壘打王賴韋廷">
-          <span class="award-logo"><img src="assets/teams/J.webp" alt="安穆科技 LOGO"></span>
-          <div class="award-copy"><small>全壘打王</small><h3>賴韋廷</h3><p>安穆科技棒球隊</p><strong>6 HR</strong></div>
-        </article>
-        <article class="hof-award-card">
-          <span class="award-index">04</span>
-          <img class="award-photo" src="images/賴韋廷.jpg" alt="打點王賴韋廷">
-          <span class="award-logo"><img src="assets/teams/J.webp" alt="安穆科技 LOGO"></span>
-          <div class="award-copy"><small>打點王</small><h3>賴韋廷</h3><p>安穆科技棒球隊</p><strong>20 RBI</strong></div>
-        </article>
-        <article class="hof-award-card">
-          <span class="award-index">05</span>
-          <img class="award-photo" src="images/賴承郁.jpg" alt="盜壘王賴丞郁">
-          <span class="award-logo"><img src="assets/teams/C.webp" alt="遊牧者 LOGO"></span>
-          <div class="award-copy"><small>盜壘王</small><h3>賴丞郁</h3><p>遊牧者棒球隊</p><strong>17 SB</strong></div>
-        </article>
-      </div>
+      <div class="award-grid" data-hall-hitting></div>
     </section>
 
-    <section class="award-section" data-award-category="pitcher">
+    <section class="award-section" data-award-category="pitcher" aria-labelledby="pitching-honors-title">
       <div class="section-heading">
-        <div><span class="eyebrow">PITCHING HONORS</span><h2>投手榮耀</h2></div>
+        <div><span class="eyebrow">PITCHING HONORS</span><h2 id="pitching-honors-title">投手榮耀</h2></div>
         <p>每一局壓制與守成，成為球隊走向勝利的軌跡。</p>
       </div>
-      <div class="award-grid">
-        <article class="hof-award-card">
-          <span class="award-index">01</span>
-          <img class="award-photo" src="images/林銘孝.jpg" alt="防禦率王林銘孝">
-          <span class="award-logo"><img src="assets/teams/J.webp" alt="安穆科技 LOGO"></span>
-          <div class="award-copy"><small>防禦率王</small><h3>林銘孝</h3><p>安穆科技棒球隊</p><strong>2.97 ERA</strong></div>
-        </article>
-        <article class="hof-award-card">
-          <span class="award-index">02</span>
-          <img class="award-photo" src="images/羅迪.jpg" alt="勝投王羅迪">
-          <span class="award-logo"><img src="assets/teams/J.webp" alt="安穆科技 LOGO"></span>
-          <div class="award-copy"><small>勝投王</small><h3>羅迪</h3><p>安穆科技棒球隊</p><strong>3 W</strong></div>
-        </article>
-        <article class="hof-award-card">
-          <span class="award-index">03</span>
-          <img class="award-photo" src="images/王瑋鋐.jpg" alt="三振王王瑋鋐">
-          <span class="award-logo"><img src="assets/teams/D.webp" alt="好Chill LOGO"></span>
-          <div class="award-copy"><small>三振王</small><h3>王瑋鋐</h3><p>好Chill 棒球隊</p><strong>22 K</strong></div>
-        </article>
-        <article class="hof-award-card">
-          <span class="award-index">04</span>
-          <img class="award-photo" src="images/林晏辰.jpg" alt="中繼王林晏辰">
-          <span class="award-logo"><img src="assets/teams/G.webp" alt="T.C.W LOGO"></span>
-          <div class="award-copy"><small>中繼王</small><h3>林晏辰</h3><p>T.C.W 棒球隊</p><strong>6 HLD</strong></div>
-        </article>
-        <article class="hof-award-card shared-card saves">
-          <span class="award-index">05</span>
-          <div class="shared-photos two">
-            <img src="images/李統裕.jpg" alt="李統裕">
-            <img src="images/陳麒文.jpg" alt="陳麒文">
-          </div>
-          <div class="award-copy">
-            <small>救援王 · 共同得主</small>
-            <h3>李統裕 · 陳麒文</h3>
-            <p>遊牧者棒球隊 · 安穆科技棒球隊</p>
-            <div class="shared-team-logos"><img src="assets/teams/C.webp" alt="遊牧者"><img src="assets/teams/J.webp" alt="安穆科技"></div>
-            <strong>3 SV</strong>
-          </div>
-        </article>
-      </div>
+      <div class="award-grid" data-hall-pitching></div>
     </section>
+
+    <noscript><p class="hall-noscript">請啟用 JavaScript 以瀏覽各屆名人堂紀錄。</p></noscript>
   </main>
 
   <script>
@@ -196,6 +98,7 @@
     }
   </script>
   <script src="assets/season3-site.js"></script>
-  <script src="assets/hall-of-fame.js"></script>
+  <script src="assets/hall-of-fame-data.js?v=20261014-s2hof1"></script>
+  <script src="assets/hall-of-fame.js?v=20261014-s2hof1"></script>
 </body>
 </html>

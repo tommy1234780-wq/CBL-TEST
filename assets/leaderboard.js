@@ -2,7 +2,8 @@
   "use strict";
 
   const body = document.body;
-  const csvUrl = body.dataset.csv;
+  const dataUrl = body.dataset.source || "assets/data/player-stats.json";
+  const playerType = body.dataset.playerType || "hitter";
   const metric = body.dataset.metric;
   const metricLabel = body.dataset.metricLabel;
   const metricAliases = (body.dataset.metricAliases || metricLabel).split("|");
@@ -12,6 +13,7 @@
   const decimals = Number(body.dataset.decimals || 0);
   const minimum = Number(body.dataset.minimum || 0);
   const minimumAliases = (body.dataset.minimumAliases || "").split("|").filter(Boolean);
+  const useSecondaryTiebreak = body.dataset.secondaryTiebreak !== "false";
   const ruleText = body.dataset.rule || "第三屆例行賽官方成績";
   const season = "第三屆";
   let currentGroup = "A組";
@@ -42,46 +44,11 @@
   }
 
   function teamLogo(team) {
+    const officialTeam = window.CBL_SEASON3?.findTeam(team);
+    if (officialTeam) return officialTeam.logo;
     const value = normalize(team);
     const match = teamLogoRules.find((entry) => entry[1].some((alias) => value.includes(normalize(alias))));
     return match ? `assets/teams/${match[0]}.webp` : "assets/season3-main-logo.webp";
-  }
-
-  function parseCsv(text) {
-    const rows = [];
-    let row = [];
-    let field = "";
-    let quoted = false;
-    for (let i = 0; i < text.length; i += 1) {
-      const char = text[i];
-      if (char === '"') {
-        if (quoted && text[i + 1] === '"') {
-          field += '"';
-          i += 1;
-        } else {
-          quoted = !quoted;
-        }
-      } else if (char === "," && !quoted) {
-        row.push(field.trim());
-        field = "";
-      } else if ((char === "\n" || char === "\r") && !quoted) {
-        if (char === "\r" && text[i + 1] === "\n") i += 1;
-        row.push(field.trim());
-        field = "";
-        if (row.some(Boolean)) rows.push(row);
-        row = [];
-      } else {
-        field += char;
-      }
-    }
-    if (field || row.length) {
-      row.push(field.trim());
-      if (row.some(Boolean)) rows.push(row);
-    }
-    if (!rows.length) return { headers: [], data: [] };
-    const headers = rows[0].map((header) => header.trim());
-    const data = rows.slice(1).map((values) => Object.fromEntries(headers.map((header, index) => [header, values[index] || ""])));
-    return { headers, data };
   }
 
   function findKey(headers, aliases, fallback) {
@@ -121,7 +88,7 @@
     }
     return `<article class="podium-card rank-${position}">
       <span class="team-logo-medallion"><img src="${teamLogo(player.__team)}" alt="${escapeHtml(player.__team)} LOGO"></span>
-      <span class="podium-position">第 ${position} 名</span>
+      <span class="podium-position">第 ${player.__rank || position} 名</span>
       <strong class="podium-name">${escapeHtml(player.__player)}</strong>
       <span class="podium-team">${escapeHtml(player.__team)}</span>
       <span class="podium-score">${formatValue(player.__value)} <small>${escapeHtml(metric)}</small></span>
@@ -153,6 +120,7 @@
     const metricKey = findKey(headers, metricAliases, metricLabel);
     const secondaryKey = findKey(headers, secondaryAliases, "");
     const minimumKey = findKey(headers, minimumAliases, "");
+    $("#division-heading").textContent = `${currentGroup === "A組" ? "黑洞組" : "恆星組"}前三名`;
 
     const seasonRows = cachedRows.filter((row) => String(row[seasonKey] || "").trim() === season);
     if (!seasonRows.length) {
@@ -180,11 +148,11 @@
     rows.sort((a, b) => {
       const difference = sortDirection === "asc" ? a.__value - b.__value : b.__value - a.__value;
       if (difference) return difference;
-      return numeric(b.__secondary, 0) - numeric(a.__secondary, 0);
+      if (useSecondaryTiebreak) return numeric(b.__secondary, 0) - numeric(a.__secondary, 0);
+      return String(a.__player).localeCompare(String(b.__player), "zh-Hant");
     });
     rows = rankRows(rows).slice(0, 10);
 
-    $("#division-heading").textContent = `${currentGroup === "A組" ? "黑洞組" : "恆星組"}前三名`;
     $("#ranking-podium").innerHTML = [0, 1, 2].map((index) => podiumCard(rows[index], index + 1)).join("");
 
     if (!rows.length) {
@@ -204,13 +172,17 @@
 
   async function load() {
     try {
-      const response = await fetch(csvUrl, { cache: "no-store" });
+      const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const parsed = parseCsv(await response.text());
-      cachedRows = parsed.data;
-      cachedHeaders = parsed.headers;
-      const updateHeader = cachedHeaders.find((header) => /^20\d{2}[/-]\d{1,2}[/-]\d{1,2}$/.test(header));
-      $("#ranking-updated").textContent = updateHeader ? `資料更新：${updateHeader}` : "官方資料即時更新";
+      const officialData = await response.json();
+      const dataset = officialData.datasets?.[playerType];
+      if (!dataset || !Array.isArray(dataset.rows) || !Array.isArray(dataset.headers)) throw new Error("官網正式資料格式不完整");
+      cachedRows = dataset.rows;
+      cachedHeaders = dataset.headers;
+      const updatedAt = officialData.meta?.generatedAt ? new Date(officialData.meta.generatedAt) : null;
+      $("#ranking-updated").textContent = updatedAt && !Number.isNaN(updatedAt.getTime())
+        ? `資料更新：${new Intl.DateTimeFormat("zh-TW", { year: "numeric", month: "2-digit", day: "2-digit" }).format(updatedAt)}`
+        : "依聯盟公告更新";
       render();
     } catch (error) {
       console.error("CBL leaderboard load failed", error);

@@ -4,17 +4,14 @@
   const CONFIG = {
     hitter: {
       label: "打者",
-      role: "打者檔案",
-      updateIndex: 28,
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_X5jYPR24dk5oqUSr1py8glTu-jHZJwuzhyJN7RrjMkgkXjwv0hVgmn7KlieQy_-CZEn6UQofqTbz/pub?gid=546432089&single=true&output=csv"
+      role: "打者檔案"
     },
     pitcher: {
       label: "投手",
-      role: "投手檔案",
-      updateIndex: 26,
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTmnSzqJij7qN0DkHrUHSTUbQv609l1OkQU-1BlZqO2t2Jry0zvcMyQa1DpbGKYSXtF94pg2CU-I3X8/pub?gid=1969750057&single=true&output=csv"
+      role: "投手檔案"
     }
   };
+  const DATA_URL = "assets/data/player-stats.json";
 
   const elements = {
     tabs: Array.from(document.querySelectorAll("[data-player-type]")),
@@ -41,6 +38,7 @@
   };
 
   const cache = {};
+  let officialDataPromise = null;
   const state = {
     type: "hitter",
     career: false,
@@ -52,7 +50,8 @@
 
   async function initialize() {
     bindEvents();
-    await activateType("hitter");
+    const requestedType = new URLSearchParams(window.location.search).get("type");
+    await activateType(requestedType === "pitcher" ? "pitcher" : "hitter");
   }
 
   async function activateType(type) {
@@ -79,45 +78,44 @@
   }
 
   async function loadDataset(type) {
-    const response = await fetch(CONFIG[type].url);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const parsed = parseCSV(await response.text());
+    if (!officialDataPromise) {
+      officialDataPromise = fetch(DATA_URL, { cache: "no-store" }).then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      });
+    }
+    const officialData = await officialDataPromise;
+    const source = officialData.datasets?.[type];
+    if (!source || !Array.isArray(source.headers) || !Array.isArray(source.rows)) {
+      throw new Error("官網正式資料格式不完整");
+    }
     const dataset = {
       type,
-      headers: parsed.headers,
-      originalRows: parsed.rows,
-      careerRows: [],
+      headers: source.headers,
+      originalRows: source.rows,
+      careerRows: Array.isArray(source.careerRows) ? source.careerRows : [],
       keys: null,
-      updateText: parsed.headers[CONFIG[type].updateIndex] || "依聯盟公告"
+      updateText: formatUpdatedTime(officialData.meta?.generatedAt)
     };
     dataset.keys = resolveKeys(dataset);
     dataset.originalRows = dataset.originalRows.filter((row) => String(row[dataset.keys.name] || "").trim());
-    dataset.careerRows = type === "hitter" ? calculateHitterCareer(dataset) : calculatePitcherCareer(dataset);
+    if (!dataset.careerRows.length) {
+      dataset.careerRows = type === "hitter" ? calculateHitterCareer(dataset) : calculatePitcherCareer(dataset);
+    }
     return dataset;
-  }
-
-  function parseCSV(text) {
-    const lines = text.replace(/\r/g, "").split("\n").filter((line) => line.trim());
-    if (!lines.length) throw new Error("資料表沒有內容");
-    const headers = splitCSVLine(lines[0]).map((header) => header.trim());
-    const rows = lines.slice(1).map((line) => {
-      const cells = splitCSVLine(line);
-      return headers.reduce((row, header, index) => {
-        row[header] = (cells[index] || "").trim();
-        return row;
-      }, {});
-    });
-    return { headers, rows };
   }
 
   function resolveKeys(dataset) {
     const headers = dataset.headers;
     const find = (candidates, fallback = "") => findKey(headers, candidates) || fallback;
     const common = {
+      id: headers.find((header) => /球員ID/.test(header)) || "球員ID",
       name: headers.find((header) => header.includes("姓名")) || "背號/姓名",
+      aliases: "姓名別名",
       team: headers.find((header) => header.includes("隊")) || "隊伍",
+      division: headers.find((header) => /組別|分組/.test(header)) || "組別",
       season: headers.find((header) => /屆數|屆別|賽季/.test(header)) || "屆數",
-      update: headers[CONFIG[dataset.type].updateIndex]
+      update: ""
     };
 
     if (dataset.type === "hitter") {
@@ -159,20 +157,22 @@
 
   function calculateHitterCareer(dataset) {
     const { headers, originalRows, keys } = dataset;
-    const nonStats = new Set([keys.name, keys.team, keys.season, keys.update]);
+    const nonStats = new Set([keys.id, keys.name, keys.aliases, keys.team, keys.division, keys.season, keys.update]);
     const players = new Map();
 
     originalRows.forEach((row) => {
-      const name = row[keys.name].trim();
-      if (!players.has(name)) {
-        const career = { [keys.name]: name, [keys.team]: row[keys.team], [keys.season]: "生涯累計", _latestSeason: row[keys.season] };
+      const playerId = String(row[keys.id] || "").trim();
+      if (!playerId) return;
+      if (!players.has(playerId)) {
+        const career = { [keys.id]: playerId, [keys.name]: row[keys.name], [keys.aliases]: row[keys.aliases], [keys.team]: row[keys.team], [keys.division]: row[keys.division], [keys.season]: "生涯累計", _latestSeason: row[keys.season] };
         headers.forEach((header) => { if (!nonStats.has(header)) career[header] = Number(row[header]) || 0; });
-        players.set(name, career);
+        players.set(playerId, career);
       } else {
-        const career = players.get(name);
+        const career = players.get(playerId);
         if (compareSeason(row[keys.season], career._latestSeason) > 0) {
           career._latestSeason = row[keys.season];
           career[keys.team] = row[keys.team];
+          career[keys.division] = row[keys.division];
         }
         headers.forEach((header) => { if (!nonStats.has(header)) career[header] += Number(row[header]) || 0; });
       }
@@ -199,22 +199,24 @@
 
   function calculatePitcherCareer(dataset) {
     const { headers, originalRows, keys } = dataset;
-    const nonStats = new Set([keys.name, keys.team, keys.season, keys.update]);
+    const nonStats = new Set([keys.id, keys.name, keys.aliases, keys.team, keys.division, keys.season, keys.update]);
     const players = new Map();
 
     originalRows.forEach((row) => {
-      const name = row[keys.name].trim();
-      if (!players.has(name)) {
-        const career = { [keys.name]: name, [keys.team]: row[keys.team], [keys.season]: "生涯累計", _latestSeason: row[keys.season] };
+      const playerId = String(row[keys.id] || "").trim();
+      if (!playerId) return;
+      if (!players.has(playerId)) {
+        const career = { [keys.id]: playerId, [keys.name]: row[keys.name], [keys.aliases]: row[keys.aliases], [keys.team]: row[keys.team], [keys.division]: row[keys.division], [keys.season]: "生涯累計", _latestSeason: row[keys.season] };
         headers.forEach((header) => {
           if (!nonStats.has(header)) career[header] = header === keys.ip ? ipToDecimal(row[header]) : Number(row[header]) || 0;
         });
-        players.set(name, career);
+        players.set(playerId, career);
       } else {
-        const career = players.get(name);
+        const career = players.get(playerId);
         if (compareSeason(row[keys.season], career._latestSeason) > 0) {
           career._latestSeason = row[keys.season];
           career[keys.team] = row[keys.team];
+          career[keys.division] = row[keys.division];
         }
         headers.forEach((header) => {
           if (!nonStats.has(header)) career[header] += header === keys.ip ? ipToDecimal(row[header]) : Number(row[header]) || 0;
@@ -265,8 +267,10 @@
     const season = elements.season.value;
     const rows = source.filter((row) => {
       const nameValue = String(row[keys.name] || "").toLowerCase();
+      const aliasValue = String(row[keys.aliases] || "").toLowerCase();
+      const idValue = String(row[keys.id] || "").toLowerCase();
       const teamValue = String(row[keys.team] || "").toLowerCase();
-      return (!keyword || nameValue.includes(keyword) || teamValue.includes(keyword)) &&
+      return (!keyword || nameValue.includes(keyword) || aliasValue.includes(keyword) || idValue.includes(keyword) || teamValue.includes(keyword)) &&
         (!team || row[keys.team] === team) &&
         (state.career || !season || row[keys.season] === season);
     });
@@ -280,7 +284,8 @@
   function getDisplayHeaders() {
     const dataset = currentDataset();
     const { headers, keys } = dataset;
-    const base = headers.filter((header) => header !== keys.update && !(state.career && header === keys.season));
+    const hiddenHeaders = new Set([keys.id, keys.aliases, keys.update].filter(Boolean));
+    const base = headers.filter((header) => !hiddenHeaders.has(header) && !(state.career && header === keys.season));
     if (state.full) return base;
     const preferred = state.type === "hitter"
       ? [keys.season, keys.team, keys.name, keys.avg, keys.h, keys.hr, keys.bb, keys.sb, keys.ops]
@@ -310,7 +315,7 @@
     }
 
     elements.body.innerHTML = rows.map((row) => {
-      const profileKey = `${row[keys.name] || ""}|||${row[keys.season] || "生涯累計"}`;
+      const profileKey = `${row[keys.id] || ""}|||${row[keys.season] || "生涯累計"}`;
       let previousGroup = "";
       const cells = displayHeaders.map((header, index) => {
         const group = classifyHeader(header);
@@ -348,13 +353,14 @@
         ? [keys.h, keys.hr, keys.bb, keys.sb, keys.ops]
         : [keys.ip, keys.w, keys.l, keys.sv, keys.so, keys.whip];
       const summaries = summaryKeys.filter(Boolean).map((key) => `<div class="mobile-summary-stat"><span>${escapeHtml(displayLabel(key))}</span><b>${escapeHtml(row[key] ?? "")}</b></div>`).join("");
-      const detailHeaders = dataset.headers.filter((header) => header !== keys.update && header !== keys.name && header !== keys.team && header !== keys.season && header !== primary && !summaryKeys.includes(header));
+      const detailHeaders = dataset.headers.filter((header) => header !== keys.update && header !== keys.id && header !== keys.name && header !== keys.team && header !== keys.season && header !== primary && !summaryKeys.includes(header));
       const details = detailHeaders.map((header) => `<div class="detail-stat"><span>${escapeHtml(displayLabel(header))}</span><b>${escapeHtml(row[header] ?? "")}</b></div>`).join("");
       const primaryValue = hitter ? formatRate(row[primary]) : (row[primary] || "0.00");
       const openLabel = state.career ? "查看歷屆與完整數據" : "查看生涯與完整數據";
+      const division = row[keys.division] && row[keys.division] !== "不分組" && row[keys.division] !== "歷屆" ? ` · ${row[keys.division]}` : "";
       return `<article class="mobile-player-card" data-mobile-index="${index}">
         <div class="mobile-card-head">
-          <div class="mobile-player-identity"><img src="${teamLogo(row[keys.team])}" alt="${escapeHtml(row[keys.team])} LOGO"><div class="mobile-player-meta"><strong>${escapeHtml(row[keys.name] || "未命名球員")}</strong><small>${escapeHtml(row[keys.team] || "")} · ${escapeHtml(row[keys.season] || "")}</small></div></div>
+          <div class="mobile-player-identity"><img src="${teamLogo(row[keys.team])}" alt="${escapeHtml(row[keys.team])} LOGO"><div class="mobile-player-meta"><strong>${escapeHtml(row[keys.name] || "未命名球員")}</strong><small>${escapeHtml(row[keys.team] || "")}${escapeHtml(division)} · ${escapeHtml(row[keys.season] || "")}</small></div></div>
           <div class="mobile-primary-stat"><small>${hitter ? "打擊率" : displayLabel(primary)}</small><strong>${escapeHtml(primaryValue)}</strong></div>
         </div>
         <div class="mobile-summary">${summaries}</div>
@@ -369,8 +375,9 @@
     const { keys } = dataset;
     const name = row[keys.name] || "未命名球員";
     const team = row[keys.team] || "";
-    const career = dataset.careerRows.find((item) => item[keys.name] === name) || row;
-    const history = dataset.originalRows.filter((item) => item[keys.name] === name).sort((a, b) => compareSeason(b[keys.season], a[keys.season]));
+    const playerId = row[keys.id] || "";
+    const career = dataset.careerRows.find((item) => item[keys.id] === playerId) || row;
+    const history = dataset.originalRows.filter((item) => item[keys.id] === playerId).sort((a, b) => compareSeason(b[keys.season], a[keys.season]));
     const core = state.type === "hitter"
       ? [keys.avg, keys.h, keys.hr, keys.bb, keys.sb, keys.ops]
       : [keys.ip, keys.w, keys.l, keys.sv, keys.hld, keys.so, keys.era, keys.whip];
@@ -378,7 +385,8 @@
     const historyCore = state.type === "hitter" ? validCore : [keys.ip, keys.w, keys.l, keys.so, keys.era, keys.whip].filter(Boolean);
     const stats = (source) => validCore.map((key) => `<div class="profile-stat${key === primaryKey() ? " primary" : ""}"><span>${escapeHtml(displayLabel(key))}</span><strong>${escapeHtml(key === keys.avg ? formatRate(source[key]) : (source[key] ?? ""))}</strong></div>`).join("");
     const historyRows = history.map((item) => `<tr>${[keys.season, ...historyCore].map((key) => `<td>${escapeHtml(key === keys.avg ? formatRate(item[key]) : (item[key] ?? ""))}</td>`).join("")}</tr>`).join("");
-    const header = mobile ? "" : `<div class="profile-head"><img src="${teamLogo(team)}" alt="${escapeHtml(team)} LOGO"><div><h3>${escapeHtml(name)}</h3><p>${escapeHtml(team)} · ${escapeHtml(row[keys.season] || "生涯累計")}</p></div><span class="profile-role">${CONFIG[state.type].role}</span></div>`;
+    const division = row[keys.division] && row[keys.division] !== "不分組" && row[keys.division] !== "歷屆" ? ` · ${row[keys.division]}` : "";
+    const header = mobile ? "" : `<div class="profile-head"><img src="${teamLogo(team)}" alt="${escapeHtml(team)} LOGO"><div><h3>${escapeHtml(name)}</h3><p>${escapeHtml(team)}${escapeHtml(division)} · ${escapeHtml(row[keys.season] || "生涯累計")}</p></div><span class="profile-role">${CONFIG[state.type].role}</span></div>`;
     return `<div class="player-profile-inline${mobile ? " mobile-profile-inline" : ""}" style="--profile-columns:${Math.min(validCore.length, 8)}">${header}
       <section class="profile-section"><div class="profile-section-heading"><strong>${state.career ? "生涯核心成績" : "當屆核心成績"}</strong><span>${escapeHtml(row[keys.season] || "生涯累計")}</span></div><div class="profile-stats">${stats(row)}</div></section>
       ${state.career ? "" : `<section class="profile-section"><div class="profile-section-heading"><strong>生涯累計</strong><span>${unique(history.map((item) => item[keys.season])).length} 屆正式紀錄</span></div><div class="profile-stats">${stats(career)}</div></section>`}
@@ -588,6 +596,8 @@
   }
 
   function teamLogo(team) {
+    const officialTeam = window.CBL_SEASON3?.findTeam(team);
+    if (officialTeam) return officialTeam.logo;
     const value = normalizeTeam(team);
     const rules = [
       ["A", ["戰狼"]], ["B", ["神清163", "神清"]], ["C", ["遊牧者"]],
@@ -636,6 +646,13 @@
     return Number.isFinite(number) ? number.toFixed(3) : (value || "0.000");
   }
 
+  function formatUpdatedTime(value) {
+    if (!value) return "依聯盟公告";
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return String(value);
+    return new Intl.DateTimeFormat("zh-TW", { year: "numeric", month: "2-digit", day: "2-digit" }).format(parsed);
+  }
+
   function numeric(value) {
     const number = Number.parseFloat(value);
     return Number.isFinite(number) ? number : 0;
@@ -643,29 +660,6 @@
 
   function unique(values) {
     return Array.from(new Set(values));
-  }
-
-  function splitCSVLine(line) {
-    const output = [];
-    let current = "";
-    let quoted = false;
-    for (let index = 0; index < line.length; index += 1) {
-      const character = line[index];
-      const next = line[index + 1];
-      if (character === '"' && quoted && next === '"') {
-        current += '"';
-        index += 1;
-      } else if (character === '"') {
-        quoted = !quoted;
-      } else if (character === "," && !quoted) {
-        output.push(current);
-        current = "";
-      } else {
-        current += character;
-      }
-    }
-    output.push(current);
-    return output;
   }
 
   function setLoading(loading) {

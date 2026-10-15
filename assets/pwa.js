@@ -24,9 +24,7 @@
 
   const teams = [
     ["OFFICIAL", "CBL 官方通知"],
-    ["A", "戰狼棒球隊"], ["B", "神清163棒球隊"], ["C", "遊牧者棒球隊"], ["D", "好Chill棒球隊"],
-    ["E", "台中樂天棒球隊"], ["F", "台中NGU棒球隊"], ["G", "T.C.W棒球隊"], ["H", "創邑棒球隊"],
-    ["I", "捷創科技 JTRON"], ["J", "安穆科技棒球隊"]
+    ...(window.CBL_SEASON3?.teams || []).map((team) => [team.channelId, team.displayName])
   ];
 
   const config = window.CBL_PUSH_CONFIG || {
@@ -54,14 +52,48 @@
   }
   toggle.addEventListener("click", () => setExpanded(settings.hidden));
 
-  const authClient = window.supabase?.createClient(config.supabaseUrl, config.supabasePublishableKey);
+  let authClient = null;
+  let authClientPromise = null;
+
+  function getAuthClient() {
+    if (authClient) return Promise.resolve(authClient);
+    if (authClientPromise) return authClientPromise;
+
+    authClientPromise = new Promise((resolve, reject) => {
+      const connect = () => {
+        if (!window.supabase) {
+          reject(new Error("auth_client_unavailable"));
+          return;
+        }
+        authClient = window.supabase.createClient(config.supabaseUrl, config.supabasePublishableKey);
+        resolve(authClient);
+      };
+
+      if (window.supabase) {
+        connect();
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      script.async = true;
+      script.onload = connect;
+      script.onerror = () => reject(new Error("auth_client_unavailable"));
+      document.head.appendChild(script);
+    }).catch((error) => {
+      authClientPromise = null;
+      throw error;
+    });
+
+    return authClientPromise;
+  }
 
   async function accessToken() {
-    if (!authClient) throw new Error("auth_client_unavailable");
-    let { data: { session }, error: sessionError } = await authClient.auth.getSession();
+    const client = await getAuthClient();
+    let { data: { session }, error: sessionError } = await client.auth.getSession();
     if (sessionError) throw new Error("auth_session_failed");
     if (!session) {
-      const result = await authClient.auth.signInAnonymously();
+      const result = await client.auth.signInAnonymously();
       if (result.error || !result.data.session) throw new Error("anonymous_signin_failed");
       session = result.data.session;
     }

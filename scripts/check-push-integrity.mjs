@@ -11,9 +11,10 @@ requireText('assets/pwa.js', '"apikey": config.supabasePublishableKey', 'must se
 requireText('assets/pwa.js', 'subscribe_409', 'must keep endpoint conflict diagnostics');
 requireText('assets/pwa.js', 'anonymous_signin_failed', 'must keep anonymous auth failure handling');
 requireText('assets/pwa.js', 'push_subscription_failed', 'must keep push subscription failure handling');
-requireText('sw.js', 'const CACHE_NAME = "cbl-season-3-v7"', 'cache version must not regress below the current protected version');
-requireText('sw.js', './assets/pwa.js?v=20260816-pushfix2', 'service worker must cache the protected push client version');
-requireText('index.html', 'assets/pwa.js?v=20260816-pushfix2', 'homepage must load the protected push client version');
+requireText('assets/pwa.js', 'function getAuthClient()', 'must keep the Supabase client deferred until notification opt-in');
+requireText('sw.js', 'const CACHE_NAME = "cbl-season-3-v23-team-alias-20261015"', 'cache version must match the current protected version');
+requireText('sw.js', './assets/pwa.js?v=20261014-perf1', 'service worker must cache the protected push client version');
+requireText('index.html', 'assets/pwa.js?v=20261014-perf1', 'homepage must load the protected push client version');
 
 if (checks.length) {
   console.error('\n❌ Push notification integrity check failed:\n');

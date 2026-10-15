@@ -12,13 +12,27 @@
   <meta property="og:description" content="棒球星系，正式啟航。黑洞組與恆星組雙組開戰。">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="zh_TW">
-  <meta property="og:image" content="https://cblcbl.netlify.app/assets/season3-main-logo.webp">
+  <meta property="og:site_name" content="CBL 台中市企業交流棒球聯盟">
+  <meta property="og:url" content="https://cblcbl.netlify.app/">
+  <meta property="og:image" content="https://cblcbl.netlify.app/assets/cbl-season3-social-share.jpg">
+  <meta property="og:image:secure_url" content="https://cblcbl.netlify.app/assets/cbl-season3-social-share.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CBL 台中市企業交流棒球聯盟第三屆官方主視覺">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CBL 第三屆企業交流棒球聯盟">
+  <meta name="twitter:description" content="棒球星系，正式啟航。黑洞組與恆星組雙組開戰。">
+  <meta name="twitter:image" content="https://cblcbl.netlify.app/assets/cbl-season3-social-share.jpg">
   <title>CBL 第三屆官方網站｜台中市企業交流棒球聯盟</title>
+  <link rel="canonical" href="https://cblcbl.netlify.app/">
   <link rel="icon" href="assets/cbl-pwa-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/cbl-pwa-icon.png">
-    <link rel="stylesheet" href="assets/season3-site.css">
-  <link rel="stylesheet" href="assets/season3-home.css">
+  <link rel="preload" as="image" href="assets/homepage-season3-key-visual.webp" media="(min-width: 761px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/homepage-season3-mobile-bg.webp" media="(max-width: 760px)" fetchpriority="high">
+  <link rel="stylesheet" href="assets/season3-site.css">
+  <link rel="stylesheet" href="assets/season3-home.css?v=20261014-sync1">
   <link rel="stylesheet" href="assets/pwa.css?v=20260813-theme2">
 </head>
 <body class="home-page">
@@ -46,27 +60,30 @@
 
   <main class="home-main">
     <section class="season-hero" aria-labelledby="season-title">
+      <div class="hero-mobile-emblem" aria-hidden="true">
+        <img src="assets/season3-main-logo.webp" alt="" decoding="async" fetchpriority="high">
+      </div>
       <div class="hero-grid">
         <div class="hero-copy">
-          <span class="hero-eyebrow">CBL TAICHUNG · THIRD SEASON</span>
+          <span class="hero-eyebrow">CBL TAICHUNG · SEASON 3 OFFICIAL</span>
           <h1 id="season-title">第三屆企業交流棒球聯盟<span>棒球星系，正式啟航</span></h1>
-          <p class="hero-lead">棒球的世界如同宇宙般浩瀚。第三屆由黑洞組與恆星組雙組開戰，每一場攻防、每一份成績，都在 CBL 星系中被記錄、被看見、被流傳。</p>
-        </div>
-
-        <div class="hero-emblem" aria-label="CBL 第三屆官方識別">
-          <img class="hero-main-logo" src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO">
+          <p class="hero-lead">黑洞組與恆星組雙組開戰。每一場攻防、每一份成績，都在 CBL 星系中被記錄、被看見、被流傳。</p>
+          <div class="hero-actions" aria-label="第三屆主要功能">
+            <a class="primary" href="賽程戰績表.html">查看賽程戰績</a>
+            <a href="數據統計.html">進入球員數據</a>
+          </div>
         </div>
       </div>
 
       <div class="hero-divisions" aria-label="第三屆聯盟分組">
-        <div class="hero-division">
+        <a class="hero-division" href="team_introduction.html?division=black-hole" aria-label="查看黑洞組 6 支正式球隊">
           <img src="assets/black-hole-division-logo.webp" alt="黑洞組 LOGO">
-          <div><span>黑洞組</span><small>深不可測，萬有引力。</small></div>
-        </div>
-        <div class="hero-division">
+          <div><span>黑洞組</span><small>查看 6 支正式球隊</small></div>
+        </a>
+        <a class="hero-division" href="team_introduction.html?division=stellar" aria-label="查看恆星組 6 支正式球隊">
           <img src="assets/stellar-division-logo.webp" alt="恆星組 LOGO">
-          <div><span>恆星組</span><small>燃燒核心，照亮戰場。</small></div>
-        </div>
+          <div><span>恆星組</span><small>查看 6 支正式球隊</small></div>
+        </a>
       </div>
     </section>
 
@@ -112,7 +129,19 @@
         <p>掌握本週賽果與聯盟焦點，完整賽程及分組戰績可前往賽程戰績表查詢。</p>
       </div>
       <div class="weekly-panel">
-        <img src="assets/weekly-report.webp" alt="CBL 第三屆每週戰況" class="weekly-report-image" id="weekly-report-image" decoding="async">
+        <a class="weekly-report-link" data-weekly-report-link href="賽程戰績表.html#schedule" aria-label="查看第三屆上半季賽程">
+          <div class="weekly-stage" id="weekly-report" data-state="ready">
+            <img src="assets/weekly-report.webp" alt="CBL 第三屆每週戰況" class="weekly-report-image" id="weekly-report-image" loading="lazy" decoding="async" fetchpriority="low">
+            <div class="weekly-status" role="status" aria-live="polite">
+              <img src="assets/season3-main-logo.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+              <span>CBL WEEKLY REPORT</span>
+              <strong class="weekly-loading-title">正在更新本週戰報</strong>
+              <strong class="weekly-empty-title">本週戰報整理中</strong>
+              <p>賽果完成確認後，聯盟將於此處發布正式戰報。</p>
+            </div>
+            <span class="weekly-link-action" data-weekly-link-action>查看上半季賽程</span>
+          </div>
+        </a>
       </div>
     </section>
 
@@ -126,25 +155,27 @@
       </div>
 
       <div class="division-grid">
-        <article class="division-card hole">
-          <img src="assets/black-hole-division-logo.webp" alt="黑洞組官方 LOGO">
+        <a class="division-card hole" href="team_introduction.html?division=black-hole" aria-label="探索黑洞組 6 支正式球隊">
+          <img src="assets/black-hole-division-logo.webp" alt="黑洞組官方 LOGO" loading="lazy" decoding="async">
           <div class="copy">
             <span class="label">BLACK HOLE DIVISION</span>
             <h3>黑洞組</h3>
             <p>象徵壓迫、牽引、未知與極限。每支球隊都要在強大重力場中，找到屬於自己的勝利軌道。</p>
             <strong>深不可測，萬有引力。</strong>
+            <span class="division-card-action">探索黑洞組 6 支球隊 <b aria-hidden="true">→</b></span>
           </div>
-        </article>
+        </a>
 
-        <article class="division-card stellar">
-          <img src="assets/stellar-division-logo.webp" alt="恆星組官方 LOGO">
+        <a class="division-card stellar" href="team_introduction.html?division=stellar" aria-label="探索恆星組 6 支正式球隊">
+          <img src="assets/stellar-division-logo.webp" alt="恆星組官方 LOGO" loading="lazy" decoding="async">
           <div class="copy">
             <span class="label">STELLAR DIVISION</span>
             <h3>恆星組</h3>
             <p>象徵光芒、熱血、穩定與爆發。球隊在整季燃燒能量，並於關鍵時刻照亮整座戰場。</p>
             <strong>燃燒核心，照亮戰場。</strong>
+            <span class="division-card-action">探索恆星組 6 支球隊 <b aria-hidden="true">→</b></span>
           </div>
-        </article>
+        </a>
       </div>
     </section>
 
@@ -152,62 +183,20 @@
       <div class="section-heading">
         <div>
           <span class="kicker">GAME FILMS</span>
-          <h2 id="video-title">雙組賽事影片</h2>
+          <h2 id="video-title">賽事影片專區</h2>
         </div>
-        <p>黑洞組與恆星組分區呈現，每組固定保留三場官方影片位置，觀看時不再混淆。</p>
+        <p>所有組別的官方賽事集中收錄，依序觀看 CBL 球場上的精彩攻防。</p>
       </div>
 
-      <section class="division-video-panel hole" aria-labelledby="black-hole-video-title">
+      <section class="division-video-panel combined" aria-labelledby="combined-video-title">
         <div class="division-video-head">
-          <img src="assets/black-hole-division-logo.webp" alt="黑洞組 LOGO">
+          <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO" loading="lazy" decoding="async">
           <div>
-            <span>BLACK HOLE DIVISION · 3 GAME FILMS</span>
-            <h3 id="black-hole-video-title">黑洞組賽事影片</h3>
+            <span>CBL OFFICIAL GAME FILMS</span>
+            <h3 id="combined-video-title">聯盟賽事影音</h3>
           </div>
         </div>
-
-        <div class="video-grid" id="black-hole-videos">
-          <article class="video-card">
-            <div class="video-wrapper">
-              <iframe src="https://www.youtube.com/embed/jiuKIi0mycc?si=hfNI1VOAwd7J287l" title="遊牧者對神清163 賽事影片" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <div class="video-meta"><strong>G1</strong></div>
-          </article>
-          <article class="video-card">
-            <div class="video-wrapper">
-              <iframe src="https://www.youtube.com/embed/yLhFPCSkVL4?si=QU6rjTEPe-tQkZwI" title="好丘對樂天 賽事影片" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <div class="video-meta"><strong>G2</strong></div>
-          </article>
-          <article class="video-card">
-            <div class="video-wrapper">
-              <iframe src="https://www.youtube.com/embed/ANlf4Bt6ZQg?si=73Bnc8xtsQbH8ip-" title="創邑對台中NGU 賽事影片" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <div class="video-meta"><strong>G3</strong></div>
-          </article>
-        </div>
-      </section>
-
-      <section class="division-video-panel stellar" aria-labelledby="stellar-video-title">
-        <div class="division-video-head">
-          <img src="assets/stellar-division-logo.webp" alt="恆星組 LOGO">
-          <div>
-            <span>STELLAR DIVISION · 3 GAME FILMS</span>
-            <h3 id="stellar-video-title">恆星組賽事影片</h3>
-          </div>
-        </div>
-
-        <div class="video-grid" id="stellar-videos">
-          <article class="video-card video-placeholder">
-            <div class="placeholder-frame"><strong>G1</strong></div>
-          </article>
-          <article class="video-card video-placeholder">
-            <div class="placeholder-frame"><strong>G2</strong></div>
-          </article>
-          <article class="video-card video-placeholder">
-            <div class="placeholder-frame"><strong>G3</strong></div>
-          </article>
-        </div>
+        <div class="video-grid" data-season3-videos></div>
       </section>
     </section>
 
@@ -221,34 +210,13 @@
       </div>
 
       <div class="team-orbit" aria-label="第三屆參賽球隊輪播">
-        <div class="team-track">
-          <img src="assets/teams/A.webp" alt="戰狼棒球隊" loading="lazy" decoding="async">
-          <img src="assets/teams/B.webp" alt="神清163棒球隊" loading="lazy" decoding="async">
-          <img src="assets/teams/C.webp" alt="遊牧者棒球隊" loading="lazy" decoding="async">
-          <img src="assets/teams/D.webp" alt="好Chill棒球隊" loading="lazy" decoding="async">
-          <img src="assets/teams/E.webp" alt="台中樂天棒球隊" loading="lazy" decoding="async">
-          <img src="assets/teams/F.webp" alt="台中NGU棒球隊" loading="lazy" decoding="async">
-          <img src="assets/teams/G.webp" alt="T.C.W棒球隊" loading="lazy" decoding="async">
-          <img src="assets/teams/H.webp" alt="創邑棒球隊" loading="lazy" decoding="async">
-          <img src="assets/teams/I.webp" alt="捷創科技JTRON棒球隊" loading="lazy" decoding="async">
-          <img src="assets/teams/J.webp" alt="安穆科技棒球隊" loading="lazy" decoding="async">
-          <img src="assets/teams/A.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <img src="assets/teams/B.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <img src="assets/teams/C.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <img src="assets/teams/D.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <img src="assets/teams/E.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <img src="assets/teams/F.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <img src="assets/teams/G.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <img src="assets/teams/H.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <img src="assets/teams/I.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <img src="assets/teams/J.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-        </div>
+        <div class="team-track" data-season3-team-orbit></div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer home-footer">
-    <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO">
+    <img src="assets/season3-main-logo.webp" alt="CBL 第三屆官方主 LOGO" loading="lazy" decoding="async">
     <strong>CBL TAICHUNG · SEASON 3 OFFICIAL WEBSITE</strong>
     <p>台中市 CBL 企業交流棒球聯盟｜黑洞組 × 恆星組</p>
     <div class="footer-links" aria-label="CBL 官方聯絡管道">
@@ -266,9 +234,12 @@
       document.getElementById("nav-links").classList.toggle("active");
     }
   </script>
+  <script src="assets/season3-data.js?v=20261014-main1"></script>
+  <script src="assets/season3-schedule-data.js?v=20261014-sync1"></script>
+  <script src="assets/season3-results-data.js?v=20261014-results1"></script>
+  <script src="assets/season3-home-data.js?v=20261014-sync1"></script>
   <script src="assets/season3-site.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/pwa.js?v=20260813-6"></script>
-  <script src="assets/content.js?v=1"></script>
+  <script src="assets/pwa.js?v=20261014-perf1"></script>
+  <script src="assets/content.js?v=20261014-sync1"></script>
 </body>
 </html>

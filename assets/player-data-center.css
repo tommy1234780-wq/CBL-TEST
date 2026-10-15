@@ -324,11 +324,12 @@ th.sorted-asc .sort-icon::after { content: " ▲"; }
 .integrated-mobile-list { display: none; }
 .mobile-player-card { content-visibility: auto; contain-intrinsic-size: 180px; border-bottom: 1px solid var(--data-line); background: transparent; }
 .mobile-card-head { display: flex; padding: 17px 4px 12px; align-items: center; justify-content: space-between; gap: 12px; }
-.mobile-player-identity { display: flex; min-width: 0; align-items: center; gap: 10px; }
+.mobile-player-identity { display: flex; min-width: 0; flex: 1 1 auto; align-items: center; gap: 10px; overflow: hidden; }
 .mobile-player-identity img { width: 50px; height: 50px; flex: 0 0 50px; object-fit: cover; border-radius: 50%; }
+.mobile-player-meta { min-width: 0; flex: 1 1 auto; overflow: hidden; }
 .mobile-player-meta strong { display: block; overflow: hidden; color: #fff; font-size: 1.05rem; text-overflow: ellipsis; white-space: nowrap; }
 .mobile-player-meta small { display: block; overflow: hidden; color: var(--data-muted); font-size: 0.68rem; text-overflow: ellipsis; white-space: nowrap; }
-.mobile-primary-stat { flex: 0 0 auto; text-align: right; }
+.mobile-primary-stat { min-width: 70px; flex: 0 0 auto; text-align: right; }
 .mobile-primary-stat small { display: block; color: #aebdcb; font-size: 0.66rem; font-weight: 800; }
 .mobile-primary-stat strong { display: block; color: var(--data-orange); font-size: 1.65rem; line-height: 1.15; font-variant-numeric: tabular-nums; }
 .mobile-summary { display: grid; grid-template-columns: repeat(3, 1fr); padding: 2px 0 15px; gap: 8px; }

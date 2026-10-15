@@ -1,14 +1,23 @@
-const CACHE_NAME = "cbl-season-3-v7";
+const CACHE_NAME = "cbl-season-3-v23-team-alias-20261015";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./assets/season3-site.css",
-  "./assets/season3-home.css",
+  "./assets/season3-home.css?v=20261014-sync1",
   "./assets/pwa.css",
   "./assets/season3-site.js",
-  "./assets/pwa.js?v=20260816-pushfix2",
-  "./assets/season3-main-logo.webp"
+  "./assets/season3-data.js?v=20261014-main1",
+  "./assets/season3-home-data.js?v=20261014-sync1",
+  "./assets/season3-schedule-data.js?v=20261014-sync1",
+  "./assets/season3-results-data.js?v=20261014-results1",
+  "./assets/content.js?v=20261014-sync1",
+  "./assets/pwa.js?v=20261014-perf1",
+  "./數據統計.html",
+  "./assets/player-data-center.css?v=20261015-id1",
+  "./assets/player-data-contrast.css",
+  "./assets/player-data-shell.js?v=20261015-id1",
+  "./assets/data/player-stats.json"
 ];
 
 self.addEventListener("install", (event) => {
@@ -28,7 +37,7 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   const isDocument = event.request.mode === "navigate" || event.request.destination === "document" || path.endsWith(".html");
-  const isFreshAsset = event.request.destination === "style" || event.request.destination === "script" || path.endsWith(".css") || path.endsWith(".js") || path.endsWith(".webmanifest");
+  const isFreshAsset = event.request.destination === "style" || event.request.destination === "script" || path.endsWith(".css") || path.endsWith(".js") || path.endsWith(".json") || path.endsWith(".webmanifest");
 
   if (isDocument || isFreshAsset) {
     event.respondWith(networkFirst(event.request, isDocument));

@@ -1324,7 +1324,7 @@
 
 @media (max-width: 760px) {
   .season-hero {
-    min-height: 700px;
+    min-height: auto;
     background-image:
       linear-gradient(180deg, rgba(2, 9, 20, 0.04) 0 26%, rgba(2, 9, 20, 0.36) 38%, rgba(2, 9, 20, 0.9) 58%, #020914 82%),
       url("homepage-season3-mobile-bg.webp");
@@ -1357,7 +1357,7 @@
   .hero-grid {
     display: flex;
     min-height: 0;
-    padding: 0 14px 132px;
+    padding: 0 14px 20px;
     align-items: flex-start;
     text-align: left;
   }
@@ -1381,17 +1381,17 @@
   }
 
   .hero-divisions {
-    bottom: 16px;
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
     width: calc(100% - 28px);
+    margin: 0 auto 16px;
+    transform: none;
   }
 }
 
 @media (max-width: 460px) {
-  .season-hero,
-  .hero-grid {
-    min-height: 700px;
-  }
-
   .season-hero {
     background-position: center top;
     background-size: 100% auto;
@@ -1404,7 +1404,7 @@
 
   .hero-grid {
     padding-top: 0;
-    padding-bottom: 142px;
+    padding-bottom: 16px;
   }
 
   .hero-copy h1 {
